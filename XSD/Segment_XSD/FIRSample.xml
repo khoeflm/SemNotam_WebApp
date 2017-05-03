@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FirCollection xmlns="http://semnotam.frequentis.com/schema/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xsi:schemaLocation="http://semnotam.frequentis.com/schema/1.0 ./FIRSchema.xsd" >
+  
+  <hasMember>
+    <Fir id="KZDC">
+      <designator>KZDC</designator>
+	  <localId>ZDC</localId>
+    </Fir>
+  </hasMember>	
+  <hasMember>
+    <Fir id="KZNY">
+	  <designator>KZNY</designator>
+      <localId>ZNY</localId>
+    </Fir>
+  </hasMember>
+  <hasMember>
+    <Fir id="KZBW">
+      <designator>KZBW</designator>	
+      <localId>ZBW</localId>
+    </Fir>
+  </hasMember>
+</FirCollection>

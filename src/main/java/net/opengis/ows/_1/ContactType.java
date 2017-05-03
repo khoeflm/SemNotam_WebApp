@@ -1,0 +1,176 @@
+
+package net.opengis.ows._1;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * For OWS use in the service metadata document, the optional hoursOfService and contactInstructions elements were retained, as possibly being useful in the ServiceProvider section. 
+ * 
+ * <p>Java-Klasse für ContactType complex type.
+ * 
+ * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
+ * 
+ * <pre>
+ * &lt;complexType name="ContactType"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="Phone" type="{http://www.opengis.net/ows/1.1}TelephoneType" minOccurs="0"/&gt;
+ *         &lt;element name="Address" type="{http://www.opengis.net/ows/1.1}AddressType" minOccurs="0"/&gt;
+ *         &lt;element name="OnlineResource" type="{http://www.opengis.net/ows/1.1}OnlineResourceType" minOccurs="0"/&gt;
+ *         &lt;element name="HoursOfService" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="ContactInstructions" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ContactType", propOrder = {
+    "phone",
+    "address",
+    "onlineResource",
+    "hoursOfService",
+    "contactInstructions"
+})
+public class ContactType {
+
+    @XmlElement(name = "Phone")
+    protected TelephoneType phone;
+    @XmlElement(name = "Address")
+    protected AddressType address;
+    @XmlElement(name = "OnlineResource")
+    protected OnlineResourceType onlineResource;
+    @XmlElement(name = "HoursOfService")
+    protected String hoursOfService;
+    @XmlElement(name = "ContactInstructions")
+    protected String contactInstructions;
+
+    /**
+     * Ruft den Wert der phone-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TelephoneType }
+     *     
+     */
+    public TelephoneType getPhone() {
+        return phone;
+    }
+
+    /**
+     * Legt den Wert der phone-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TelephoneType }
+     *     
+     */
+    public void setPhone(TelephoneType value) {
+        this.phone = value;
+    }
+
+    /**
+     * Ruft den Wert der address-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link AddressType }
+     *     
+     */
+    public AddressType getAddress() {
+        return address;
+    }
+
+    /**
+     * Legt den Wert der address-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link AddressType }
+     *     
+     */
+    public void setAddress(AddressType value) {
+        this.address = value;
+    }
+
+    /**
+     * Ruft den Wert der onlineResource-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link OnlineResourceType }
+     *     
+     */
+    public OnlineResourceType getOnlineResource() {
+        return onlineResource;
+    }
+
+    /**
+     * Legt den Wert der onlineResource-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link OnlineResourceType }
+     *     
+     */
+    public void setOnlineResource(OnlineResourceType value) {
+        this.onlineResource = value;
+    }
+
+    /**
+     * Ruft den Wert der hoursOfService-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getHoursOfService() {
+        return hoursOfService;
+    }
+
+    /**
+     * Legt den Wert der hoursOfService-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setHoursOfService(String value) {
+        this.hoursOfService = value;
+    }
+
+    /**
+     * Ruft den Wert der contactInstructions-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getContactInstructions() {
+        return contactInstructions;
+    }
+
+    /**
+     * Legt den Wert der contactInstructions-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setContactInstructions(String value) {
+        this.contactInstructions = value;
+    }
+
+}

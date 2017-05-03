@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SemNotamWebServiceService" targetNamespace="http://ws.semnotam.frequentis.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.semnotam.frequentis.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://ws.semnotam.frequentis.com/" schemaLocation="semnotamwebservice_schema16.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="evaluateNotamSetResponse">
+    <wsdl:part name="parameters" element="tns:evaluateNotamSetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAerodromeIdsResponse">
+    <wsdl:part name="parameters" element="tns:getAerodromeIdsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTransitionSegmentById">
+    <wsdl:part name="parameters" element="tns:getTransitionSegmentById">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecificationForFeatureCollectionResponse">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecificationForFeatureCollectionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFirById">
+    <wsdl:part name="parameters" element="tns:getFirById">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecificationForNotamSetResponse">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecificationForNotamSetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateNotamSet">
+    <wsdl:part name="parameters" element="tns:evaluateNotamSet">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateResponse">
+    <wsdl:part name="parameters" element="tns:evaluateResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecificationResponse">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecificationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAtsSegmentIds">
+    <wsdl:part name="parameters" element="tns:getAtsSegmentIds">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateFeatureCollection">
+    <wsdl:part name="parameters" element="tns:evaluateFeatureCollection">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAtsSegmentIdsResponse">
+    <wsdl:part name="parameters" element="tns:getAtsSegmentIdsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecification">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecification">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFirIdsResponse">
+    <wsdl:part name="parameters" element="tns:getFirIdsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateFeatureCollectionResponse">
+    <wsdl:part name="parameters" element="tns:evaluateFeatureCollectionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAerodromeByIdResponse">
+    <wsdl:part name="parameters" element="tns:getAerodromeByIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAerodromeById">
+    <wsdl:part name="parameters" element="tns:getAerodromeById">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAtsSegmentById">
+    <wsdl:part name="parameters" element="tns:getAtsSegmentById">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluate">
+    <wsdl:part name="parameters" element="tns:evaluate">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFirIds">
+    <wsdl:part name="parameters" element="tns:getFirIds">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecificationForFeatureCollection">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecificationForFeatureCollection">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="evaluateInterestSpecificationForNotamSet">
+    <wsdl:part name="parameters" element="tns:evaluateInterestSpecificationForNotamSet">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTransitionSegmentByIdResponse">
+    <wsdl:part name="parameters" element="tns:getTransitionSegmentByIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAircraftTypeIdsResponse">
+    <wsdl:part name="parameters" element="tns:getAircraftTypeIdsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTransitionSegmentIds">
+    <wsdl:part name="parameters" element="tns:getTransitionSegmentIds">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFirByIdResponse">
+    <wsdl:part name="parameters" element="tns:getFirByIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAircraftTypeIds">
+    <wsdl:part name="parameters" element="tns:getAircraftTypeIds">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAtsSegmentByIdResponse">
+    <wsdl:part name="parameters" element="tns:getAtsSegmentByIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTransitionSegmentIdsResponse">
+    <wsdl:part name="parameters" element="tns:getTransitionSegmentIdsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAerodromeIds">
+    <wsdl:part name="parameters" element="tns:getAerodromeIds">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SemNotamWebService">
+    <wsdl:operation name="getAerodromeById">
+      <wsdl:input name="getAerodromeById" message="tns:getAerodromeById">
+    </wsdl:input>
+      <wsdl:output name="getAerodromeByIdResponse" message="tns:getAerodromeByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAtsSegmentById">
+      <wsdl:input name="getAtsSegmentById" message="tns:getAtsSegmentById">
+    </wsdl:input>
+      <wsdl:output name="getAtsSegmentByIdResponse" message="tns:getAtsSegmentByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluate">
+      <wsdl:input name="evaluate" message="tns:evaluate">
+    </wsdl:input>
+      <wsdl:output name="evaluateResponse" message="tns:evaluateResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFirIds">
+      <wsdl:input name="getFirIds" message="tns:getFirIds">
+    </wsdl:input>
+      <wsdl:output name="getFirIdsResponse" message="tns:getFirIdsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecificationForFeatureCollection">
+      <wsdl:input name="evaluateInterestSpecificationForFeatureCollection" message="tns:evaluateInterestSpecificationForFeatureCollection">
+    </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationForFeatureCollectionResponse" message="tns:evaluateInterestSpecificationForFeatureCollectionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecificationForNotamSet">
+      <wsdl:input name="evaluateInterestSpecificationForNotamSet" message="tns:evaluateInterestSpecificationForNotamSet">
+    </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationForNotamSetResponse" message="tns:evaluateInterestSpecificationForNotamSetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTransitionSegmentById">
+      <wsdl:input name="getTransitionSegmentById" message="tns:getTransitionSegmentById">
+    </wsdl:input>
+      <wsdl:output name="getTransitionSegmentByIdResponse" message="tns:getTransitionSegmentByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFirById">
+      <wsdl:input name="getFirById" message="tns:getFirById">
+    </wsdl:input>
+      <wsdl:output name="getFirByIdResponse" message="tns:getFirByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateNotamSet">
+      <wsdl:input name="evaluateNotamSet" message="tns:evaluateNotamSet">
+    </wsdl:input>
+      <wsdl:output name="evaluateNotamSetResponse" message="tns:evaluateNotamSetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTransitionSegmentIds">
+      <wsdl:input name="getTransitionSegmentIds" message="tns:getTransitionSegmentIds">
+    </wsdl:input>
+      <wsdl:output name="getTransitionSegmentIdsResponse" message="tns:getTransitionSegmentIdsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAircraftTypeIds">
+      <wsdl:input name="getAircraftTypeIds" message="tns:getAircraftTypeIds">
+    </wsdl:input>
+      <wsdl:output name="getAircraftTypeIdsResponse" message="tns:getAircraftTypeIdsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAtsSegmentIds">
+      <wsdl:input name="getAtsSegmentIds" message="tns:getAtsSegmentIds">
+    </wsdl:input>
+      <wsdl:output name="getAtsSegmentIdsResponse" message="tns:getAtsSegmentIdsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateFeatureCollection">
+      <wsdl:input name="evaluateFeatureCollection" message="tns:evaluateFeatureCollection">
+    </wsdl:input>
+      <wsdl:output name="evaluateFeatureCollectionResponse" message="tns:evaluateFeatureCollectionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecification">
+      <wsdl:input name="evaluateInterestSpecification" message="tns:evaluateInterestSpecification">
+    </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationResponse" message="tns:evaluateInterestSpecificationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAerodromeIds">
+      <wsdl:input name="getAerodromeIds" message="tns:getAerodromeIds">
+    </wsdl:input>
+      <wsdl:output name="getAerodromeIdsResponse" message="tns:getAerodromeIdsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SemNotamWebServiceServiceSoapBinding" type="tns:SemNotamWebService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAerodromeById">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAerodromeById">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAerodromeByIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAtsSegmentById">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAtsSegmentById">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAtsSegmentByIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFirIds">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFirIds">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFirIdsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecificationForFeatureCollection">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluateInterestSpecificationForFeatureCollection">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationForFeatureCollectionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecificationForNotamSet">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluateInterestSpecificationForNotamSet">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationForNotamSetResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTransitionSegmentById">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTransitionSegmentById">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTransitionSegmentByIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFirById">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFirById">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFirByIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateNotamSet">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluateNotamSet">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateNotamSetResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTransitionSegmentIds">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTransitionSegmentIds">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTransitionSegmentIdsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAircraftTypeIds">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAircraftTypeIds">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAircraftTypeIdsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAtsSegmentIds">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAtsSegmentIds">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAtsSegmentIdsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateFeatureCollection">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluateFeatureCollection">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateFeatureCollectionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="evaluateInterestSpecification">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="evaluateInterestSpecification">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="evaluateInterestSpecificationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAerodromeIds">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAerodromeIds">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAerodromeIdsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SemNotamWebServiceService">
+    <wsdl:port name="SemNotamWebServicePort" binding="tns:SemNotamWebServiceServiceSoapBinding">
+      <soap:address location="http://localhost:8080/SemNotamWebService/services"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

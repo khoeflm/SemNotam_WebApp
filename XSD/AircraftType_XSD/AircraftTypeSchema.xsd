@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://semnotam.frequentis.com/schema/1.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:aixm="http://www.aixm.aero/schema/5.1"  
+  xmlns:tns="http://semnotam.frequentis.com/schema/1.0"
+  elementFormDefault="qualified">
+    
+  <import namespace="http://www.opengis.net/gml/3.2" 
+    schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd" />
+  <import namespace="http://www.aixm.aero/schema/5.1" 
+    schemaLocation="../AIXM_Features.xsd"/>
+    
+<!--  <include schemaLocation="../Query_XSD/QuerySchema.xsd" /> --> 
+  
+  <element name="AircraftTypeCollection">
+    <complexType>
+      <sequence>
+        <element name="hasMember" maxOccurs="unbounded" minOccurs="0">
+          <complexType>
+            <choice>
+              <element name="AircraftType" type="tns:AircraftTypeType" />
+            </choice>
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+  
+  <complexType name="AircraftTypeType">
+    <sequence>
+      <element name="name" type="token" />
+      <element name="wingspan" type="aixm:ValDistanceType" minOccurs="0" maxOccurs="unbounded" /> <!-- UnitOfMeasurement: NM, KM, M, FT, MI, CM, OTHER -->
+      <element name="tailHeight" type="aixm:ValDistanceType" minOccurs="0" maxOccurs="unbounded" /> <!-- equivalent to FAA tail height / UnitOfMeasurement: NM, KM, M, FT, MI, CM, OTHER -->
+      <element name="approachSpeed" type="aixm:ValSpeedType" minOccurs="0" maxOccurs="unbounded" /> <!-- UnitOfMeasurement: KM_H, KT, MACH, M_MIN, FT_MIN, M_SEC, FT_SEC, MPH, OTHER -->
+      <element name="weight" type="aixm:ValWeightType" minOccurs="0" maxOccurs="unbounded" /> <!-- empty weight / upper weight bound / UnitOfMeasurement: KG, T, LB, TON, OTHER--> 
+      
+      <element name="aircraftApproachCategory" type="aixm:CodeAircraftCategoryType" minOccurs="0" maxOccurs="unbounded" /> <!-- approach category (A, B, C, D, E) -->  
+      <element name="airplaneDesignGroup" type="token" minOccurs="0" maxOccurs="unbounded" />
+      <element name="type" type="aixm:CodeAircraftType" minOccurs="0" maxOccurs="unbounded" /> <!-- LANDPLANE / SEAPLANE / HELICOPTER -->
+      <element name="engine" type="aixm:CodeAircraftEngineType" minOccurs="0" maxOccurs="unbounded" /> <!-- JET (Ramjet, Turbo-*) / PISTON (rotary engine, 2 or 4 cycle engine, reciprocating engine)/ TURBOPROP (Turbo-prop)-->
+      <element name="faaFireFightingCategory" type="token" minOccurs="0" maxOccurs="unbounded" /> <!-- missing: Fire Fighting Category FAA (A, B, C, D, E), ICAO (1, 2, 3, 4, 5, ... , 9, 10)-->
+      <element name="icaoAircraftTypeDesignator" type="aixm:CodeAircraftICAOType" minOccurs="0" maxOccurs="unbounded" />	  
+    </sequence>
+    <attribute name="id" type="token" use="required" />
+  </complexType>
+  
+</schema>
+
+
+
+

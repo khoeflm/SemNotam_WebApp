@@ -1,0 +1,16 @@
+ID          ComponentType           ComponentName           Defining Class              Description
+
+140         ComboBox                RootInterest            InterestMenuBarForm         Contains the InterestList in the InterestMenuBarForm
+150         ComboBox                Interest (X)            ComplexInterests            Contains the InterestList in the ComplexInterestForms
+160         ComboBox                AircraftValues          AircraftInterestForm        id to check for the blur events of Aircraft Forms
+170         ComboBox/TextField      PeriodValues            PeriodOfInterestForm        id to check for the blur events of Period Forms
+180         CB/TF/DF                AreaValues              AreaOfInterestForm          id to check for the blur events of Area Forms
+310         Button                  addInterestButton       ComplexInterests            Button to add Interests in ComplexGroupInterestForms (GroupIntersectForm, GroupUnionForm)
+320         Button                  acceptComplexInt        ComplexInterests            Button to "activate" Interest from Complex Combo Box
+330         Button                  deleteComplexPart       ComplexInterests            Delete ComboBox from Complex Interest Panel
+340         Button                  deletePath              FlightPathInterestForm      Deletes FlightPathInterestForm from View.
+350         Button                  refreshArea             AreaOfInterestForm          Adds values of AreaForm to AreaInterest
+360         Button                  deletePlan              FlightPlanInterestForm      Deletes FlightPlanForm from View
+370         Button                  deleteComp              BinaryInterestForm          Deletes Complex Interest Form
+370         Button                  deletePeriod            PeriodOfInterestForm        Delete Period Form from View
+370         Button                  deleteAttributeForm     AttributeOfInterestForm     Delete Attribute Form from View

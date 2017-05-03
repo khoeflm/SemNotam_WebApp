@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://semnotam.frequentis.com/schema/1.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:aixm="http://www.aixm.aero/schema/5.1"  
+  xmlns:tns="http://semnotam.frequentis.com/schema/1.0"
+  elementFormDefault="qualified">
+    
+<!--  <import namespace="http://www.opengis.net/gml/3.2" 
+    schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd" /> -->
+  <import namespace="http://www.aixm.aero/schema/5.1" 
+    schemaLocation="../AIXM_Features.xsd"/>
+
+  <include schemaLocation="../Query_XSD/InterestSpecificationSchema.xsd" />  
+  
+  <element name="SegmentCollection">
+    <complexType>
+      <sequence>
+        <element name="hasMember" maxOccurs="unbounded" minOccurs="0">
+          <complexType>
+            <choice>
+              <element name="AtsSegment" type="tns:AtsSegmentType" />
+              <element name="TransitionSegment" type="tns:TransitionSegmentType" />
+            </choice>
+          </complexType>
+        </element>
+        <element name="collectionSpecificData" type="tns:InterestSpecificDataPropertyType" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>
+    </complexType>
+  </element>
+  
+  <complexType name="SegmentType">
+    <sequence>
+      <element name="identifier" type="token" />
+      <element name="shape" type="aixm:ElevatedCurvePropertyType" />
+      <element name="startPoint" type="tns:ElevatedPointReferencePropertyType" />
+      <element name="endPoint" type="tns:ElevatedPointReferencePropertyType" />
+      <element name="firDesignator" type="token" minOccurs="0" maxOccurs="unbounded"/> 
+    </sequence>
+    <attribute name="id" type="token" use="required" />
+  </complexType>
+
+  <complexType name="AtsSegmentType">
+    <complexContent>
+      <extension base="tns:SegmentType" /> 
+    </complexContent>
+  </complexType>
+  
+  <complexType name="TransitionSegmentType">
+    <complexContent>
+      <extension base="tns:SegmentType">
+        <sequence>
+          <element name="aerodromeDesignator" type="token" minOccurs="0" maxOccurs="unbounded" />
+        </sequence> 
+      </extension>
+    </complexContent>
+  </complexType> 
+  
+</schema>

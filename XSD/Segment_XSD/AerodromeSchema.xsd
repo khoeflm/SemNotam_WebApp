@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://semnotam.frequentis.com/schema/1.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:aixm="http://www.aixm.aero/schema/5.1"  
+  xmlns:tns="http://semnotam.frequentis.com/schema/1.0"
+  elementFormDefault="qualified">
+    
+<!--  <import namespace="http://www.opengis.net/gml/3.2" 
+    schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd" /> -->
+  <import namespace="http://www.aixm.aero/schema/5.1" 
+    schemaLocation="../AIXM_Features.xsd"/>
+    
+  <include schemaLocation="../Query_XSD/QuerySchema.xsd" /> 
+  <include schemaLocation="./SegmentSchema.xsd" />    
+  
+  <element name="AerodromeCollection">
+    <complexType>
+      <sequence>
+        <element name="hasMember" maxOccurs="unbounded" minOccurs="0">
+          <complexType>
+            <choice>
+              <element name="Aerodrome" type="tns:AerodromeType" />
+            </choice>
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+  
+  <complexType name="AerodromeType">
+    <sequence>
+      <element name="designator" type="token" />
+      <element name="localId" type="token" minOccurs="0" />
+      <element name="firDesignator" type="token" minOccurs="0" maxOccurs="unbounded" />
+      <element name="type" type="aixm:CodeAirportHeliportType" minOccurs="0" /> <!-- AD -> Aerodrome only. AH -> Aerodrome with heliport landing area. HP -> Heliport only. LS -> Landing site. -->
+      <!-- no ARP since the assignment of NOTAMs to an aerodrome is not done bthrough spatial aspects -->
+    </sequence>
+    <attribute name="id" type="token" use="required" />
+  </complexType>
+</schema>
+
+
+
+

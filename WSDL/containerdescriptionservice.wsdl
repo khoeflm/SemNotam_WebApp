@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ContainerDescriptionServiceService" targetNamespace="http://ws.semnotam.frequentis.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.semnotam.frequentis.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://ws.semnotam.frequentis.com/" schemaLocation="containerdescriptionservice_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="getInterestFromConceptResponse">
+    <wsdl:part name="parameters" element="tns:getInterestFromConceptResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="selectConceptForFacetResponse">
+    <wsdl:part name="parameters" element="tns:selectConceptForFacetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="selectConceptForFacet">
+    <wsdl:part name="parameters" element="tns:selectConceptForFacet">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConceptForInterestResponse">
+    <wsdl:part name="parameters" element="tns:getConceptForInterestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConceptForInterest">
+    <wsdl:part name="parameters" element="tns:getConceptForInterest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInterestFromConcept">
+    <wsdl:part name="parameters" element="tns:getInterestFromConcept">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ContainerDescriptionService">
+    <wsdl:operation name="getInterestFromConcept">
+      <wsdl:input name="getInterestFromConcept" message="tns:getInterestFromConcept">
+    </wsdl:input>
+      <wsdl:output name="getInterestFromConceptResponse" message="tns:getInterestFromConceptResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="selectConceptForFacet">
+      <wsdl:input name="selectConceptForFacet" message="tns:selectConceptForFacet">
+    </wsdl:input>
+      <wsdl:output name="selectConceptForFacetResponse" message="tns:selectConceptForFacetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getConceptForInterest">
+      <wsdl:input name="getConceptForInterest" message="tns:getConceptForInterest">
+    </wsdl:input>
+      <wsdl:output name="getConceptForInterestResponse" message="tns:getConceptForInterestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContainerDescriptionServiceServiceSoapBinding" type="tns:ContainerDescriptionService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getInterestFromConcept">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getInterestFromConcept">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getInterestFromConceptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="selectConceptForFacet">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="selectConceptForFacet">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="selectConceptForFacetResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getConceptForInterest">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getConceptForInterest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getConceptForInterestResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContainerDescriptionServiceService">
+    <wsdl:port name="ContainerDescriptionServicePort" binding="tns:ContainerDescriptionServiceServiceSoapBinding">
+      <soap:address location="http://localhost:8080/SemNotamWebService/services"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

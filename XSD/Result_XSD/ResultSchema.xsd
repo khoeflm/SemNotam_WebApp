@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://semnotam.frequentis.com/schema/1.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:aixm="http://www.aixm.aero/schema/5.1"
+  xmlns:tns="http://semnotam.frequentis.com/schema/1.0"
+  xmlns:message="http://www.aixm.aero/schema/5.1/message"
+  elementFormDefault="qualified">
+
+  <import namespace="http://www.aixm.aero/schema/5.1"
+    schemaLocation="../AIXM_Features.xsd"/>
+ <!-- <import namespace="http://www.opengis.net/gml/3.2"
+    schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd" /> -->
+  <import namespace="http://www.aixm.aero/schema/5.1/message"
+    schemaLocation="../message/AIXM_BasicMessage.xsd" />
+  <import namespace="http://www.aixm.aero/schema/5.1/event"
+    schemaLocation="../event/Event_Features.xsd" />
+
+  <include schemaLocation="../Query_XSD/InterestSpecificationSchema.xsd" />
+
+  <!--+++++++++++Evaluated Interest Specification+++++++++++ -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <element name="EvaluatedInterestSpecification" type="tns:InterestSpecResultType" />
+
+  <complexType name="InterestSpecResultType">
+    <complexContent>
+      <extension base="tns:InterestSpecificationType">
+        <sequence>
+          <element name="hasResult" type="tns:ResultNotamPropertyType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ResultNotamPropertyType">
+    <sequence>
+      <element name="Result" type="tns:ResultType" />
+    </sequence>
+  </complexType>
+  
+  <complexType name="ResultType">
+    <sequence>
+      <element name="hasRanking" type="tns:RankingAssignmentPropertyType" minOccurs="0" maxOccurs="unbounded" />
+      <element name="hasClassification" type="tns:ClassificationPropertyType" minOccurs="0" maxOccurs="unbounded" />
+      
+      <element name="hasNotam" type="tns:AIXMBasicMessagePropertyType" minOccurs="0" />
+      <element name="hasNotamId" type="token" minOccurs="0" />
+    </sequence>
+  </complexType>
+  
+  <!--
+  <complexType name="AIXMBasicMessagePropertyType">
+    <sequence>
+      <element name="AIXMBasicMessage" type="message:AIXMBasicMessageType" />
+    </sequence>      
+  </complexType>
+  -->
+  
+  <complexType name="AIXMBasicMessagePropertyType">
+    <sequence>
+	  <element ref="message:AIXMBasicMessage"/>
+    </sequence>      
+  </complexType> 
+  
+  <!--+++++++++++++++++++++Ranking++++++++++++++++++++++++++ -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <complexType name="RankingAssignmentPropertyType">
+    <sequence>
+      <element name="RankingAssignment" type="tns:RankingAssignmentType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="RankingAssignmentType">
+    <sequence>
+      <element name="hasRankingStrategy" type="tns:RankingStrategyPropertyType" />
+      <element name="hasRanking" type="tns:RankingPropertyType" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="RankingPropertyType">
+    <sequence>
+      <element name="Ranking" type="tns:RankingType" />
+    </sequence>
+  </complexType>
+
+  <!-- Ranking Type -->
+  <complexType name="RankingType">
+    <sequence>
+      <element name="rank" type="integer" />
+    </sequence>
+  </complexType>
+
+  
+  <!--+++++++++++++++++++++Classification+++++++++++++++++++ -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <complexType name="ClassificationPropertyType">
+    <sequence>
+      <element name="GroupAssignment" type="tns:GroupAssignmentType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="GroupAssignmentType">
+    <sequence>
+      <element name="hasGrouping" type="tns:GroupingPropertyType" />
+      <element name="hasGroup" type="tns:GroupPropertyType" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="GroupingPropertyType">
+    <sequence>
+      <element name="Grouping" type="tns:GroupingType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="GroupPropertyType">
+    <sequence>
+      <element name="Group" type="tns:ResultGroupType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="ResultGroupType">
+    <complexContent>
+      <extension base="tns:GroupType">
+        <sequence>
+          <element name="attribute" type="string" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SegmentCollection xmlns="http://semnotam.frequentis.com/schema/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:aixm="http://www.aixm.aero/schema/5.1" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://semnotam.frequentis.com/schema/1.0 ./SegmentSchema.xsd" >
+  
+  <hasMember>
+    <AtsSegment id="1212">
+	  <identifier>489e94aa-11da-4a52-b346-3fb83631751c</identifier>
+      <shape>
+        <aixm:ElevatedCurve gml:id="EC_1212">
+          <gml:segments>
+            <gml:LineStringSegment>
+              <gml:posList>38.9353015690001 -77.458481289
+                38.93530156900009 -77.45848128899996 38.9358698240001
+                -77.458208563 38.9359786850001 -77.45815443
+              </gml:posList>
+            </gml:LineStringSegment>
+          </gml:segments>
+        </aixm:ElevatedCurve>
+      </shape>
+	  <startPoint xlink:href="#EP_s1212" /> 
+	  <endPoint xlink:href="#EP_e1212" />
+      <firDesignator>KZDC</firDesignator>
+    </AtsSegment>
+  </hasMember>	
+  <collectionSpecificData>
+    <PointData>
+      <hasMember>
+        <aixm:ElevatedPoint gml:id="EP_s1212">
+		  <gml:pos>38.9353015690001 -77.458481289</gml:pos>
+		</aixm:ElevatedPoint>
+      </hasMember>
+      <hasMember>
+        <aixm:ElevatedPoint gml:id="EP_e1212">
+          <gml:pos>38.9359786850001 -77.45815443</gml:pos>
+        </aixm:ElevatedPoint>
+      </hasMember>
+    </PointData>
+  </collectionSpecificData>
+</SegmentCollection> 

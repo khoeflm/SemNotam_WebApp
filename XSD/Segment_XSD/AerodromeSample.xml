@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AerodromeCollection xmlns="http://semnotam.frequentis.com/schema/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xsi:schemaLocation="http://semnotam.frequentis.com/schema/1.0 ./AerodromeSchema.xsd" >
+  
+  <hasMember>
+    <Aerodrome id="KIAD">
+      <designator>KIAD</designator>
+      <localId>IAD</localId>
+      <firDesignator>KZDC</firDesignator>
+      <type>AH</type>
+    </Aerodrome>
+  </hasMember>	
+  <hasMember>
+    <Aerodrome id="KJFK">
+      <designator>KJFK</designator>
+      <localId>JFK</localId>
+      <firDesignator>KZNY</firDesignator>
+      <type>AH</type>	  
+    </Aerodrome>
+  </hasMember>
+</AerodromeCollection>

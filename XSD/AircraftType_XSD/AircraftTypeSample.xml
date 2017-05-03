@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AircraftTypeCollection xmlns="http://semnotam.frequentis.com/schema/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:aixm="http://www.aixm.aero/schema/5.1" 
+    xsi:schemaLocation="http://semnotam.frequentis.com/schema/1.0 ./AircraftTypeSchema.xsd" >
+  
+  <hasMember>
+    <AircraftType id="717-200">
+	  <name>717-200</name>
+	  <wingspan uom="FT">93.33</wingspan>
+	  <tailHeight uom="FT">29.75</tailHeight>
+	  <approachSpeed uom="KT">139</approachSpeed>
+	  <weight uom="LB">67500</weight>
+	  <weight uom="LB">121000</weight>
+	  <aircraftApproachCategory>C</aircraftApproachCategory>
+	  <airplaneDesignGroup>III</airplaneDesignGroup>
+	  <type>LANDPLANE</type>
+	  <engine>JET</engine>
+	  <faaFireFightingCategory>B</faaFireFightingCategory>
+	</AircraftType>
+  </hasMember>
+</AircraftTypeCollection>
