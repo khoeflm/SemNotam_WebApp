@@ -2,6 +2,11 @@ package at.notamWebapp;
 
 import oracle.jdbc.pool.OracleDataSource;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,5 +102,35 @@ public class DBConnector {
             resultList.add(rs.getString(1));
         }
         return resultList;
+    }
+
+    public List<String> loadExistingInterests(String fileNameSubstring){
+        File dir = new File("tmp/InterestSpecification");
+        File[] files;
+        if(fileNameSubstring.equals("")){
+            files = dir.listFiles();
+        }else {
+            files = dir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.contains(fileNameSubstring);
+                }
+            });
+        }
+        List<String> fileNames = new ArrayList<>();
+        for(File f : files){
+            fileNames.add(f.getName());
+        }
+        return fileNames;
+    }
+
+    public String loadExistingInterest(String filename) {
+        File dir = new File("tmp/InterestSpecification/");
+        try {
+            return new String(Files.readAllBytes(Paths.get(dir+"/"+filename)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

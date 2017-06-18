@@ -1,20 +1,19 @@
 package at.notamWebapp.interestSpec.model;
 
-import aero.aixm.CodeFlightRuleType;
-import aero.aixm.CodeMeteoConditionsType;
-import aero.aixm.ValDistanceType;
-import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.AreaOfInterestForm;
+import aero.aixm.*;
 import com.frequentis.semnotam.schema._1.*;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import net.opengis.gml.*;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,26 +40,60 @@ public class FormValueParser {
         return sbpt;
     }
 
-    public static SegmentShapePropertyType getSegmentShape(HashMap<String, String> values) {
+    public static SegmentShapePropertyType getSegmentShape(String x1,String y1,String x2,String y2) {
         SegmentShapePropertyType sspt = new SegmentShapePropertyType();
         SegmentShapeAreaType ssat = new SegmentShapeAreaType();
-        ElevatedPointReferencePropertyType startPoint = new ElevatedPointReferencePropertyType();
-        ElevatedPointReferencePropertyType endPoint = new ElevatedPointReferencePropertyType();
-        startPoint.setHref(values.get("startPointX")+" "+values.get("startPointY"));
-        endPoint.setHref(values.get("endPointX")+" "+values.get("endPointY"));
-        ssat.setStartPoint(startPoint);
-        ssat.setEndPoint(endPoint);
+        ElevatedCurvePropertyType shapeCurve = new ElevatedCurvePropertyType();
+        CurveSegmentArrayPropertyType segments = new CurveSegmentArrayPropertyType();
+        GeodesicStringType abstractCurveSegment = new GeodesicStringType();
+        DirectPositionListType directPositionListType = new DirectPositionListType();
+        ElevatedCurveType elevatedCurveType = new ElevatedCurveType();
+
+
+        elevatedCurveType.setSegments(segments);
+        shapeCurve.setElevatedCurve(elevatedCurveType);
+        ssat.setShapeCurve(shapeCurve);
         sspt.setSegmentShapeArea(ssat);
+        abstractCurveSegment.setInterpolation(CurveInterpolationType.GEODESIC);
+
+        abstractCurveSegment.setPosList(directPositionListType);
+        JAXBElement<? extends AbstractCurveSegmentType> jaxbElement = new JAXBElement<>(
+                QName.valueOf("gml:GeodesicString"), GeodesicStringType.class, abstractCurveSegment);
+        segments.getAbstractCurveSegment().add(jaxbElement);
+
+        if(!x1.equals("")) {
+            directPositionListType.getValue().add(0, Double.valueOf(x1));
+        } else{
+            directPositionListType.getValue().add(0, Double.valueOf(0));
+        }
+
+        if(!y1.equals("")) {
+            directPositionListType.getValue().add(1, Double.valueOf(y1));
+        } else{
+            directPositionListType.getValue().add(1, Double.valueOf(0));
+        }
+
+        if(!x2.equals("")) {
+            directPositionListType.getValue().add(2, Double.valueOf(x2));
+        } else{
+            directPositionListType.getValue().add(2, Double.valueOf(0));
+        }
+
+        if(!y2.equals("")) {
+            directPositionListType.getValue().add(3, Double.valueOf(y2));
+        } else{
+            directPositionListType.getValue().add(3, Double.valueOf(0));
+        }
         return sspt;
     }
 
-    public static ValDistanceType getValDistance(HashMap<String, String> values) {
+    private static ValDistanceType getValDistance(HashMap<String, String> values) {
         ValDistanceType value = new ValDistanceType();
         value.setValue(BigDecimal.valueOf(Long.parseLong(values.get("flightAltitude"))));
         return value;
     }
 
-    public static TimeBufferPropertyType getTimeBuffer(HashMap<String, String> values) {
+    private static TimeBufferPropertyType getTimeBuffer(HashMap<String, String> values) {
         TimeBufferPropertyType tbpt = new TimeBufferPropertyType();
         TimeBufferPropertyType.TemporalBuffer tb = new TimeBufferPropertyType.TemporalBuffer();
         try {
@@ -76,13 +109,13 @@ public class FormValueParser {
         return tbpt;
     }
 
-    public static CodeFlightRuleType getFlightRule(HashMap<String, String> values){
+    private static CodeFlightRuleType getFlightRule(HashMap<String, String> values){
         CodeFlightRuleType cfrt = new CodeFlightRuleType();
         cfrt.setValue(values.get("flightRule"));
         return cfrt;
     }
 
-    public static CodeMeteoConditionsType getMeteoCondition(HashMap<String, String> values) {
+    private static CodeMeteoConditionsType getMeteoCondition(HashMap<String, String> values) {
         CodeMeteoConditionsType cmct = new CodeMeteoConditionsType();
         cmct.setValue(values.get("meteoCondition"));
         return cmct;
@@ -160,7 +193,7 @@ public class FormValueParser {
         }
         return tbpt;
     }
-
+/*
     public static AreaOfInterestType addAreaFormValuesToAreaInterest(AreaOfInterestForm areaForm) {
         //  Abschnitt zur Erzeugung der jeweiligen AreaInterests und hinzufügen zum FlightPath
         HashMap<String, String> values = areaForm.getCaptionValuePairs();
@@ -395,7 +428,7 @@ public class FormValueParser {
         }
         return null;
     }
-
+*/
     public static Panel getinterestFormPanel(String property) {
         Panel interestPanel = new Panel();
         return interestPanel;

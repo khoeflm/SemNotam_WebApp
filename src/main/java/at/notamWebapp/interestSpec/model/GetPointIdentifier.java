@@ -7,17 +7,25 @@ public class GetPointIdentifier {
 
     public static String getFirstPointId(String segmentId){
         if(segmentId!="") {
-            int x = segmentId.indexOf("-");
-            return segmentId.substring(0, x - 1);
+            if(segmentId.indexOf("-") != -1) {
+                int x = segmentId.indexOf("-");
+                return segmentId.substring(0, x - 1);
+            }else{
+                return segmentId;
+            }
         }
         else return "";
     }
 
     public static String getSecondPointId(String segmentId){
         if(segmentId!="") {
-            int x = segmentId.indexOf("-");
-            int y = segmentId.length();
-            return segmentId.substring(x + 1, y);
+            if(segmentId.indexOf("-") != -1) {
+                int x = segmentId.indexOf("-");
+                int y = segmentId.length();
+                return segmentId.substring(x + 1, y);
+            }else{
+                return segmentId;
+            }
         }
         else return "";
     }

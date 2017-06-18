@@ -2,14 +2,18 @@ package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import at.notamWebapp.interestSpec.model.GetPointIdentifier;
+import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
+import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
+import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.frequentis.semnotam.schema._1.AtsAreaType;
 import com.frequentis.semnotam.schema._1.ElevatedPointReferencePropertyType;
-import com.frequentis.semnotam.schema._1.TransitionAreaType;
 import com.vaadin.data.Property;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import net.opengis.gml.GeodesicStringType;
@@ -53,6 +57,7 @@ public class AtsAreaFields extends GridLayout {
         setMargin(true);
         setSpacing(true);
         identifier.addItems(predefinedAtsAreas);
+        identifier.setRequired(true);
         this.controller = controller;
 
         horizontalBuffer.setWidth("90%");
@@ -83,13 +88,14 @@ public class AtsAreaFields extends GridLayout {
         endPosition.setResolution(Resolution.MINUTE);
         beginPosition.setImmediate(true);
         endPosition.setImmediate(true);
+
         //set Converter (XML-Gregorian Calender <-> Date)
-    /*
         beginPosition.setConverter(new CustomDateConverter());
         endPosition.setConverter(new CustomDateConverter());
         bufferBefore.setConverter(new CustomDurationConverter());
         bufferAfter.setConverter(new CustomDurationConverter());
-    */
+        timeOfDay.setConverter(new CustomDayTimeConverter());
+
         //set ComboBox values
         //Day, Night --> Time of Day
         //IMC, VMC --> Meteo Conditions
@@ -121,12 +127,29 @@ public class AtsAreaFields extends GridLayout {
                 "elevatedCurve.segments");
 
         identifier.addValueChangeListener(valueChangeEvent -> {
-            TransitionAreaType specArea = area.getDepartureArea();
+            AtsAreaType specArea = area.getAtsArea();
             setElevatedProperties(specArea, valueChangeEvent);
         });
         elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-            TransitionAreaType specArea = area.getDepartureArea();
+            AtsAreaType specArea = area.getAtsArea();
             setElevatedPoint(specArea);
+        });
+
+        bufferBefore.addValueChangeListener(valueChangeEvent ->
+        {
+            try{
+                bufferBefore.commit();
+            } catch (Validator.InvalidValueException e){
+                //    tfOccBufBef.setComponentError(new UserError("Only numeric values allowed"));
+            }
+        });
+        bufferAfter.addValueChangeListener(valueChangeEvent ->
+        {
+            try{
+                bufferAfter.commit();
+            } catch (Validator.InvalidValueException e){
+                //    tfOccBufAft.setComponentError(new UserError("Only numeric values allowed"));
+            }
         });
 
         addComponent(this.areaId, 0, 0);
@@ -156,16 +179,54 @@ public class AtsAreaFields extends GridLayout {
                 }
             }
         }
+
+        //Validation of Start and End Time
+        endPosition.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(beginPosition.getValue() != null && endPosition.getValue().before(beginPosition.getValue())){
+                        endPosition.setValue(beginPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else endPosition.commit();
+                }
+        );
+
+        beginPosition.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(endPosition.getValue() != null && beginPosition.getValue().after(endPosition.getValue())){
+                        beginPosition.setValue(endPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else beginPosition.commit();
+                }
+        );
     }
 
-    private void setElevatedProperties(TransitionAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
-        setElevatedCurveId(specArea, valueChangeEvent);
-        setElevatedPoint(specArea);
+    private void setElevatedProperties(AtsAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
+        try {
+            if (!identifier.isValid()) {
+                identifier.setValidationVisible(true);
+            } else {
+                identifier.setValidationVisible(false);
+                identifier.setComponentError(null);
+                identifier.commit();
+                setElevatedCurveId(specArea, valueChangeEvent);
+                setElevatedPoint(specArea);
+            }
+        } catch (Validator.EmptyValueException e) {
+            // A required value was missing
+        }
     }
 
-    private void setElevatedPoint(TransitionAreaType transArea) {
+    private void setElevatedPoint(AtsAreaType atsArea) {
         if(!identifier.getValue().toString().isEmpty()) {
-            GeodesicStringType geodesicStringType = (GeodesicStringType) transArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().
+            GeodesicStringType geodesicStringType = (GeodesicStringType) atsArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().
                     getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
             List<Double> pointList = geodesicStringType.getPosList().getValue();
             controller.getElevatedDataController().setElevatedPoint(identifier.getValue().toString(), pointList);
@@ -173,16 +234,16 @@ public class AtsAreaFields extends GridLayout {
             ElevatedPointReferencePropertyType endPoint = new ElevatedPointReferencePropertyType();
             startPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getFirstPointId(identifier.getValue().toString()));
             endPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getSecondPointId(identifier.getValue().toString()));
-            transArea.getSegmentShape().getSegmentShapeArea().setStartPoint(startPoint);
-            transArea.getSegmentShape().getSegmentShapeArea().setEndPoint(endPoint);
+            atsArea.getSegmentShape().getSegmentShapeArea().setStartPoint(startPoint);
+            atsArea.getSegmentShape().getSegmentShapeArea().setEndPoint(endPoint);
         }
     }
 
-    private void setElevatedCurveId(TransitionAreaType transArea, Property.ValueChangeEvent valueChangeEvent) {
+    private void setElevatedCurveId(AtsAreaType atsArea, Property.ValueChangeEvent valueChangeEvent) {
         String identifier = (String) valueChangeEvent.getProperty().getValue();
         String firstPointId = GetPointIdentifier.getFirstPointId(identifier);
         String secondPointId = GetPointIdentifier.getSecondPointId(identifier);
-        transArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().getElevatedCurve().setId("ElevatedCurvePoint"+
+        atsArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().getElevatedCurve().setId("ElevatedCurvePoint"+
                 firstPointId +"Point"+secondPointId);
     }
 }

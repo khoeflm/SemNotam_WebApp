@@ -1,152 +1,24 @@
+//
+// Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.11 generiert 
+// Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+// ï¿½nderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
+// Generiert: 2017.02.21 um 12:51:48 PM CET 
+//
+
 
 package aero.aixm;
+
+import aero.aixm.event.*;
+import aero.aixm.schema._5_1.extensions.faa.fnse.EventExtensionType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-import aero.aixm.event.AerialRefuellingExtensionType;
-import aero.aixm.event.AeronauticalGroundLightExtensionType;
-import aero.aixm.event.AirTrafficControlServiceExtensionType;
-import aero.aixm.event.AirTrafficManagementServiceExtensionType;
-import aero.aixm.event.AircraftGroundServiceExtensionType;
-import aero.aixm.event.AircraftStandExtensionType;
-import aero.aixm.event.AirportClearanceServiceExtensionType;
-import aero.aixm.event.AirportGroundServiceExtensionType;
-import aero.aixm.event.AirportHeliportCollocationExtensionType;
-import aero.aixm.event.AirportHeliportExtensionType;
-import aero.aixm.event.AirportHeliportProtectionAreaExtensionType;
-import aero.aixm.event.AirportHotSpotExtensionType;
-import aero.aixm.event.AirportProtectionAreaMarkingExtensionType;
-import aero.aixm.event.AirportSuppliesServiceExtensionType;
-import aero.aixm.event.AirspaceBorderCrossingExtensionType;
-import aero.aixm.event.AirspaceExtensionType;
-import aero.aixm.event.AltimeterSourceExtensionType;
-import aero.aixm.event.AngleIndicationExtensionType;
-import aero.aixm.event.ApproachLegExtensionType;
-import aero.aixm.event.ApproachLightingSystemExtensionType;
-import aero.aixm.event.ApronElementExtensionType;
-import aero.aixm.event.ApronExtensionType;
-import aero.aixm.event.ApronLightSystemExtensionType;
-import aero.aixm.event.ApronMarkingExtensionType;
-import aero.aixm.event.ArrestingGearExtensionType;
-import aero.aixm.event.ArrivalFeederLegExtensionType;
-import aero.aixm.event.ArrivalLegExtensionType;
-import aero.aixm.event.AuthorityForAirspaceExtensionType;
-import aero.aixm.event.AzimuthExtensionType;
-import aero.aixm.event.ChangeOverPointExtensionType;
-import aero.aixm.event.CheckpointINSExtensionType;
-import aero.aixm.event.CheckpointVORExtensionType;
-import aero.aixm.event.CirclingAreaExtensionType;
-import aero.aixm.event.DMEExtensionType;
-import aero.aixm.event.DeicingAreaExtensionType;
-import aero.aixm.event.DeicingAreaMarkingExtensionType;
-import aero.aixm.event.DepartureLegExtensionType;
-import aero.aixm.event.DesignatedPointExtensionType;
-import aero.aixm.event.DirectionFinderExtensionType;
-import aero.aixm.event.DistanceIndicationExtensionType;
-import aero.aixm.event.ElevationExtensionType;
-import aero.aixm.event.FinalLegExtensionType;
-import aero.aixm.event.FireFightingServiceExtensionType;
-import aero.aixm.event.FlightRestrictionExtensionType;
-import aero.aixm.event.FloatingDockSiteExtensionType;
-import aero.aixm.event.GeoBorderExtensionType;
-import aero.aixm.event.GlidepathExtensionType;
-import aero.aixm.event.GroundLightSystemExtensionType;
-import aero.aixm.event.GroundTrafficControlServiceExtensionType;
-import aero.aixm.event.GuidanceLineExtensionType;
-import aero.aixm.event.GuidanceLineLightSystemExtensionType;
-import aero.aixm.event.GuidanceLineMarkingExtensionType;
-import aero.aixm.event.HoldingAssessmentExtensionType;
-import aero.aixm.event.HoldingPatternExtensionType;
-import aero.aixm.event.InformationServiceExtensionType;
-import aero.aixm.event.InitialLegExtensionType;
-import aero.aixm.event.InstrumentApproachProcedureExtensionType;
-import aero.aixm.event.IntermediateLegExtensionType;
-import aero.aixm.event.LocalizerExtensionType;
-import aero.aixm.event.MarkerBeaconExtensionType;
-import aero.aixm.event.MarkingBuoyExtensionType;
-import aero.aixm.event.MarkingExtensionType;
-import aero.aixm.event.MissedApproachLegExtensionType;
-import aero.aixm.event.NDBExtensionType;
-import aero.aixm.event.NavaidEquipmentExtensionType;
-import aero.aixm.event.NavaidExtensionType;
-import aero.aixm.event.NavigationAreaExtensionType;
-import aero.aixm.event.NavigationAreaRestrictionExtensionType;
-import aero.aixm.event.NavigationSystemCheckpointExtensionType;
-import aero.aixm.event.NonMovementAreaExtensionType;
-import aero.aixm.event.ObstacleAreaExtensionType;
-import aero.aixm.event.OrganisationAuthorityExtensionType;
-import aero.aixm.event.PassengerLoadingBridgeExtensionType;
-import aero.aixm.event.PassengerServiceExtensionType;
-import aero.aixm.event.PilotControlledLightingExtensionType;
-import aero.aixm.event.PrecisionApproachRadarExtensionType;
-import aero.aixm.event.PrimarySurveillanceRadarExtensionType;
-import aero.aixm.event.ProcedureDMEExtensionType;
-import aero.aixm.event.ProcedureExtensionType;
-import aero.aixm.event.RadarEquipmentExtensionType;
-import aero.aixm.event.RadarSystemExtensionType;
-import aero.aixm.event.RadioCommunicationChannelExtensionType;
-import aero.aixm.event.RadioFrequencyAreaExtensionType;
-import aero.aixm.event.RoadExtensionType;
-import aero.aixm.event.RouteDMEExtensionType;
-import aero.aixm.event.RouteExtensionType;
-import aero.aixm.event.RouteSegmentExtensionType;
-import aero.aixm.event.RulesProceduresExtensionType;
-import aero.aixm.event.RunwayBlastPadExtensionType;
-import aero.aixm.event.RunwayCentrelinePointExtensionType;
-import aero.aixm.event.RunwayDirectionExtensionType;
-import aero.aixm.event.RunwayDirectionLightSystemExtensionType;
-import aero.aixm.event.RunwayElementExtensionType;
-import aero.aixm.event.RunwayExtensionType;
-import aero.aixm.event.RunwayMarkingExtensionType;
-import aero.aixm.event.RunwayProtectAreaExtensionType;
-import aero.aixm.event.RunwayProtectAreaLightSystemExtensionType;
-import aero.aixm.event.RunwayVisualRangeExtensionType;
-import aero.aixm.event.SDFExtensionType;
-import aero.aixm.event.SafeAltitudeAreaExtensionType;
-import aero.aixm.event.SeaplaneLandingAreaExtensionType;
-import aero.aixm.event.SeaplaneRampSiteExtensionType;
-import aero.aixm.event.SearchRescueServiceExtensionType;
-import aero.aixm.event.SecondarySurveillanceRadarExtensionType;
-import aero.aixm.event.SegmentLegExtensionType;
-import aero.aixm.event.ServiceExtensionType;
-import aero.aixm.event.SignificantPointInAirspaceExtensionType;
-import aero.aixm.event.SpecialDateExtensionType;
-import aero.aixm.event.SpecialNavigationStationExtensionType;
-import aero.aixm.event.SpecialNavigationSystemExtensionType;
-import aero.aixm.event.StandMarkingExtensionType;
-import aero.aixm.event.StandardInstrumentArrivalExtensionType;
-import aero.aixm.event.StandardInstrumentDepartureExtensionType;
-import aero.aixm.event.StandardLevelColumnExtensionType;
-import aero.aixm.event.StandardLevelSectorExtensionType;
-import aero.aixm.event.StandardLevelTableExtensionType;
-import aero.aixm.event.SurveillanceRadarExtensionType;
-import aero.aixm.event.SurveyControlPointExtensionType;
-import aero.aixm.event.TACANExtensionType;
-import aero.aixm.event.TaxiHoldingPositionExtensionType;
-import aero.aixm.event.TaxiHoldingPositionLightSystemExtensionType;
-import aero.aixm.event.TaxiHoldingPositionMarkingExtensionType;
-import aero.aixm.event.TaxiwayElementExtensionType;
-import aero.aixm.event.TaxiwayExtensionType;
-import aero.aixm.event.TaxiwayLightSystemExtensionType;
-import aero.aixm.event.TaxiwayMarkingExtensionType;
-import aero.aixm.event.TerminalArrivalAreaExtensionType;
-import aero.aixm.event.TouchDownLiftOffExtensionType;
-import aero.aixm.event.TouchDownLiftOffLightSystemExtensionType;
-import aero.aixm.event.TouchDownLiftOffMarkingExtensionType;
-import aero.aixm.event.TouchDownLiftOffSafeAreaExtensionType;
-import aero.aixm.event.TrafficSeparationServiceExtensionType;
-import aero.aixm.event.UnitExtensionType;
-import aero.aixm.event.UnplannedHoldingExtensionType;
-import aero.aixm.event.VORExtensionType;
-import aero.aixm.event.VerticalStructureExtensionType;
-import aero.aixm.event.VisualGlideSlopeIndicatorExtensionType;
-import aero.aixm.event.WorkAreaExtensionType;
 
 
 /**
- * <p>Java-Klasse für AbstractExtensionType complex type.
+ * <p>Java-Klasse fï¿½r AbstractExtensionType complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
@@ -301,7 +173,8 @@ import aero.aixm.event.WorkAreaExtensionType;
     RouteExtensionType.class,
     ChangeOverPointExtensionType.class,
     AerialRefuellingExtensionType.class,
-    RulesProceduresExtensionType.class
+    RulesProceduresExtensionType.class,
+    EventExtensionType.class
 })
 public abstract class AbstractExtensionType
     extends AbstractAIXMObjectType

@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.model.customConverter;
 
 import aero.aixm.ValDistanceType;
+import com.frequentis.semnotam.schema._1.CodeTimeOfDayBaseType;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
 
@@ -30,6 +31,9 @@ public class MyConverterFactory extends DefaultConverterFactory{
     //    else if((presentationType == String.class) && (modelType == CodeVerticalDatumType.class)){
     //        return (Converter<PRESENTATION, MODEL>) new JAXBElementConverter();
     //    }
+        else if((presentationType == String.class) && (modelType == CodeTimeOfDayBaseType.class)){
+            return (Converter<PRESENTATION, MODEL>) new CustomDayTimeConverter();
+        }
         else return super.createConverter(presentationType, modelType);
     }
 }

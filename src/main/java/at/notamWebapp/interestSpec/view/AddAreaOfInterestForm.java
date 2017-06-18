@@ -14,11 +14,11 @@ public class AddAreaOfInterestForm extends Panel implements SemNotamForm{
     private Upload upload;
     XMLUnmarshaller xmlUnmarshaller;
 
-    public AddAreaOfInterestForm(SemNotamController controller, XMLUnmarshaller xmlUnmarshaller, String id){
+    public AddAreaOfInterestForm(SemNotamController controller, String id){
         setId(id);
         this.addController(controller);
         this.xmlUnmarshaller = xmlUnmarshaller;
-        upload = new Upload("FlightPlan Uploader", xmlUnmarshaller);
+        upload = new Upload("FlightPlan Uploader", controller);
         upload.setId(getId());
         bAddArea.setId("addAreaInterest");
         cbAreaInterest.addItems(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
@@ -36,7 +36,7 @@ public class AddAreaOfInterestForm extends Panel implements SemNotamForm{
         cbAreaInterest.setItemCaption(12, "DepartureAlternateApproachArea");
         cbAreaInterest.setItemCaption(13, "EnRouteAlternateApproachArea");
         cbAreaInterest.setItemCaption(14, "DestinationAlternateApproachArea");
-        upload.addSucceededListener(xmlUnmarshaller);
+        upload.addSucceededListener(controller);
         HorizontalLayout aaoifLayout = new HorizontalLayout(cbAreaInterest, bAddArea, upload);
         aaoifLayout.setComponentAlignment(bAddArea, Alignment.BOTTOM_CENTER);
         setCaption("Add new AreaOfInterest");

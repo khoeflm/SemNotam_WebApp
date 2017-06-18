@@ -2,8 +2,10 @@ package at.notamWebapp.interestSpec.view.simpleInterestForm;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import com.frequentis.semnotam.schema._1.PeriodOfInterestType;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 
@@ -11,10 +13,10 @@ import com.vaadin.ui.*;
  * Created by khoef on 20.11.2016.
  */
 public class PeriodOfInterestForm extends Panel {
-    private DateField dfOccStartTime = new DateField("Occurance Time (beginPos):");
-    private DateField dfOccEndTime = new DateField("Occurance Time (endPos):");
-    private DateField dfDetStartTime = new DateField("Departure Time (beginPos):");
-    private DateField dfDetEndTime = new DateField("Arrival Time (endPos):");
+    private DateField dfOccStartTime = new DateField("Occurence Time (beginPos):");
+    private DateField dfOccEndTime = new DateField("Occurence Time (endPos):");
+    private DateField dfDetStartTime = new DateField("Detection Time (beginPos):");
+    private DateField dfDetEndTime = new DateField("Detection Time (endPos):");
     private TextField tfOccBufBef = new TextField("Buffer before:");
     private TextField tfOccBufAft = new TextField("Buffer after:");
     private Label id = new Label();
@@ -63,7 +65,73 @@ public class PeriodOfInterestForm extends Panel {
         dfOccEndTime.addValueChangeListener(valueChangeEvent -> dfOccEndTime.commit());
         dfDetStartTime.addValueChangeListener(valueChangeEvent -> dfDetStartTime.commit());
         dfDetEndTime.addValueChangeListener(valueChangeEvent -> dfDetEndTime.commit());
-        tfOccBufBef.addValueChangeListener(valueChangeEvent -> tfOccBufBef.commit());
-        tfOccBufAft.addValueChangeListener(valueChangeEvent -> tfOccBufAft.commit());
+        tfOccBufBef.addValueChangeListener(valueChangeEvent ->
+                    {
+                        try{
+                            tfOccBufBef.commit();
+                        } catch (Validator.InvalidValueException e){
+                        //    tfOccBufBef.setComponentError(new UserError("Only numeric values allowed"));
+                        }
+                    });
+        tfOccBufAft.addValueChangeListener(valueChangeEvent ->
+                    {
+                        try{
+                            tfOccBufAft.commit();
+                        } catch (Validator.InvalidValueException e){
+                        //    tfOccBufAft.setComponentError(new UserError("Only numeric values allowed"));
+                        }
+                    });
+
+        //Validation of Start and End Time
+        dfDetEndTime.addValueChangeListener(valueChangeEvent ->
+                {
+                    if(dfDetStartTime.getValue() != null && dfDetEndTime.getValue().before(dfDetStartTime.getValue())){
+                        dfDetEndTime.setValue(dfOccStartTime.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else dfDetEndTime.commit();
+                }
+        );
+
+        dfDetStartTime.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(dfDetEndTime.getValue() != null && dfDetStartTime.getValue().after(dfDetEndTime.getValue())){
+                        dfDetStartTime.setValue(dfDetEndTime.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else dfDetStartTime.commit();
+                }
+        );
+
+        //Validation of Start and End Time
+        dfOccEndTime.addValueChangeListener(valueChangeEvent ->
+                {
+                    if(dfOccStartTime.getValue() != null && dfOccEndTime.getValue().before(dfOccStartTime.getValue())){
+                        dfOccEndTime.setValue(dfOccStartTime.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else dfOccEndTime.commit();
+                }
+        );
+
+        dfOccStartTime.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(dfOccEndTime.getValue() != null && dfOccStartTime.getValue().after(dfOccEndTime.getValue())){
+                        dfOccStartTime.setValue(dfOccEndTime.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else dfOccStartTime.commit();
+                }
+        );
     }
 }

@@ -2,7 +2,7 @@ package at.notamWebapp.interestSpec.model;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.*;
-import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
+import com.frequentis.semnotam.schema._1.*;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 
 /**
@@ -15,7 +15,8 @@ public class AreaFormFactory{
         this.controller = controller;
     }
 
-    public AreaOfInterestForm initAreaForm(AreaOfInterestPropertyType area, String areaId, Class areaClass){
+    public AreaOfInterestForm initAreaForm(AreaOfInterestPropertyType area, String areaId){
+        Class areaClass = getAreaClass(area);
         AreaOfInterestForm areaForm = new AreaOfInterestForm(areaId, controller, areaClass, area);
         switch (areaClass.getSimpleName()){
             case "DepartureAerodromeAreaType":case "DestinationAerodromeAreaType":case"DepartureAlternateAerodromeAreaType":
@@ -42,5 +43,36 @@ public class AreaFormFactory{
         return areaForm;
     }
 
-
+    private Class getAreaClass(AreaOfInterestPropertyType area) {
+        if(area.getDepartureAerodromeArea() != null){
+            return DepartureAerodromeAreaType.class;
+        }else if(area.getDestinationAerodromeArea() != null){
+            return DestinationAerodromeAreaType.class;
+        }else if(area.getDepartureAlternateAerodromeArea() != null){
+            return DepartureAlternateAerodromeAreaType.class;
+        }else if(area.getDestinationAlternateAerodromeArea() != null){
+            return DestinationAlternateAerodromeAreaType.class;
+        }else if(area.getEnRouteAlternateAerodromeArea() != null){
+            return EnRouteAlternateAerodromeAreaType.class;
+        }else if(area.getFirArea() != null){
+            return FirAreaType.class;
+        }else if(area.getShapeArea() != null){
+            return ShapeAreaType.class;
+        }else if(area.getConceptDefinedArea() != null){
+            return ConceptDefinedAreaType.class;
+        }else if(area.getAtsArea() != null){
+            return AtsAreaType.class;
+        }else if(area.getDepartureArea() != null){
+            return DepartureAreaType.class;
+        }else if(area.getDestinationApproachArea() != null){
+            return DestinationApproachAreaType.class;
+        }else if(area.getDepartureAlternateApproachArea() != null){
+            return DepartureAlternateApproachAreaType.class;
+        }else if(area.getEnRouteAlternateApproachArea() != null){
+            return EnRouteAlternateApproachAreaType.class;
+        }else if(area.getDestinationAlternateApproachArea() != null){
+            return DestinationAlternateApproachAreaType.class;
+        }
+        else return null;
+    }
 }

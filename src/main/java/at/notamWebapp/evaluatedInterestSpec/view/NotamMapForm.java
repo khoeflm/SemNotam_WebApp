@@ -1,6 +1,8 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
+import at.notamWebapp.GoogleMapsDrawer;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
+import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.ui.Panel;
@@ -12,6 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 public class NotamMapForm extends Panel {
     private GoogleMap googleMap;
     private VerticalLayout mainLayout;
+    private GoogleMapsDrawer googleMapsDrawer;
 
     public NotamMapForm(EvalNotamController controller){
         googleMap = new GoogleMap(null, null, null);
@@ -23,5 +26,15 @@ public class NotamMapForm extends Panel {
         mainLayout.setWidth("100%");
         mainLayout.setHeight("600px");
         setContent(mainLayout);
+    }
+
+
+
+    public void drawMapElements(EvaluatedInterestService model) {
+        if(googleMapsDrawer == null){
+            googleMapsDrawer = new GoogleMapsDrawer();
+        }
+        googleMapsDrawer.drawFlightPath(googleMap, model.getFlightPath());
+        //googleMapsDrawer.drawNotamMarkers(googleMap, notamTableValues);
     }
 }

@@ -1,25 +1,24 @@
+//
+// Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.11 generiert 
+// Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+// ï¿½nderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
+// Generiert: 2017.02.21 um 12:51:48 PM CET 
+//
+
 
 package aero.aixm.event;
 
+import aero.aixm.*;
+import aero.aixm.schema._5_1.extensions.faa.fnse.EventExtensionType;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlType;
-import aero.aixm.AbstractAIXMTimeSliceType;
-import aero.aixm.AbstractExtensionType;
-import aero.aixm.DateTimeType;
-import aero.aixm.NotePropertyType;
-import aero.aixm.TextDesignatorType;
-import aero.aixm.TextNameType;
 
 
 /**
- * <p>Java-Klasse für EventTimeSliceType complex type.
+ * <p>Java-Klasse fï¿½r EventTimeSliceType complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
@@ -81,15 +80,15 @@ public class EventTimeSliceType
     protected List<NotePropertyType> theNote;
     @XmlElement(nillable = true)
     protected List<AISPublicationPropertyType> documentAIS;
-    protected List<EventTimeSliceType.Extension> extension;
+    protected List<Extension> extension;
 
     /**
      * Ruft den Wert der eventName-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link TextNameType }{@code >}
-     *     
+     *
      */
     public JAXBElement<TextNameType> getEventName() {
         return eventName;
@@ -97,11 +96,11 @@ public class EventTimeSliceType
 
     /**
      * Legt den Wert der eventName-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link TextNameType }{@code >}
-     *     
+     *
      */
     public void setEventName(JAXBElement<TextNameType> value) {
         this.eventName = value;
@@ -109,11 +108,11 @@ public class EventTimeSliceType
 
     /**
      * Ruft den Wert der encoding-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link CodeEventEncodingType }{@code >}
-     *     
+     *
      */
     public JAXBElement<CodeEventEncodingType> getEncoding() {
         return encoding;
@@ -121,11 +120,11 @@ public class EventTimeSliceType
 
     /**
      * Legt den Wert der encoding-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link CodeEventEncodingType }{@code >}
-     *     
+     *
      */
     public void setEncoding(JAXBElement<CodeEventEncodingType> value) {
         this.encoding = value;
@@ -133,11 +132,11 @@ public class EventTimeSliceType
 
     /**
      * Ruft den Wert der scenario-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link TextDesignatorType }{@code >}
-     *     
+     *
      */
     public JAXBElement<TextDesignatorType> getScenario() {
         return scenario;
@@ -145,11 +144,11 @@ public class EventTimeSliceType
 
     /**
      * Legt den Wert der scenario-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link TextDesignatorType }{@code >}
-     *     
+     *
      */
     public void setScenario(JAXBElement<TextDesignatorType> value) {
         this.scenario = value;
@@ -157,11 +156,11 @@ public class EventTimeSliceType
 
     /**
      * Ruft den Wert der revision-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link DateTimeType }{@code >}
-     *     
+     *
      */
     public JAXBElement<DateTimeType> getRevision() {
         return revision;
@@ -169,11 +168,11 @@ public class EventTimeSliceType
 
     /**
      * Legt den Wert der revision-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link DateTimeType }{@code >}
-     *     
+     *
      */
     public void setRevision(JAXBElement<DateTimeType> value) {
         this.revision = value;
@@ -181,25 +180,25 @@ public class EventTimeSliceType
 
     /**
      * Gets the value of the textNOTAM property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the textNOTAM property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getTextNOTAM().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link NOTAMPropertyType }
-     * 
-     * 
+     *
+     *
      */
     public List<NOTAMPropertyType> getTextNOTAM() {
         if (textNOTAM == null) {
@@ -210,11 +209,11 @@ public class EventTimeSliceType
 
     /**
      * Ruft den Wert der causeEvent-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link EventPropertyType }{@code >}
-     *     
+     *
      */
     public JAXBElement<EventPropertyType> getCauseEvent() {
         return causeEvent;
@@ -222,11 +221,11 @@ public class EventTimeSliceType
 
     /**
      * Legt den Wert der causeEvent-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link EventPropertyType }{@code >}
-     *     
+     *
      */
     public void setCauseEvent(JAXBElement<EventPropertyType> value) {
         this.causeEvent = value;
@@ -234,25 +233,25 @@ public class EventTimeSliceType
 
     /**
      * Gets the value of the theNote property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the theNote property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getTheNote().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link NotePropertyType }
-     * 
-     * 
+     *
+     *
      */
     public List<NotePropertyType> getTheNote() {
         if (theNote == null) {
@@ -263,25 +262,25 @@ public class EventTimeSliceType
 
     /**
      * Gets the value of the documentAIS property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the documentAIS property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDocumentAIS().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AISPublicationPropertyType }
-     * 
-     * 
+     *
+     *
      */
     public List<AISPublicationPropertyType> getDocumentAIS() {
         if (documentAIS == null) {
@@ -292,36 +291,36 @@ public class EventTimeSliceType
 
     /**
      * Gets the value of the extension property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the extension property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getExtension().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link EventTimeSliceType.Extension }
-     * 
-     * 
+     *
+     *
      */
-    public List<EventTimeSliceType.Extension> getExtension() {
+    public List<Extension> getExtension() {
         if (extension == null) {
-            extension = new ArrayList<EventTimeSliceType.Extension>();
+            extension = new ArrayList<Extension>();
         }
         return this.extension;
     }
 
 
     /**
-     * <p>Java-Klasse für anonymous complex type.
+     * <p>Java-Klasse fï¿½r anonymous complex type.
      * 
      * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
      * 
@@ -346,8 +345,8 @@ public class EventTimeSliceType
     })
     public static class Extension {
 
-        @XmlElement(name = "AbstractEventExtension", required = true)
-        protected AbstractExtensionType abstractEventExtension;
+        @XmlElementRef(name = "AbstractEventExtension", namespace = "http://www.aixm.aero/schema/5.1/event", type = JAXBElement.class)
+        protected JAXBElement<? extends AbstractExtensionType> abstractEventExtension;
         @XmlAttribute(name = "owns")
         protected Boolean owns;
 
@@ -356,10 +355,11 @@ public class EventTimeSliceType
          * 
          * @return
          *     possible object is
-         *     {@link AbstractExtensionType }
+         *     {@link JAXBElement }{@code <}{@link AbstractExtensionType }{@code >}
+         *     {@link JAXBElement }{@code <}{@link EventExtensionType }{@code >}
          *     
          */
-        public AbstractExtensionType getAbstractEventExtension() {
+        public JAXBElement<? extends AbstractExtensionType> getAbstractEventExtension() {
             return abstractEventExtension;
         }
 
@@ -368,10 +368,11 @@ public class EventTimeSliceType
          * 
          * @param value
          *     allowed object is
-         *     {@link AbstractExtensionType }
+         *     {@link JAXBElement }{@code <}{@link AbstractExtensionType }{@code >}
+         *     {@link JAXBElement }{@code <}{@link EventExtensionType }{@code >}
          *     
          */
-        public void setAbstractEventExtension(AbstractExtensionType value) {
+        public void setAbstractEventExtension(JAXBElement<? extends AbstractExtensionType> value) {
             this.abstractEventExtension = value;
         }
 

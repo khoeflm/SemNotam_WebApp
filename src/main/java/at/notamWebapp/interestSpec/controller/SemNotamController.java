@@ -1,12 +1,13 @@
 package at.notamWebapp.interestSpec.controller;
 
 import at.notamWebapp.DBConnector;
+import at.notamWebapp.GoogleMapsDrawer;
+import at.notamWebapp.XMLParserService;
 import at.notamWebapp.XMLUnmarshaller;
-import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
+import at.notamWebapp.interestSpec.FlightPlanLoader;
 import at.notamWebapp.interestSpec.model.InterestSpecificationService;
 import at.notamWebapp.interestSpec.view.AddAreaOfInterestForm;
 import at.notamWebapp.interestSpec.view.InterestSpecificationForm;
-import at.notamWebapp.interestSpec.view.SemNotamUI;
 import at.notamWebapp.interestSpec.view.complexInterestForms.BinaryInterestForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.GroupInterestForm;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.AreaOfInterestForm;
@@ -15,25 +16,31 @@ import com.frequentis.semnotam.schema._1.InterestPropertyType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
+import skyVectorFlightPlan.FlightPlan;
 
-import java.io.ByteArrayInputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by khoef on 22.11.2016.
  */
-public class SemNotamController implements Button.ClickListener, FieldEvents.FocusListener, FieldEvents.BlurListener {
+public class SemNotamController implements Button.ClickListener, FieldEvents.FocusListener, FieldEvents.BlurListener,
+        Upload.Receiver, Upload.SucceededListener, TabSheet.SelectedTabChangeListener, ItemClickEvent.ItemClickListener {
     private InterestSpecificationForm view;
     private InterestSpecificationService model;
     private FlightPathInterestType flightPathInt;
     private ElevatedDataController elevatedDataController;
+    private XMLParserService toXml = new XMLParserService();
+    private GoogleMapsDrawer googleMapsDrawer;
+    private File file;
 
-    public SemNotamController(SemNotamUI ui){
-        view = new InterestSpecificationForm(ui, this);
+    public SemNotamController(InterestSpecificationForm view){
+        this.view = view;
         model = new InterestSpecificationService(this);
         flightPathInt = new FlightPathInterestType();
         elevatedDataController = new ElevatedDataController(view, model);
@@ -65,21 +72,54 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
 
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
+
+    /*================================================================================================================
+    ================================================================================================================*/
+    //Save Interest Spec in File
         if(clickEvent.getButton().getId().equals("saveIS")){
-           model.saveInterestSpec();
+            String filename = view.getInterestSpecID().getValue();
+            InterestSpecificationType interestSpec = model.getSavableInterestSpec(view.getRootElement(), filename, !view.getDisableSpecific().getValue(),
+                    !view.getDisableGeneral().getValue());
+            if(interestSpec!=null) {
+                if (toXml.noSuchFileExists(filename)) {
+                    toXml.createXMLFile(interestSpec, filename);
+                } else {
+                    view.setAlreadyExistingFileWindow(filename);
+                }
+            }
         }
+        //Continue the saving off the file although there is an already existing file with the same name
+        else if(clickEvent.getButton().getId().equals("contSave")){
+            String filename = view.getInterestSpecID().getValue();
+            InterestSpecificationType interestSpec = model.getSavableInterestSpec(view.getRootElement(), filename, !view.getDisableSpecific().getValue(),
+                    !view.getDisableGeneral().getValue());
+            if(interestSpec!=null) {
+                toXml.createXMLFile(interestSpec, filename);
+            }
+            view.removeExistingFileWindow();
+        }
+        //Cancel saving due to already existing filename
+        else if(clickEvent.getButton().getId().equals("cancelSave")){
+            view.removeExistingFileWindow();
+            view.getInterestSpecID().focus();
+        }
+
+
+    /*================================================================================================================
+    ================================================================================================================*/
+    // Load existing Interst
+        //open Load Window
         else if(clickEvent.getButton().getId().equals("loadIS")){
             view.addLoadInterestWindow();
-            view.getLoadInterestWindow().setVisible(true);
         }
-        else if(clickEvent.getButton().getId().equals("queryIS")){
-            FormLayout lay = (FormLayout) clickEvent.getButton().getParent();
-            TextField txtName = (TextField) lay.getComponent(1);
-            String isName = txtName.getValue();
-            DBConnector dbconn = new DBConnector();
-            String interestString = null;
-            InterestSpecificationType interestSpec = null;
 
+        //search all Files from File Directory
+        else if(clickEvent.getButton().getId().equals("queryIS")){
+            //FormLayout lay = (FormLayout) clickEvent.getButton().getParent();
+            //TextField txtName = (TextField) lay.getComponent(1);
+            //String isName = txtName.getValue();
+
+/*
             try {
                 interestString =  dbconn.loadInterest(isName);
                 if(interestString.equals("-1")){view.getLoadInterestWindow().showLoadErrorMessage(interestString);}
@@ -93,12 +133,18 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        else if(clickEvent.getButton().getId().equals(("evalIS"))){
-            view.getMyUI().getMainLayout().removeAllComponents();
-            EvalNotamController evalNotamController = new EvalNotamController(view.getMyUI());
+            */
 
-            view.getMyUI().getMainLayout().addComponent(evalNotamController.getView());
+        }
+
+    /*================================================================================================================
+    ================================================================================================================*/
+        else if(clickEvent.getButton().getId().equals(("evalIS"))){
+            view.getUI().getNavigator().navigateTo("EvalInterestSpec");
+            //view.getMyUI().getMainLayout().removeAllComponents();
+            //EvalNotamController evalNotamController = new EvalNotamController(view.getMyUI());
+
+            //view.getMyUI().getMainLayout().addComponent(evalNotamController.getView());
         }
         else if(clickEvent.getButton().getId().equals("addInterest")){
             Object cbValue =  view.getImbForm().getCbNewInterest().getValue();
@@ -226,87 +272,9 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             model.getChosenComplexInterestStrings().remove("PERI"+idNr);
             model.getChosenComplexInterestStrings().remove("PATH"+idNr);
         }
+
     }
-/*
-    public void addAreasFromFlightPlan(String pathId) {
-        //Flugplan aus Datei laden
-        FlightPlan fpl = view.getFlightPathInterestForm(pathId).getXmlUnmarshaller().getFlightPlan();
-        FlightPlan.WaypointTable wpt = fpl.getWaypointTable();
 
-        HashMap<String, String> values = new HashMap<>();
-        AreaOfInterestPropertyType area = new AreaOfInterestPropertyType();
-        List<Field> fields;
-
-        float lastLat = wpt.getWaypoint().get(wpt.getWaypoint().size()-1).getLat();
-        float lastLon = wpt.getWaypoint().get(wpt.getWaypoint().size()-1).getLon();
-
-        for(FlightPlan.WaypointTable.Waypoint w : wpt.getWaypoint()) {
-
-            if(wpt.getWaypoint().indexOf(w) == 0){
-                //1. Station des Flugplans (Abflughafen) laden
-                values.put("aerodromeDesignator", w.getIdentifier());
-                DepartureAerodromeAreaType depaat = new DepartureAerodromeAreaType();
-                depaat.setDesignator(wpt.getWaypoint().get(0).getIdentifier());
-                fields = InterestSpecificationService.getAllInterestFields(depaat.getClass());
-                view.getFlightPathInterestForm(pathId).areaForm(fields, depaat.getClass(), values);
-
-                values.put("startPointX", Float.toString(wpt.getWaypoint().get(0).getLat()));
-                values.put("startPointY", Float.toString(wpt.getWaypoint().get(0).getLon()));
-            }
-            else if(wpt.getWaypoint().indexOf(w) == 1){
-                values.put("endPointX", Float.toString(w.getLat()));
-                values.put("endPointY", Float.toString(w.getLon()));
-                DepartureAreaType dat = new DepartureAreaType();
-                values.put("designator", w.getIdentifier());
-                dat.setIdentifier(w.getIdentifier());
-                dat.setSegmentShape(FormValueParser.getSegmentShape(values));
-                area.setDepartureArea(dat);
-                flightPathInt.getHasMember().add(area);
-                fields = InterestSpecificationService.getAllInterestFields(dat.getClass());
-                view.getFlightPathInterestForm(pathId).areaForm(fields, dat.getClass(), values);
-                values.put("startPointX", Float.toString(w.getLat()));
-                values.put("startPointY", Float.toString(w.getLon()));
-            }
-            else if (wpt.getWaypoint().indexOf(w) != wpt.getWaypoint().size() - 1) {
-                values.put("endPointX", Float.toString(w.getLat()));
-                values.put("endPointY", Float.toString(w.getLon()));
-                AtsAreaType aat = new AtsAreaType();
-                values.put("identifier", w.getIdentifier());
-                aat.setIdentifier(w.getIdentifier());
-                aat.setSegmentShape(FormValueParser.getSegmentShape(values));
-                area.setAtsArea(aat);
-                flightPathInt.getHasMember().add(area);
-                fields = InterestSpecificationService.getAllInterestFields(aat.getClass());
-                view.getFlightPathInterestForm(pathId).areaForm(fields, aat.getClass(), values);
-                values.put("startPointX", Float.toString(w.getLat()));
-                values.put("startPointY", Float.toString(w.getLon()));
-            }
-            else {
-                //Destination Approach Area
-                values.remove("identifier");
-                values.put("endPointX", Float.toString(w.getLat()));
-                values.put("endPointY", Float.toString(w.getLon()));
-                DestinationApproachAreaType dat = new DestinationApproachAreaType();
-                values.put("aerodromeDesignator", w.getIdentifier());
-                dat.setIdentifier(w.getIdentifier());
-                dat.setSegmentShape(FormValueParser.getSegmentShape(values));
-                area.setDestinationApproachArea(dat);
-                flightPathInt.getHasMember().add(area);
-                fields = InterestSpecificationService.getAllInterestFields(dat.getClass());
-                view.getFlightPathInterestForm(pathId).areaForm(fields, dat.getClass(), values);
-                //Zielflughafen laden
-                values.put("designator", w.getIdentifier());
-                values.put("endPointX", Float.toString(lastLat));
-                values.put("endPointY", Float.toString(lastLon));
-                DestinationAerodromeAreaType desaat = new DestinationAerodromeAreaType();
-                desaat.setDesignator(wpt.getWaypoint().get(wpt.getWaypoint().size()-1).getIdentifier());
-                fields = InterestSpecificationService.getAllInterestFields(desaat.getClass());
-                view.getFlightPathInterestForm(pathId).areaForm();
-            }
-
-        }
-    }
-*/
     @Override
     public void focus(FieldEvents.FocusEvent focusEvent) {
         if(focusEvent.getSource() instanceof ComboBox){
@@ -412,5 +380,65 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             return form;
         }
         return null;
+    }
+
+    /*================================================================================================================
+    ================================================================================================================*/
+    //UPLOAD CONTROLLER METHODS
+
+    @Override
+    public OutputStream receiveUpload(String filename, String mimeType) {
+        FileOutputStream fos;
+        try {
+            file = new File(filename);
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            new Notification("Could not open file<br/>",
+                    e.getMessage(),
+                    Notification.Type.ERROR_MESSAGE)
+                    .show(Page.getCurrent());
+            return null;
+        }
+        return fos;
+    }
+
+    @Override
+    public void uploadSucceeded(Upload.SucceededEvent succeededEvent) {
+        Upload activeUploader = (Upload) succeededEvent.getComponent();
+        String pathId = activeUploader.getParent().getParent().getId();
+        FlightPlan fp = XMLUnmarshaller.unmarshalFlightPlan(file);
+
+        // Parameter: 1 -skyvector Flightplan, 2- flightpathform, 3 - FlightPath Interest
+        FlightPlanLoader.addAreasFromFlightPlan(fp, view.getFlightPathInterestForm(pathId) ,
+                model.getInterestMap().get(pathId).getFlightPathInterest());
+    }
+
+    /*================================================================================================================
+    ================================================================================================================*/
+    //TAB-CHANGE-LISTENER
+
+    @Override
+    public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
+        if(googleMapsDrawer == null){
+            googleMapsDrawer = new GoogleMapsDrawer();
+        }
+        String path = selectedTabChangeEvent.getComponent().getParent().getId();
+        if(model.getInterestSpec().getInterestSpecificData().size() != 0){
+            googleMapsDrawer.drawFlightPath(view.getFlightPathInterestForm(path).getGoogleMap(),
+                    model.getInterestSpec().getInterestSpecificData().get(0).getPointData().getHasMember());
+        }
+    }
+
+    @Override
+    public void itemClick(ItemClickEvent itemClickEvent) {
+        if(itemClickEvent.getComponent().getId().equals("existingISTable")){
+            String existingIS = itemClickEvent.getItem().toString();
+            DBConnector conn = new DBConnector();
+            String interestString = conn.loadExistingInterest(existingIS);
+            view.removeLoadInterestWindow();
+            InterestSpecificationType interestSpec = XMLUnmarshaller.unmarshalInterestSpecification(
+                    new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
+            this.addLoadedInterestSpec(interestSpec);
+        }
     }
 }

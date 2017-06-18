@@ -3,7 +3,6 @@ package at.notamWebapp.evaluatedInterestSpec.controller;
 import at.notamWebapp.DBConnector;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
-import at.notamWebapp.interestSpec.view.SemNotamUI;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Button;
@@ -19,9 +18,9 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
     EvaluatedInterestService model;
     EvaluatedInterestSpecificationForm view;
 
-    public EvalNotamController(SemNotamUI myUI){
+    public EvalNotamController(EvaluatedInterestSpecificationForm view){
         this.model = new EvaluatedInterestService(this);
-        this.view = new EvaluatedInterestSpecificationForm(this, myUI);
+        this.view = view;
     }
 
     public EvaluatedInterestSpecificationForm getView() {
@@ -32,11 +31,14 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
     public void buttonClick(Button.ClickEvent clickEvent) {
         if (clickEvent.getButton().getId().equals("findExRS")){
             view.addLoadEvalInterestWindow();
+            view.setResultsVisible();
         }
         else if(clickEvent.getButton().getId().equals("findExIS")){
             InterestSpecificationType is = new InterestSpecificationType();
             model.loadResultfromWS(is);
             fillNotamFilterOptions();
+            view.drawMapElements(model);
+            view.setResultsVisible();
         }
         else if(clickEvent.getButton().getId().equals("queryRS")){
             DBConnector conn = new DBConnector();

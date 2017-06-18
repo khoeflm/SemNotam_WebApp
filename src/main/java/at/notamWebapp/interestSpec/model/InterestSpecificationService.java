@@ -3,7 +3,6 @@ package at.notamWebapp.interestSpec.model;
 import aero.aixm.CodeSignalPerformanceILSType;
 import aero.aixm.ElevatedPointPropertyType;
 import aero.aixm.ElevatedPointType;
-import at.notamWebapp.XMLParserService;
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import at.notamWebapp.interestSpec.view.InterestSpecificationForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.FlightPathInterestForm;
@@ -41,6 +40,7 @@ public class InterestSpecificationService{
         interestMap = new HashMap<>();
         elevatedPointMap = new HashMap<>();
         chosenComplexInterests = new ArrayList<>();
+
     }
 
     public void setInterestSpec(InterestSpecificationType is){
@@ -55,6 +55,33 @@ public class InterestSpecificationService{
 
     public InterestSpecificationType getInterestSpec() {
         return interestSpec;
+    }
+
+    public InterestSpecificationType getSavableInterestSpec(String rootElement, String filename, Boolean specificInterestDefined,
+                                       Boolean generalInterestDefined) {
+        if(!rootElement.equals("-1")||view.getDisableSpecific().getValue()) {
+            InterestPropertyType undefinedInterest = new InterestPropertyType();
+            undefinedInterest.setUndefinedInterest(new UndefinedInterestType());
+            if(generalInterestDefined) {
+                InterestPropertyType generalInterestProperty = new InterestPropertyType();
+                generalInterestProperty.setIntersectionInterest(view.getGeneralInterestForm().getGeneralInterestController().
+                        getGeneralIntersectionInterest());
+                rootBinaryInterest.setLeftHand(generalInterestProperty);
+            }
+            else{
+                rootBinaryInterest.setLeftHand(undefinedInterest);
+            }
+            if(specificInterestDefined) {
+                rootBinaryInterest.setRightHand(interestMap.get(rootElement));
+            }
+            else{
+                rootBinaryInterest.setRightHand(undefinedInterest);
+            }
+            interestSpec.setId(filename);
+            interestSpec.setInterest(interest);
+            return interestSpec;
+        }
+        return null;
     }
 
     public void saveInterestSpec() {
@@ -80,10 +107,10 @@ public class InterestSpecificationService{
             else{
                 rootBinaryInterest.setRightHand(undefinedInterest);
             }
-            XMLParserService toXml = new XMLParserService();
+
             interestSpec.setId(filename);
             interestSpec.setInterest(interest);
-            toXml.createXMLFile(interestSpec, filename);
+
         }
     }
 
@@ -249,63 +276,57 @@ public class InterestSpecificationService{
     public void addAreaInterest(String selectedArea, String id) {
         FlightPathInterestForm fpiForm = view.getFlightPathInterestForm(id);
         FlightPathInterestType flightPath = interestMap.get(id).getFlightPathInterest();
-        Class areaClass = null;
         AreaInterestFactory areaFactory = new AreaInterestFactory();
         AreaOfInterestPropertyType area = new AreaOfInterestPropertyType();
         switch(selectedArea) {
             case "1":
                 area.setDepartureAerodromeArea(areaFactory.newDepartureAerodromeAreaType());
-                areaClass = new DepartureAerodromeAreaType().getClass();
                  break;
             case "2":
                 area.setDestinationAerodromeArea(areaFactory.newDestinationAerodromeAreaType());
-                areaClass = new DestinationAerodromeAreaType().getClass();
                 break;
             case "3":
                 area.setDepartureAlternateAerodromeArea(areaFactory.newDepartureAlternateAerodromeAreaType());
-                areaClass = new DepartureAlternateAerodromeAreaType().getClass();
                 break;
             case "4":
                 area.setEnRouteAlternateAerodromeArea(areaFactory.newEnRouteAlternateAerodromeAreaType());
-                areaClass = new EnRouteAlternateAerodromeAreaType().getClass();
                 break;
             case "5":
                 area.setDestinationAlternateAerodromeArea(areaFactory.newDestinationAlternateAerodromeAreaType());
-                areaClass = new DestinationAlternateAerodromeAreaType().getClass();
                 break;
             case "6":
                 area.setFirArea(areaFactory.newFirArea());
-                areaClass = new FirAreaType().getClass(); break;
+                break;
             case "7":
                 area.setShapeArea(areaFactory.newShapeArea());
-                areaClass = new ShapeAreaType().getClass(); break;
+                break;
             case "8":
                 area.setConceptDefinedArea(areaFactory.newConceptDefinedAreaType());
-                areaClass = new ConceptDefinedAreaType().getClass(); break;
+                break;
             case "9":
                 area.setAtsArea(areaFactory.newAtsAreaType());
-                areaClass = new AtsAreaType().getClass(); break;
+                break;
             case "10":
                 area.setDepartureArea(areaFactory.newDepartureArea());
-                areaClass = new DepartureAreaType().getClass(); break;
+                break;
             case "11":
                 area.setDestinationApproachArea(areaFactory.newDestinationApproachArea());
-                areaClass = new DestinationApproachAreaType().getClass(); break;
+                break;
             case "12":
                 area.setDepartureAlternateApproachArea(areaFactory.newDepartureAlternateApproachArea());
-                areaClass = new DepartureAlternateApproachAreaType().getClass(); break;
+                break;
             case "13":
                 area.setEnRouteAlternateApproachArea(areaFactory.newEnRouteAlternateApproachArea());
-                areaClass = new EnRouteAlternateApproachAreaType().getClass(); break;
+                break;
             case "14":
                 area.setDestinationAlternateApproachArea(areaFactory.newDestinationAlternateApproachArea());
-                areaClass = new DestinationAlternateApproachAreaType().getClass(); break;
+                break;
             default:
                 new Notification("WRONG INTEREST TYPE", "CALLED INTEREST CAN NOT BE DEFINED").show(Page.getCurrent());
                 break;
         }
         flightPath.getHasMember().add(area);
-        fpiForm.areaForm(area, areaClass);
+        fpiForm.areaForm(area);
     }
 
     public HashMap<String, InterestPropertyType> getInterestMap() {
@@ -428,5 +449,4 @@ public class InterestSpecificationService{
 
         interestSpecificDataType.getHasMember().add(elevatedPointPropertyType);
     }
-
 }

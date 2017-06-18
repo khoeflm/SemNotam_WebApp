@@ -2,6 +2,8 @@ package at.notamWebapp.interestSpec.model.customConverter;
 
 import aero.aixm.ValDistanceType;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -14,8 +16,17 @@ public class ValDistanceConverter implements Converter<String, ValDistanceType> 
     @Override
     public ValDistanceType convertToModel(String s, Class<? extends ValDistanceType> aClass, Locale locale) throws ConversionException {
         ValDistanceType valDistance = new ValDistanceType();
-        valDistance.setValue(BigDecimal.valueOf(Long.parseLong(s)));
-        return valDistance;
+        try {
+            valDistance.setValue(BigDecimal.valueOf(Long.parseLong(s)));
+            return valDistance;
+        }catch (NumberFormatException e){
+            new Notification(
+                    "Attention",
+                    "Only numeric values allowed.",
+                    Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            valDistance.setValue(BigDecimal.ZERO);
+            return valDistance;
+        }
     }
 
     @Override

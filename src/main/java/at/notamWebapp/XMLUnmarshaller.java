@@ -2,9 +2,6 @@ package at.notamWebapp;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import com.frequentis.semnotam.schema._1.*;
-import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Upload;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -16,14 +13,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.sax.SAXSource;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.StringReader;
 
 /**
  * Created by khoef on 20.12.2016.
  */
-public class XMLUnmarshaller implements Upload.Receiver, Upload.SucceededListener{
+public class XMLUnmarshaller{
     private FlightPlan flightPlan;
-    private File file;
     private SemNotamController controller;
 
     public XMLUnmarshaller(SemNotamController controller) {
@@ -32,7 +30,7 @@ public class XMLUnmarshaller implements Upload.Receiver, Upload.SucceededListene
 
     public XMLUnmarshaller(){}
 
-    public FlightPlan unmarshalFlightPlan(File file){
+    public static FlightPlan unmarshalFlightPlan(File file){
         Unmarshaller skvUnmarshaller = null;
         try {
             skvUnmarshaller = JAXBContext.newInstance(skyVectorFlightPlan.ObjectFactory.class).createUnmarshaller();
@@ -68,24 +66,6 @@ public class XMLUnmarshaller implements Upload.Receiver, Upload.SucceededListene
         return null;
     }
 
-    @Override
-    public OutputStream receiveUpload(String filename, String mimeType) {
-        FileOutputStream fos;
-        try {
-            file = new File(filename);
-            fos = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            new Notification("Could not open file<br/>",
-                    e.getMessage(),
-                    Notification.Type.ERROR_MESSAGE)
-                    .show(Page.getCurrent());
-            return null;
-        }
-        return fos;
-    }
-
-    @Override
-    public void uploadSucceeded(Upload.SucceededEvent succeededEvent) {    }
 
 
     public static InterestPropertyType unmarshalGeneralInterestData(String generalInterestPropertyXML) {

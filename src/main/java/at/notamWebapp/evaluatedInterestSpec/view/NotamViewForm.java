@@ -181,6 +181,10 @@ public class NotamViewForm extends Panel {
         notamTable.setColumnCollapsingAllowed(true);
         VerticalLayout tableLayout = new VerticalLayout(notamTable);
         tableLayout.setMargin(true);
+        tableLayout.setSizeFull();
+        notamTable.setWidth("90%");
+        tableLayout.setComponentAlignment(notamTable, Alignment.TOP_LEFT);
+
 
         PdfExporter pdfExporter = new PdfExporter(notamTable);
         pdfExporter.setCaption("Export to PDF");

@@ -41,9 +41,8 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
 
         TabSheet tabs = new TabSheet();
         tabs.setSizeFull();
-
         xmlUnmarshaller = new XMLUnmarshaller(controller);
-        addAreaForm = new AddAreaOfInterestForm(controller, xmlUnmarshaller, getId());
+        addAreaForm = new AddAreaOfInterestForm(controller, getId());
         googleMap = new GoogleMap(null, null, null);
         Embedded skyvector = new Embedded("",new ExternalResource("https://skyvector.com/"));
 
@@ -71,6 +70,8 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
         setCaption("FlightPathOfInterest");
         fpiLayout.setSpacing(true);
         fpiLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        tabs.addSelectedTabChangeListener(controller);
+
     }
 
     public AddAreaOfInterestForm getAddAreaForm() {
@@ -95,17 +96,21 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
         return flightPath;
     }
 
-    public void areaForm(AreaOfInterestPropertyType area, Class areaClass) {
+    public void areaForm(AreaOfInterestPropertyType area) {
         AreaFormFactory areaFormFactory = new AreaFormFactory(controller);
-        AreaOfInterestForm  areaForm = areaFormFactory.initAreaForm(area, getId()+"AREA"+areaIndex, areaClass);
+        AreaOfInterestForm  areaForm = areaFormFactory.initAreaForm(area, getId()+"AREA"+areaIndex);
         fpiLayout.addComponent(areaForm);
     //    setContent(areaForm);
     }
 
     public void addAllAreas(FlightPathInterestType flightPath) {
+        fpiLayout.removeAllComponents();
         for(AreaOfInterestPropertyType area : flightPath.getHasMember()){
-            areaForm(area, area.getClass());
-
+            areaForm(area);
         }
+    }
+
+    public GoogleMap getGoogleMap() {
+        return googleMap;
     }
 }

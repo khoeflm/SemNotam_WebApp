@@ -1,14 +1,14 @@
 package at.notamWebapp.interestSpec.view;
 
-import at.notamWebapp.interestSpec.controller.SemNotamController;
+import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
 import at.notamWebapp.interestSpec.model.customConverter.MyConverterFactory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -21,25 +21,33 @@ import javax.servlet.annotation.WebServlet;
  */
 @Theme("mytheme")
 public class SemNotamUI extends UI {
-
-    private VerticalLayout mainLayout = new VerticalLayout();
-    private SemNotamController controller;
+    Navigator navigator;
+//    private VerticalLayout mainLayout = new VerticalLayout();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        controller = new SemNotamController(this);
         VaadinSession session = getSession();
+        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(300);
         session.setConverterFactory(new MyConverterFactory());
-        mainLayout.addComponents(controller.getView());
-        setContent(mainLayout);
+//        mainLayout.addComponents(controller.getView());
+//        setContent(mainLayout);
+
+        getPage().setTitle("SemNotam WebApp");
+
+        // Create a navigator to control the views
+        navigator = new Navigator(this, this);
+        // Create and register the views
+        navigator.addView("", new InterestSpecificationForm());
+        navigator.addView("EvalInterestSpec", new EvaluatedInterestSpecificationForm());
     }
 
-    public VerticalLayout getMainLayout() {
+   /* public VerticalLayout getMainLayout() {
         return mainLayout;
-    }
+    }*/
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = SemNotamUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
+
 }

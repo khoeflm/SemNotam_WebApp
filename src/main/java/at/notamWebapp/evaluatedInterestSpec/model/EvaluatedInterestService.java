@@ -1,18 +1,20 @@
 package at.notamWebapp.evaluatedInterestSpec.model;
 
+import aero.aixm.ElevatedPointPropertyType;
 import aero.aixm.event.EventType;
 import aero.aixm.event.NOTAMPropertyType;
 import aero.aixm.event.NOTAMType;
+import aero.aixm.message.BasicMessageMemberAIXMPropertyType;
 import at.notamWebapp.DBConnector;
-import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import com.frequentis.semnotam.schema._1.GroupAssignmentType;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.schema._1.ResultNotamPropertyType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
+import net.opengis.gml.DirectPositionType;
 
-import javax.xml.bind.JAXBElement;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -89,6 +91,7 @@ public class EvaluatedInterestService {
 
     public List<NotamTableRow> getNotamTableValues(){
         String notamId = "", notamText = "", begin = "", end = "", importance ="", briefingPhase = "";
+        DirectPositionType pos = new DirectPositionType();
         List<NotamTableRow> notamTable = new ArrayList<>();
         NotamTableRow notamTableRow;
         if(result.getHasResult()!= null){
@@ -96,22 +99,34 @@ public class EvaluatedInterestService {
                 notamId = rs.getResult().getHasNotamId();
                 importance = rs.getResult().getHasClassification().get(0).getGroupAssignment()
                         .getHasGroup().get(0).getGroup().getGroupName();
-                briefingPhase = rs.getResult().getHasClassification().get(0).getGroupAssignment()
-                        .getHasGroup().get(0).getGroup().getGroupName();
+                //briefingPhase = rs.getResult().getHasClassification().get(0).getGroupAssignment()
+                //        .getHasGroup().get(0).getGroup().getGroupName();
                 if(rs.getResult().getHasNotam() != null) {
-                    JAXBElement<EventType> eventTypeJAXBElement = (JAXBElement<EventType>) rs.getResult().getHasNotam()
-                            .getAIXMBasicMessage().getHasMember().get(2).getAbstractAIXMFeature();
-                    EventType event = eventTypeJAXBElement.getValue();
-                    NOTAMPropertyType notamProperty = event.getTimeSlice().get(0).getEventTimeSlice().getTextNOTAM().get(0);
-                    NOTAMType notam = notamProperty.getNOTAM();
-                    notamText = notam.getTranslation().get(0).getNOTAMTranslation().getSimpleText().getValue().getValue();
-                    begin = notam.getEffectiveStart().getValue().getValue();
-                    end = notam.getEffectiveEnd().getValue().getValue();
+                    List<BasicMessageMemberAIXMPropertyType> notamPartList = rs.getResult().getHasNotam().
+                            getAIXMBasicMessage().getHasMember();
+                    for(BasicMessageMemberAIXMPropertyType notamPart : notamPartList){
+                        if(notamPart.getAbstractAIXMFeature().getValue() instanceof EventType){
+                            EventType event = (EventType) notamPart.getAbstractAIXMFeature().getValue();
+                            NOTAMPropertyType notamProperty = event.getTimeSlice().get(0).getEventTimeSlice().getTextNOTAM().get(0);
+                            NOTAMType notam = notamProperty.getNOTAM();
+                            notamText = notam.getTranslation().get(0).getNOTAMTranslation().getSimpleText().getValue().getValue();
+                            begin = notam.getEffectiveStart().getValue().getValue();
+                            end = notam.getEffectiveEnd().getValue().getValue();
+                        }
+                    }
+                    //pos = GetField.getPosition(rs);
                 }
-                notamTableRow = new NotamTableRow(notamId, notamText, begin, end, importance, briefingPhase);
+                notamTableRow = new NotamTableRow(notamId, notamText, begin, end, importance, briefingPhase, pos);
                 notamTable.add(notamTableRow);
             }
         }
         return notamTable;
     }
+
+    public List<ElevatedPointPropertyType>  getFlightPath(){
+        List<ElevatedPointPropertyType> pointList = result.getInterestSpecificData().get(0).getPointData().getHasMember();
+        return pointList;
+    }
+
+
 }

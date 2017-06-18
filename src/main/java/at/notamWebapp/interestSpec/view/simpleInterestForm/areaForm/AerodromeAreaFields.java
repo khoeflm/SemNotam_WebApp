@@ -1,11 +1,14 @@
 package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 
 import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
+import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
 import com.frequentis.semnotam.schema._1.AerodromeAreaType;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 
@@ -63,6 +66,9 @@ public class AerodromeAreaFields extends GridLayout{
         endPosition.setConverter(new CustomDateConverter());
         bufferBefore.setConverter(new CustomDurationConverter());
         bufferAfter.setConverter(new CustomDurationConverter());
+        timeOfDay.setConverter(new CustomDayTimeConverter());
+
+        designator.setRequired(true);
 
         //set ComboBox values
         //Day, Night --> Time of Day
@@ -125,5 +131,45 @@ public class AerodromeAreaFields extends GridLayout{
                 }
             }
         }
+
+        designator.addValueChangeListener(valueChangeEvent ->
+                {try {
+                    if (!designator.isValid()) {
+                        designator.setValidationVisible(true);
+                    } else {
+                        designator.setValidationVisible(false);
+                        designator.setComponentError(null);
+                        designator.commit();
+                    }
+                } catch (Validator.EmptyValueException e) {
+                    // A required value was missing
+        }});
+
+        //Validation of Start and End Time
+        endPosition.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(beginPosition.getValue() != null && endPosition.getValue().before(beginPosition.getValue())){
+                        endPosition.setValue(beginPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else endPosition.commit();
+                }
+        );
+
+        beginPosition.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(endPosition.getValue() != null && beginPosition.getValue().after(endPosition.getValue())){
+                        beginPosition.setValue(endPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else beginPosition.commit();
+                }
+        );
     }
 }

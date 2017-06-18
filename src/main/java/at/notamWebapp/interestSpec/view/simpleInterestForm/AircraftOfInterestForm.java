@@ -47,8 +47,9 @@ public class AircraftOfInterestForm extends Panel{
             }
         });
         cbILSCat.setTextInputAllowed(true);
-        cbILSCat.setNewItemsAllowed(true);
+        cbILSCat.setNewItemsAllowed(false);
         cbILSCat.setId("160");
+        cbILSCat.addItems("I", "II", "III");
         cbILSCat.addBlurListener((FieldEvents.BlurListener) blurEvent -> {
             try {
                 binder.commit();

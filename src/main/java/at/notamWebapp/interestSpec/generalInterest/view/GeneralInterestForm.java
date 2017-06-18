@@ -1,7 +1,6 @@
 package at.notamWebapp.interestSpec.generalInterest.view;
 
 import at.notamWebapp.interestSpec.generalInterest.controller.GeneralInterest;
-import at.notamWebapp.interestSpec.view.SemNotamUI;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 
@@ -16,10 +15,9 @@ public class GeneralInterestForm extends Panel {
             tfAircraftDim, tfDataFormat, tfDataType;
     private GridLayout giFormLayout;
     private ElementLoadWindow elw = new ElementLoadWindow();
-    private SemNotamUI snUI;
     private GeneralInterest generalInterestController;
 
-    public GeneralInterestForm(GeneralInterest controller, SemNotamUI snUI){
+    public GeneralInterestForm(GeneralInterest controller){
         setCaption("General Interest");
         giFormLayout = new GridLayout(2, 8);
         giFormLayout.setSpacing(true);
@@ -34,7 +32,7 @@ public class GeneralInterestForm extends Panel {
         tfSpatialDim = new TextField("Spatial Dimension");
         tfSpatial4dDim = new TextField("Spatial Temporal 4D Dimension");
         tfAircraftDim = new TextField("Aircraft Dimension");
-        tfDataFormat = new TextField("Data Format");
+        tfDataFormat = new TextField("Data Model");
         tfDataType = new TextField("Data Type");
 
         tfTempFilterDim.setEnabled(false);
@@ -81,7 +79,6 @@ public class GeneralInterestForm extends Panel {
                 tfDataType, bDataType);
 
         giFormLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
-        this.snUI = snUI;
     }
 
     public ElementLoadWindow getElw() {
@@ -90,7 +87,7 @@ public class GeneralInterestForm extends Panel {
 
     public void setElw(ElementLoadWindow elw) {
         this.elw = elw;
-        snUI.addWindow(elw);
+        getUI().addWindow(elw);
     }
 
     public GridLayout getGiFormLayout() {
@@ -135,5 +132,9 @@ public class GeneralInterestForm extends Panel {
 
     public void setConceptInElw(String concept) {
 
+    }
+
+    public void removeWindow() {
+        getUI().removeWindow(getElw());
     }
 }

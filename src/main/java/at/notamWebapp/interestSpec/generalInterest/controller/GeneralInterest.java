@@ -4,7 +4,6 @@ import at.notamWebapp.XMLUnmarshaller;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import at.notamWebapp.interestSpec.generalInterest.view.ElementLoadWindow;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
-import at.notamWebapp.interestSpec.view.SemNotamUI;
 import com.frequentis.semnotam.schema._1.InterestPropertyType;
 import com.frequentis.semnotam.schema._1.IntersectionInterestType;
 import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
@@ -21,13 +20,11 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
 
     private GeneralInterestForm view;
     private GeneralInterestModel model;
-    private SemNotamUI snUI;
     private String ontologyUri;
 
-    public GeneralInterest(SemNotamUI snUI){
-        view = new GeneralInterestForm(this, snUI);
+    public GeneralInterest(){
+        view = new GeneralInterestForm(this);
         model = new GeneralInterestModel();
-        this.snUI = snUI;
     }
 
     @Override
@@ -80,32 +77,40 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
     public void itemClick(ItemClickEvent itemClickEvent) {
         Table table = (Table) itemClickEvent.getComponent();
         String id = table.getId();
+        String value;
         switch (table.getId()){
             case "1":
                 break;
             case "2":
-                view.getTfTempDim().setValue(view.getElw().getTable().
-                        getItem(itemClickEvent.getItem()).toString());
-                setGeneralInterestData(this.ontologyUri, view.getTfTempDim().getValue());
+                value = itemClickEvent.getItem().toString();
+                view.getTfTempDim().setValue(getDim(value));
+                setGeneralInterestData(this.ontologyUri, value);
                 break;
             case "3": break;
             case "4":
-                view.getTfSpatialDim().setValue(view.getElw().getTable().
-                    getItem(itemClickEvent.getItem()).toString());
-                setGeneralInterestData(this.ontologyUri, view.getTfSpatialDim().getValue());
+                value = itemClickEvent.getItem().toString();
+                view.getTfSpatialDim().setValue(getDim(value));
+                setGeneralInterestData(this.ontologyUri, value);
                 break;
             case "5":
-                view.getTfSpatial4dDim().setValue(view.getElw().getTable().
-                        getItem(itemClickEvent.getItem()).toString());
-                setGeneralInterestData(this.ontologyUri, view.getTfSpatial4dDim().getValue());
+                value = itemClickEvent.getItem().toString();
+                view.getTfSpatial4dDim().setValue(getDim(value));
+                setGeneralInterestData(this.ontologyUri, value);
                 break;
             case "6":
-                view.getTfAircraftDim().setValue(itemClickEvent.getItem().toString());
-                setGeneralInterestData(this.ontologyUri, view.getTfAircraftDim().getValue());
+                value = itemClickEvent.getItem().toString();
+                view.getTfAircraftDim().setValue(getDim(value));
+                setGeneralInterestData(this.ontologyUri, value);
                 break;
         }
         view.getElw().setVisible(false);
-        snUI.removeWindow(view.getElw());
+        view.removeWindow();
+    }
+
+    //get only Dim-Value from whole Path
+    private String getDim(String value) {
+        int i = value.lastIndexOf('/');
+        return value.substring(i+1, value.length());
     }
 
     public void setGeneralInterestData(String ontologyUri, String conceptUri) {

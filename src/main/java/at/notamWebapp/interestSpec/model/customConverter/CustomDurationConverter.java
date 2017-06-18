@@ -1,6 +1,8 @@
 package at.notamWebapp.interestSpec.model.customConverter;
 
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -13,10 +15,21 @@ import java.util.Locale;
 public class CustomDurationConverter implements Converter<String, Duration> {
     @Override
     public Duration convertToModel(String s, Class<? extends Duration> aClass, Locale locale) throws ConversionException {
+
         try {
             return DatatypeFactory.newInstance().newDuration(true, 0, 0, 0, 0, Integer.parseInt(s),0);
         } catch (DatatypeConfigurationException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e){
+            try {
+                new Notification(
+                        "Attention",
+                        "Only numeric values allowed.",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                return DatatypeFactory.newInstance().newDuration(true,0,0,0,0,0,0);
+            } catch (DatatypeConfigurationException e1) {
+                e1.printStackTrace();
+            }
         }
         return null;
     }

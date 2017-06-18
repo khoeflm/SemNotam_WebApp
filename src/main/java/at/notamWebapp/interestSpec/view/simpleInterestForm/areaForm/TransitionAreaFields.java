@@ -3,14 +3,17 @@ package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import at.notamWebapp.interestSpec.model.GetPointIdentifier;
 import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
+import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.frequentis.semnotam.schema._1.ElevatedPointReferencePropertyType;
 import com.frequentis.semnotam.schema._1.TransitionAreaType;
 import com.vaadin.data.Property;
+import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import net.opengis.gml.GeodesicStringType;
@@ -58,6 +61,9 @@ public class TransitionAreaFields extends GridLayout {
         //Set Predefined Transition IDs for ID ComboBox
         identifier.addItems(transitionSegmentIds);
         aerodromeDesignator.addItems(aerodromeIds);
+        identifier.setRequired(true);
+        aerodromeDesignator.setRequired(true);
+
 
         //Set width of the single fields
         beginPosition.setWidth("90%");
@@ -93,6 +99,7 @@ public class TransitionAreaFields extends GridLayout {
         endPosition.setConverter(new CustomDateConverter());
         bufferBefore.setConverter(new CustomDurationConverter());
         bufferAfter.setConverter(new CustomDurationConverter());
+        timeOfDay.setConverter(new CustomDayTimeConverter());
 
         //set ComboBox values
         //Day, Night --> Time of Day
@@ -164,6 +171,19 @@ public class TransitionAreaFields extends GridLayout {
             });
         }
 
+        aerodromeDesignator.addValueChangeListener(valueChangeEvent ->
+        {try {
+            if (!aerodromeDesignator.isValid()) {
+                aerodromeDesignator.setValidationVisible(true);
+            } else {
+                aerodromeDesignator.setValidationVisible(false);
+                aerodromeDesignator.setComponentError(null);
+                aerodromeDesignator.commit();
+            }
+        } catch (Validator.EmptyValueException e) {
+            // A required value was missing
+        }});
+
 
         //bind fields to aerodrome properties
         binder.setItemDataSource(item);
@@ -185,7 +205,6 @@ public class TransitionAreaFields extends GridLayout {
         binder.bind(bufferAfter, "timeBuffer.temporalBuffer.after");
         binder.bind(horizontalBuffer, "areaBuffer.spatialBuffer.horizontal");
         binder.bind(verticalBuffer, "areaBuffer.spatialBuffer.vertical");
-
 
         //add fields to layout
         addComponent(this.areaId, 0, 0);
@@ -217,12 +236,51 @@ public class TransitionAreaFields extends GridLayout {
                 }
             }
         }
+
+        //Validation of Start and End Time
+        endPosition.addValueChangeListener(valueChangeEvent ->
+                {
+                    if(beginPosition.getValue() != null && endPosition.getValue().before(beginPosition.getValue())){
+                        endPosition.setValue(beginPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else endPosition.commit();
+                }
+        );
+
+        beginPosition.addValueChangeListener(valueChangeEvent ->
+                {
+
+                    if(endPosition.getValue() != null && beginPosition.getValue().after(endPosition.getValue())){
+                        beginPosition.setValue(endPosition.getValue());
+                        new Notification(
+                                "Attention",
+                                "End date must be after start date",
+                                Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                    }else beginPosition.commit();
+                }
+        );
     }
 
     private void setElevatedProperties(TransitionAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
-        setElevatedCurveId(specArea, valueChangeEvent);
-        setElevatedPoint(specArea);
+        try {
+            if (!identifier.isValid()) {
+                identifier.setValidationVisible(true);
+            } else {
+                identifier.setValidationVisible(false);
+                identifier.setComponentError(null);
+                identifier.commit();
+                setElevatedCurveId(specArea, valueChangeEvent);
+                setElevatedPoint(specArea);
+            }
+        } catch (Validator.EmptyValueException e) {
+            // A required value was missing
+        }
     }
+
+
 
     private void setElevatedPoint(TransitionAreaType transArea) {
         if(!identifier.getValue().toString().isEmpty()) {

@@ -9,6 +9,8 @@ import at.notamWebapp.interestSpec.view.simpleInterestForm.AttributeOfInterestFo
 import at.notamWebapp.interestSpec.view.simpleInterestForm.PeriodOfInterestForm;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.AreaOfInterestForm;
 import com.frequentis.semnotam.schema._1.*;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 
@@ -18,12 +20,11 @@ import java.util.LinkedList;
  * Created by khoef on 18.11.2016.
  * Starting Page of the Application
  */
-public class InterestSpecificationForm extends FormLayout implements SemNotamForm{
+public class InterestSpecificationForm extends FormLayout implements SemNotamForm, View{
     //Instance has its own controller. MenuBar is Standard in the Application.
     // Following Interests (FlightPlan Interest, Period Interest,...) are saved in the "interestList"
     private SemNotamController controller;
     private InterestMenuBarForm imbForm;
-    private SemNotamUI snUI;
     private LinkedList<Panel> interestList = new LinkedList<>();
     private TextField interestSpecID;
     private CheckBox disableGeneral, disableSpecific;
@@ -33,13 +34,13 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     private Button bSaveInterestSpec = new Button("Save IS");
     private Button bEvaluateInterestSpec = new Button("Eval IS");
     private LoadInterestWindow loadInterestWindow;
+    private AlreadyExistingFileWindow alreadyExistingFileWindow;
 
     //Constructor of the StartingPage
     //Two Title labels... Instantiation of the UI Object
     //MenuBar is Added
-    public InterestSpecificationForm(SemNotamUI myUi, SemNotamController controller){
-        this.controller = controller;
-        this.snUI = myUi;
+    public InterestSpecificationForm(){
+        this.controller = new SemNotamController(this);
 
         Label lTitle1 = new Label("SemNOTAM - Web Application");
         HorizontalLayout isStartMenuHorLay = new HorizontalLayout();
@@ -60,8 +61,7 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         isStartMenuHorLay.setComponentAlignment(bEvaluateInterestSpec, Alignment.BOTTOM_CENTER);
 
         imbForm = new InterestMenuBarForm(controller);
-        loadInterestWindow = new LoadInterestWindow(controller);
-        generalInterest = new GeneralInterest(snUI).getForm();
+        generalInterest = new GeneralInterest().getForm();
         disableGeneral = new CheckBox("Disable General Interest");
         disableSpecific = new CheckBox("Disable Specific Interest");
 
@@ -372,9 +372,6 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         return loadInterestWindow;
     }
 
-    public SemNotamUI getMyUI() {
-        return snUI;
-    }
 
 
     /*================================================================================================================
@@ -383,11 +380,12 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     // Add and Remove Load Interest Window to/from UI
 
     public void addLoadInterestWindow() {
-        snUI.addWindow(loadInterestWindow);
+        loadInterestWindow = new LoadInterestWindow(controller);
+        getUI().addWindow(loadInterestWindow);
     }
 
     public void removeLoadInterestWindow() {
-        snUI.removeWindow(loadInterestWindow);
+        getUI().removeWindow(loadInterestWindow);
     }
 
     /*================================================================================================================
@@ -397,4 +395,17 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
 
     }
 
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+
+    }
+
+    public void setAlreadyExistingFileWindow(String filename) {
+        alreadyExistingFileWindow = new AlreadyExistingFileWindow(filename, controller);
+        getUI().addWindow(alreadyExistingFileWindow);
+    }
+
+    public void removeExistingFileWindow() {
+        getUI().removeWindow(alreadyExistingFileWindow);
+    }
 }
