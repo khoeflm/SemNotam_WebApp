@@ -40,8 +40,8 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     //Two Title labels... Instantiation of the UI Object
     //MenuBar is Added
     public InterestSpecificationForm(){
+        setWidth("99% ");
         this.controller = new SemNotamController(this);
-
         Label lTitle1 = new Label("SemNOTAM - Web Application");
         HorizontalLayout isStartMenuHorLay = new HorizontalLayout();
         Panel interestSpec1 = new Panel();

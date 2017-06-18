@@ -1,10 +1,11 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
+import at.notamWebapp.interestSpec.view.AlreadyExistingFileWindow;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.*;
 
 /**
  * Created by khoef on 23.03.2017.
@@ -14,8 +15,12 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
     private NotamViewForm notamView;
     private NotamMapForm notamMap;
     private LoadEvalInterestWindow loadEvalInterestWindow;
+    private LoadResultWindow loadResultWindow;
     private EvalNotamController controller;
+    private AlreadyExistingFileWindow alreadyExistingFileWindow;
+
     public EvaluatedInterestSpecificationForm() {
+
         controller = new EvalNotamController(this);
         menu = new EvaluatedInterestMenuBarForm(controller);
         notamView = new NotamViewForm(controller);
@@ -26,6 +31,7 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
         this.controller = controller;
         loadEvalInterestWindow = new LoadEvalInterestWindow(controller);
         loadEvalInterestWindow.setVisible(false);
+        setWidth("99%");
     }
 
     public void addLoadEvalInterestWindow() {
@@ -66,5 +72,23 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+    }
+
+    public void addLoadResultWindow(){
+        loadResultWindow = new LoadResultWindow(controller);
+        getUI().addWindow(loadResultWindow);
+    }
+
+    public void removeLoadResultWindow(){
+        getUI().removeWindow(loadResultWindow);
+    }
+
+    public void setAlreadyExistingFileWindow(String filename) {
+        alreadyExistingFileWindow = new AlreadyExistingFileWindow(filename, controller);
+        getUI().addWindow(alreadyExistingFileWindow);
+    }
+
+    public void removeExistingFileWindow() {
+        getUI().removeWindow(alreadyExistingFileWindow);
     }
 }

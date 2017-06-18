@@ -15,9 +15,9 @@ import java.util.List;
  * Created by khoef on 15.06.2017.
  */
 public class GoogleMapsDrawer {
-    GoogleMapPolyline flightpath;
+    GoogleMapPolyline flightpathPolyLine;
     public void drawFlightPath(GoogleMap map, List<ElevatedPointPropertyType> pointList){
-        map.removePolyline(flightpath);
+        map.removePolyline(flightpathPolyLine);
         List<LatLon> points = new ArrayList<>();
         Double biggestLat = 0.0, biggestLon = 0.0, smallestLat = 0.0, smallestLon = 0.0;
         for(ElevatedPointPropertyType p : pointList){
@@ -40,10 +40,10 @@ public class GoogleMapsDrawer {
         }
         LatLon northEastBound = new LatLon(biggestLat, biggestLon);
         LatLon southWestBound = new LatLon(smallestLat, smallestLon);
-        flightpath = new GoogleMapPolyline(points);
-        flightpath.setStrokeWeight(3);
+        flightpathPolyLine = new GoogleMapPolyline(points);
+        flightpathPolyLine.setStrokeWeight(3);
         map.fitToBounds(northEastBound, southWestBound);
-        map.addPolyline(flightpath);
+        map.addPolyline(flightpathPolyLine);
     }
 
     public void drawNotamMarkers(GoogleMap googleMap, List<NotamTableRow> notamTableValues) {

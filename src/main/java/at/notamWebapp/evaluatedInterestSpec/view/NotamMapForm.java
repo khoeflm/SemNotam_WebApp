@@ -26,6 +26,7 @@ public class NotamMapForm extends Panel {
         mainLayout.setWidth("100%");
         mainLayout.setHeight("600px");
         setContent(mainLayout);
+        setSizeFull();
     }
 
 
