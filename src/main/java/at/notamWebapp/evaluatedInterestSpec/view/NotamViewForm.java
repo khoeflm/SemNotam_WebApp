@@ -26,6 +26,7 @@ public class NotamViewForm extends Panel {
     private EvalNotamController controller;
     private Or importanceFilter, briefingPhaseFilter;
     private List<String> importanceFilterList, briefingPhaseFilterList;
+    private NotamMapForm notamMapForm;
     BeanItemContainer<NotamTableRow> beans;
 
     public NotamViewForm(EvalNotamController controller) {
@@ -103,10 +104,12 @@ public class NotamViewForm extends Panel {
                 if(valueChangeEvent.getProperty().getValue().equals(false)){
                     importanceFilterList.remove(x.getId());
                     filterImportanceValues();
+                    notamMapForm.filterNotamMap(beans.getItemIds());
                 }
                 else if(valueChangeEvent.getProperty().getValue().equals(true)){
                     importanceFilterList.add(x.getId());
                     filterImportanceValues();
+                    notamMapForm.filterNotamMap(beans.getItemIds());
                 }
             });
             importanceLevelLayout.addComponent(x);
@@ -125,10 +128,12 @@ public class NotamViewForm extends Panel {
                 if(valueChangeEvent.getProperty().getValue().equals(false)) {
                     briefingPhaseFilterList.remove(x.getId());
                     filterImportanceValues();
+                    notamMapForm.filterNotamMap(beans.getItemIds());
                 }
                 else if(valueChangeEvent.getProperty().getValue().equals(true)){
                     briefingPhaseFilterList.add(x.getId());
                     filterBriefingPhaseValues();
+                    notamMapForm.filterNotamMap(beans.getItemIds());
                 }
             });
             briefingPhaseLevelLayout.addComponent(x);
@@ -140,7 +145,7 @@ public class NotamViewForm extends Panel {
         SimpleStringFilter[] filterList = new SimpleStringFilter[importanceFilterList.size()];
         int i=0;
         for(String s : importanceFilterList){
-            filterList[i] = new SimpleStringFilter("briefingPhase", s, true, false);
+            filterList[i] = new SimpleStringFilter("importance", s, true, false);
             i++;
         }
         importanceFilter = new Or(filterList);
@@ -163,7 +168,7 @@ public class NotamViewForm extends Panel {
         return classificationCheckboxesLayout;
     }
 
-    public void setNotamTable(List<NotamTableRow> notamRows) {
+    public void setNotamTable(List<NotamTableRow> notamRows, NotamMapForm notamMap) {
         beans = new BeanItemContainer<NotamTableRow>(NotamTableRow.class);
         beans.addAll(notamRows);
         fillNotamTable(beans);
@@ -194,5 +199,13 @@ public class NotamViewForm extends Panel {
         HorizontalLayout exporterLayout = new HorizontalLayout(pdfExporter, excelExporter);
         tableLayout.addComponent(exporterLayout);
         notamViewVertLayout.addComponents(tableLayout);
+    }
+
+    public NotamMapForm getNotamMapForm() {
+        return notamMapForm;
+    }
+
+    public void setNotamMapForm(NotamMapForm notamMapForm) {
+        this.notamMapForm = notamMapForm;
     }
 }

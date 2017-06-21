@@ -12,11 +12,15 @@ public class AlreadyExistingFileWindow extends Window{
     private Label errorText1 = new Label(), errorText2 = new Label();
     private Button cont, cancel;
     public AlreadyExistingFileWindow(String filename, SemNotamController controller){
+        errorText1.setValue("An Interest Specification with the ID \"" +filename+ "\" does already exist.");
+        errorText2.setValue("Do you want to overwrite the existing IS?");
         initAlreadyExistingFileWindow(filename);
         cancel.addClickListener(controller);
         cont.addClickListener(controller);
     }
     public AlreadyExistingFileWindow(String filename, EvalNotamController controller){
+        errorText1.setValue("A Result Specification with the ID \"" +filename+ "\" does already exist.");
+        errorText2.setValue("Do you want to overwrite the existing RS?");
         initAlreadyExistingFileWindow(filename);
         cancel.addClickListener(controller);
         cont.addClickListener(controller);
@@ -28,8 +32,6 @@ public class AlreadyExistingFileWindow extends Window{
         cancel = new Button("NO");
         cont.setId("contSave");
         cancel.setId("cancelSave");
-        errorText1.setValue("An Interest Specification with the ID \"" +filename+ "\" does already exist.");
-        errorText2.setValue("Do you want to overwrite the existing IS?");
         lPopUp.setSpacing(true);
         lPopUp.addComponents(errorText1, errorText2);
         HorizontalLayout buttonLayout = new HorizontalLayout(cont, cancel);

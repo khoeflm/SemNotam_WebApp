@@ -5,6 +5,7 @@ import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
 import net.opengis.gml.DirectPositionType;
 
@@ -16,6 +17,9 @@ import java.util.List;
  */
 public class GoogleMapsDrawer {
     GoogleMapPolyline flightpathPolyLine;
+    List<GoogleMapMarker> markerList;
+    List<GoogleMapPolygon> polygonList;
+
     public void drawFlightPath(GoogleMap map, List<ElevatedPointPropertyType> pointList){
         map.removePolyline(flightpathPolyLine);
         List<LatLon> points = new ArrayList<>();
@@ -47,12 +51,54 @@ public class GoogleMapsDrawer {
     }
 
     public void drawNotamMarkers(GoogleMap googleMap, List<NotamTableRow> notamTableValues) {
-        googleMap.removeAllComponents();
-        for(NotamTableRow row : notamTableValues){
-            GoogleMapMarker marker = new GoogleMapMarker(row.getNotamId(),new LatLon(row.getPos().getValue().get(0),
-                    row.getPos().getValue().get(1)),true);
-            googleMap.addMarker(marker);
+        if(markerList == null){
+            markerList = new ArrayList<>();
+        }else if(markerList.size() != 0){
+            for(GoogleMapMarker marker : markerList){
+                googleMap.removeMarker(marker);
+            }
         }
-
+        if(polygonList == null){
+            polygonList = new ArrayList<>();
+        }else if(markerList.size() != 0){
+            for(GoogleMapPolygon marker : polygonList){
+                googleMap.removePolygonOverlay(marker);
+            }
+        }
+        for(NotamTableRow row : notamTableValues){
+            if(row.getPos().size()<=2) {
+                GoogleMapMarker marker = new GoogleMapMarker(row.getNotamId(), new LatLon(row.getPos().get(0),
+                        row.getPos().get(1)), true);
+                if(row.getImportance().equalsIgnoreCase("flight critical")) {
+                    marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_red1.png");
+                }else if(row.getImportance().equalsIgnoreCase("operational restriction")) {
+                    marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_blue1.png");
+                }else if(row.getImportance().equalsIgnoreCase("potential hazard")) {
+                    marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_black1.png");
+                }else{
+                    marker.setIconUrl("VAADIN/themes/mytheme/icons/info1.png");
+                }
+                googleMap.addMarker(marker);
+                markerList.add(marker);
+            }else{
+                List<LatLon> posList = new ArrayList<>();
+                GoogleMapPolygon marker = new GoogleMapPolygon();
+                for(int i = 0; i+1 < row.getPos().size(); i=i+2) {
+                    posList.add(new LatLon(row.getPos().get(i),row.getPos().get(i+1)));
+                }
+                if(row.getImportance().equalsIgnoreCase("flight critical")) {
+                    marker.setFillColor("#FF0000");
+                }else if(row.getImportance().equalsIgnoreCase("operational restriction")) {
+                    marker.setFillColor("#FFFF00");
+                }else if(row.getImportance().equalsIgnoreCase("potential hazard")) {
+                    marker.setFillColor("#00FFFF");
+                }else{
+                    marker.setFillColor("#FFFFFF");
+                }
+                marker.setCoordinates(posList);
+                googleMap.addPolygonOverlay(marker);
+                polygonList.add(marker);
+            }
+        }
     }
 }

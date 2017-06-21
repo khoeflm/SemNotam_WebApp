@@ -1,16 +1,16 @@
 package at.notamWebapp.evaluatedInterestSpec.model;
 
-import net.opengis.gml.DirectPositionType;
+import java.util.List;
 
 /**
  * Created by khoef on 01.05.2017.
  */
 public class NotamTableRow {
     private String notamId, notamText, begin, end, importance, briefingPhase;
-    private DirectPositionType pos;
+    private List<Double> pos;
 
     public NotamTableRow(String notamId, String notamText, String begin, String end, String importance,
-                         String briefingPhase, DirectPositionType pos){
+                         String briefingPhase, List<Double> pos){
         this.notamId = notamId;
         this.notamText = notamText;
         this.begin = begin;
@@ -72,11 +72,11 @@ public class NotamTableRow {
         this.briefingPhase = briefingPhase;
     }
 
-    public void setPos(DirectPositionType pos) {
+    public void setPos(List<Double> pos) {
         this.pos = pos;
     }
 
-    public DirectPositionType getPos() {
+    public List<Double> getPos() {
         return pos;
     }
 }

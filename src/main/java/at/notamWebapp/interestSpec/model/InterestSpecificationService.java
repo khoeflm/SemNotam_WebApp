@@ -9,11 +9,14 @@ import at.notamWebapp.interestSpec.view.complexInterestForms.FlightPathInterestF
 import com.frequentis.semnotam.schema._1.*;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
+import net.opengis.gml.DirectPositionType;
+import net.opengis.gml.GeodesicStringType;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by khoef on 20.11.2016.
@@ -26,6 +29,7 @@ public class InterestSpecificationService{
     private BinaryIntersectionInterestType rootBinaryInterest;
     private HashMap<String, InterestPropertyType> interestMap;
     private HashMap<String, ElevatedPointType> elevatedPointMap;
+    private HashMap<String, List<ElevatedPointPropertyType>> posListMap;
     private ArrayList<String> chosenComplexInterests;
     private int idCounter = 0;
     private SemNotamController controller;
@@ -50,6 +54,11 @@ public class InterestSpecificationService{
     public int addToInterestMap(String id, InterestPropertyType specificInterest) {
         idCounter++;
         this.interestMap.put(id+idCounter, specificInterest);
+        if(specificInterest.getFlightPlanInterest()!=null){
+            InterestPropertyType interestPropertyType = new InterestPropertyType();
+            interestPropertyType.setFlightPathInterest(specificInterest.getFlightPlanInterest().getArea().getFlightPathInterest());
+            interestMap.put("PATH"+idCounter, interestPropertyType);
+        }
         return idCounter;
     }
 
@@ -228,7 +237,7 @@ public class InterestSpecificationService{
                 AttributeOfInterestType attribute = new AttributeOfInterestType();
                 dummyInterest = new InterestPropertyType();
                 dummyInterest.setAttributeOfInterest(attribute);
-                view.addAttributeOfInterest(idCounter, interestSpec.getInterest().getAttributeOfInterest());
+                view.addAttributeOfInterest(idCounter, attribute);
                 this.interestMap.put("ATTR"+idCounter, dummyInterest);
                 break;
             case "6":
@@ -448,5 +457,60 @@ public class InterestSpecificationService{
         elevatedPointPropertyType.setElevatedPoint(elevatedPoint);
 
         interestSpecificDataType.getHasMember().add(elevatedPointPropertyType);
+    }
+
+    public void refreshInterestSpecData(String pathId) {
+        FlightPathInterestType flightpath = interestMap.get(pathId).getFlightPathInterest();
+        GeodesicStringType positions = null;
+        List<ElevatedPointPropertyType> posList = new ArrayList<>();
+        if (posListMap != null && posListMap.containsKey(pathId)) {
+            posListMap.remove(pathId);
+        }
+        for(AreaOfInterestPropertyType area : flightpath.getHasMember()) {
+            if(area.getAtsArea() != null){
+                positions = (GeodesicStringType) area.getAtsArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }else if(area.getDepartureArea() != null){
+                positions = (GeodesicStringType) area.getDepartureArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }else if(area.getDepartureAlternateApproachArea() != null){
+                positions = (GeodesicStringType) area.getDepartureAlternateApproachArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }else if(area.getDestinationAlternateApproachArea() != null){
+                positions = (GeodesicStringType) area.getDestinationAlternateApproachArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }else if(area.getEnRouteAlternateApproachArea() != null){
+                positions = (GeodesicStringType) area.getEnRouteAlternateApproachArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }else if(area.getDestinationApproachArea() != null){
+                positions = (GeodesicStringType) area.getDestinationApproachArea().getSegmentShape().
+                        getSegmentShapeArea().getShapeCurve().getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
+            }
+            if(positions != null) {
+                ElevatedPointPropertyType elevatedPointPropertyType = new ElevatedPointPropertyType();
+                ElevatedPointType elevatedPointType = new ElevatedPointType();
+                DirectPositionType directPositionType1 = new DirectPositionType(), directPositionType2 = new DirectPositionType();
+                directPositionType1.getValue().add(0, positions.getPosList().getValue().get(0));
+                directPositionType1.getValue().add(1, positions.getPosList().getValue().get(1));
+                directPositionType2.getValue().add(0, positions.getPosList().getValue().get(2));
+                directPositionType2.getValue().add(1, positions.getPosList().getValue().get(3));
+                elevatedPointType.setPos(directPositionType1);
+                elevatedPointPropertyType.setElevatedPoint(elevatedPointType);
+                posList.add(elevatedPointPropertyType);
+                elevatedPointType = new ElevatedPointType();
+                elevatedPointPropertyType = new ElevatedPointPropertyType();
+                elevatedPointType.setPos(directPositionType2);
+                elevatedPointPropertyType.setElevatedPoint(elevatedPointType);
+                posList.add(elevatedPointPropertyType);
+            }
+        }
+        if(posListMap==null){
+            posListMap = new HashMap<>();
+        }
+        posListMap.put(pathId, posList);
+    }
+
+    public HashMap<String, List<ElevatedPointPropertyType>> getPosListMap() {
+        return posListMap;
     }
 }

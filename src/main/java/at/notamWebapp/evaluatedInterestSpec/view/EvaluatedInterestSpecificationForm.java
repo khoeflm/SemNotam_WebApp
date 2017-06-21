@@ -25,6 +25,7 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
         menu = new EvaluatedInterestMenuBarForm(controller);
         notamView = new NotamViewForm(controller);
         notamMap = new NotamMapForm(controller);
+        notamView.setNotamMapForm(notamMap);
         notamView.setVisible(false);
         notamMap.setVisible(false);
         addComponents(menu, notamView, notamMap);

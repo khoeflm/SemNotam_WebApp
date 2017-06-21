@@ -31,6 +31,8 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
     private GoogleMap googleMap;
     private static int areaIndex = 0;
     private Label id = new Label();
+    HorizontalLayout idLayout = new HorizontalLayout();
+
 
     public FlightPathInterestForm(SemNotamController controller, int id, FlightPathInterestType flightPathInterest) {
         setId("PATH"+id);
@@ -51,17 +53,17 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
         googleMap.setSizeFull();
         screenLayout.addComponent(googleMap, 0, 1);
         this.controller = controller;
-        //skyvector.setType(Embedded.TYPE_BROWSER);
-        //skyvector.setWidth("100%");
-        //skyvector.setHeight("800px");
+        skyvector.setType(Embedded.TYPE_BROWSER);
+        skyvector.setWidth("100%");
+        skyvector.setHeight("800px");
         CssLayout mapLayout = new CssLayout();
         mapLayout.setWidth("100%");
         mapLayout.setHeight("800px");
         mapLayout.addComponent(googleMap);
-        HorizontalLayout idLayout = new HorizontalLayout();
         idLayout.setSpacing(true);
         idLayout.addComponents(this.id, deletePath);
         fpiLayout.addComponents(idLayout, addAreaForm);
+        fpiLayout.setComponentAlignment(idLayout, Alignment.MIDDLE_LEFT);
         tabs.addTab(fpiLayout, "Flightplan List");
         tabs.addTab(skyvector, "Skyvector");
         tabs.addTab(mapLayout, "Flightplan Map");
@@ -71,7 +73,6 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
         fpiLayout.setSpacing(true);
         fpiLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         tabs.addSelectedTabChangeListener(controller);
-
     }
 
     public AddAreaOfInterestForm getAddAreaForm() {
@@ -98,6 +99,7 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
 
     public void areaForm(AreaOfInterestPropertyType area) {
         AreaFormFactory areaFormFactory = new AreaFormFactory(controller);
+        areaIndex++;
         AreaOfInterestForm  areaForm = areaFormFactory.initAreaForm(area, getId()+"AREA"+areaIndex);
         fpiLayout.addComponent(areaForm);
     //    setContent(areaForm);
@@ -105,6 +107,8 @@ public class FlightPathInterestForm extends Panel implements SemNotamForm {
 
     public void addAllAreas(FlightPathInterestType flightPath) {
         fpiLayout.removeAllComponents();
+        fpiLayout.addComponents(idLayout, addAreaForm);
+        fpiLayout.setComponentAlignment(idLayout, Alignment.MIDDLE_LEFT);
         for(AreaOfInterestPropertyType area : flightPath.getHasMember()){
             areaForm(area);
         }

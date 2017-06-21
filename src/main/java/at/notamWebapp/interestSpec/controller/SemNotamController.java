@@ -11,9 +11,7 @@ import at.notamWebapp.interestSpec.view.InterestSpecificationForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.BinaryInterestForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.GroupInterestForm;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.AreaOfInterestForm;
-import com.frequentis.semnotam.schema._1.FlightPathInterestType;
-import com.frequentis.semnotam.schema._1.InterestPropertyType;
-import com.frequentis.semnotam.schema._1.InterestSpecificationType;
+import com.frequentis.semnotam.schema._1.*;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
@@ -113,29 +111,6 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             view.addLoadInterestWindow();
         }
 
-        //search all Files from File Directory
-        else if(clickEvent.getButton().getId().equals("queryIS")){
-            //FormLayout lay = (FormLayout) clickEvent.getButton().getParent();
-            //TextField txtName = (TextField) lay.getComponent(1);
-            //String isName = txtName.getValue();
-
-/*
-            try {
-                interestString =  dbconn.loadInterest(isName);
-                if(interestString.equals("-1")){view.getLoadInterestWindow().showLoadErrorMessage(interestString);}
-                else{
-                    view.getLoadInterestWindow().setVisible(false);
-                    view.removeLoadInterestWindow();
-                    interestSpec = XMLUnmarshaller.unmarshalInterestSpecification(
-                            new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
-                    this.addLoadedInterestSpec(interestSpec);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            */
-
-        }
 
     /*================================================================================================================
     ================================================================================================================*/
@@ -171,10 +146,12 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             // Delete area from flightpath and from view
             Button delete = clickEvent.getButton();
             AreaOfInterestForm deleteInterest = (AreaOfInterestForm) delete.getParent().getParent().getParent().getParent();
-            String pathId = deleteInterest.getId().substring(0,5);
+            int i = deleteInterest.getId().indexOf("AREA");
+            String pathId = deleteInterest.getId().substring(0,i);
             view.getFlightPathInterestForm(pathId).delete(deleteInterest);
             InterestPropertyType flightpath = model.getInterestMap().get(pathId);
             flightpath.getFlightPathInterest().getHasMember().remove(deleteInterest.getArea());
+            model.refreshInterestSpecData(pathId);
         }
         else if(clickEvent.getButton().getId().equals("310")){
             Button addInterestForm = clickEvent.getButton();
@@ -424,8 +401,8 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         }
         String path = selectedTabChangeEvent.getComponent().getParent().getId();
         if(model.getInterestSpec().getInterestSpecificData().size() != 0){
-            googleMapsDrawer.drawFlightPath(view.getFlightPathInterestForm(path).getGoogleMap(),
-                    model.getInterestSpec().getInterestSpecificData().get(0).getPointData().getHasMember());
+            model.refreshInterestSpecData(path);
+            googleMapsDrawer.drawFlightPath(view.getFlightPathInterestForm(path).getGoogleMap(),model.getPosListMap().get(path));
         }
     }
 

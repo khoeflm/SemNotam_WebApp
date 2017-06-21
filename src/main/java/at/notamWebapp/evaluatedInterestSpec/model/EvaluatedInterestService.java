@@ -6,6 +6,7 @@ import aero.aixm.event.NOTAMPropertyType;
 import aero.aixm.event.NOTAMType;
 import aero.aixm.message.BasicMessageMemberAIXMPropertyType;
 import at.notamWebapp.DBConnector;
+import at.notamWebapp.GetField;
 import at.notamWebapp.XMLUnmarshaller;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import com.frequentis.semnotam.schema._1.GroupAssignmentType;
@@ -13,7 +14,6 @@ import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.schema._1.ResultNotamPropertyType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
-import net.opengis.gml.DirectPositionType;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -91,7 +91,7 @@ public class EvaluatedInterestService {
 
     public List<NotamTableRow> getNotamTableValues(){
         String notamId = "", notamText = "", begin = "", end = "", importance ="", briefingPhase = "";
-        DirectPositionType pos = new DirectPositionType();
+        List<Double> pos = new ArrayList<>();
         List<NotamTableRow> notamTable = new ArrayList<>();
         NotamTableRow notamTableRow;
         if(result.getHasResult()!= null){
@@ -114,7 +114,7 @@ public class EvaluatedInterestService {
                             end = notam.getEffectiveEnd().getValue().getValue();
                         }
                     }
-                    //pos = GetField.getPosition(rs);
+                    pos = GetField.getNotamPosition(rs);
                 }
                 notamTableRow = new NotamTableRow(notamId, notamText, begin, end, importance, briefingPhase, pos);
                 notamTable.add(notamTableRow);

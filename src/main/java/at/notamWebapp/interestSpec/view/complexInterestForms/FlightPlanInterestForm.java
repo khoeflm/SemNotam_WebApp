@@ -25,6 +25,7 @@ public class FlightPlanInterestForm extends Panel implements SemNotamForm {
         aoiForm.setSizeFull();
         fpiForm = new FlightPathInterestForm(controller, id, flightPlan.getArea().getFlightPathInterest());
         fpiForm.setSizeFull();
+        fpiForm.addAllAreas(flightPlan.getArea().getFlightPathInterest());
         Button deletePlan = new Button("Delete");
         deletePlan.setId("360");
         deletePlan.addClickListener(controller);

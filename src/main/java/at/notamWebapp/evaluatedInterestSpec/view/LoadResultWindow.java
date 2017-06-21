@@ -26,7 +26,8 @@ public class LoadResultWindow extends Window {
         setContent(lPopUp);
         lPopUp.setMargin(true);
         name.setNullRepresentation("");
-        existingRS.addContainerProperty("Result:", String.class, null);
+        existingRS.addContainerProperty("Result:" +
+                "", String.class, null);
         existingRS.setId("existingRSTable");
         existingRS.setSelectable(true);
         existingRS.setImmediate(true);

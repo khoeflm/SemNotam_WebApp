@@ -117,7 +117,7 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
     public void fillNotamFilterOptions(){
         view.getNotamView().setImportanceLevel(model.getImportanceLevels());
         view.getNotamView().setBriefingPhaseLevels(model.getBriefingPhaseLevels());
-        view.getNotamView().setNotamTable(model.getNotamTableValues());
+        view.getNotamView().setNotamTable(model.getNotamTableValues(), view.getNotamMap());
         view.getNotamView().getClassificationCheckboxesLayout().setVisible(true);
     }
 }

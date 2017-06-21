@@ -239,6 +239,7 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         FlightPathInterestForm fpiForm = new FlightPathInterestForm(controller, id, flightPath);
         interestList.add(fpiForm);
         lay.addComponent(fpiForm);
+        fpiForm.addAllAreas(flightPath);
         for(Panel area : fpiForm.getFlightPath()){
             interestList.add(area);
         }

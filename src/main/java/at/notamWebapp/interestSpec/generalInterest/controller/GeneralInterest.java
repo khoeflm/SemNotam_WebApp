@@ -11,6 +11,7 @@ import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,11 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
         Button clickedButton = clickEvent.getButton();
         switch (clickedButton.getId()){
             case "gi1":
-
+                List<String> temporalFacet = new ArrayList<>();
+                temporalFacet.add("TemporalNone");
+                temporalFacet.add("ValidTime");
+                temporalFacet.add("ActiveTime");
+                view.setElw(new ElementLoadWindow(this, temporalFacet, 1));
                 break;
             case "gi2":
                 List<String> temporalConcept = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/Temporal");
@@ -40,6 +45,11 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 view.setElw(new ElementLoadWindow(this, temporalConcept,2));
                 break;
             case "gi3":
+                List<String> spatialFilterFacet = new ArrayList<>();
+                spatialFilterFacet.add("SpatialNone");
+                spatialFilterFacet.add("BoundingBox");
+                spatialFilterFacet.add("GmlShape");
+                view.setElw(new ElementLoadWindow(this, spatialFilterFacet, 3));
                 break;
             case "gi4":
                 List<String> spatialConcept = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/Spatial");
@@ -56,8 +66,16 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 ontologyUri = aircraftTypeList.get(0);
                 view.setElw(new ElementLoadWindow(this, aircraftTypeList ,6));
                 break;
-            case "gi7": break;
-            case "gi8": break;
+            case "gi7":
+                List<String> dataModel = new ArrayList<>();
+                dataModel.add("AIXM");
+                view.setElw(new ElementLoadWindow(this, dataModel, 7));
+                break;
+            case "gi8":
+                List<String> dataType = new ArrayList<>();
+                dataType.add("NOTAM");
+                view.setElw(new ElementLoadWindow(this, dataType, 8));
+                break;
         }
     }
 
@@ -80,13 +98,18 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
         String value;
         switch (table.getId()){
             case "1":
+                value = itemClickEvent.getItem().toString();
+                view.getTfTempFilterDim().setValue(value);
                 break;
             case "2":
                 value = itemClickEvent.getItem().toString();
                 view.getTfTempDim().setValue(getDim(value));
                 setGeneralInterestData(this.ontologyUri, value);
                 break;
-            case "3": break;
+            case "3":
+                value = itemClickEvent.getItem().toString();
+                view.getTfSpatialFilterDim().setValue(value);
+                break;
             case "4":
                 value = itemClickEvent.getItem().toString();
                 view.getTfSpatialDim().setValue(getDim(value));
@@ -101,6 +124,14 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 value = itemClickEvent.getItem().toString();
                 view.getTfAircraftDim().setValue(getDim(value));
                 setGeneralInterestData(this.ontologyUri, value);
+                break;
+            case "7":
+                value = itemClickEvent.getItem().toString();
+                view.getTfDataFormat().setValue(value);
+                break;
+            case "8":
+                value = itemClickEvent.getItem().toString();
+                view.getTfDataType().setValue(value);
                 break;
         }
         view.getElw().setVisible(false);

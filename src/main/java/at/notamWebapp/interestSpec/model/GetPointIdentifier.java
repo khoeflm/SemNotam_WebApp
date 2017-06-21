@@ -11,7 +11,7 @@ public class GetPointIdentifier {
                 int x = segmentId.indexOf("-");
                 return segmentId.substring(0, x - 1);
             }else{
-                return segmentId;
+                return segmentId +"1";
             }
         }
         else return "";
@@ -24,7 +24,7 @@ public class GetPointIdentifier {
                 int y = segmentId.length();
                 return segmentId.substring(x + 1, y);
             }else{
-                return segmentId;
+                return segmentId +"2";
             }
         }
         else return "";
