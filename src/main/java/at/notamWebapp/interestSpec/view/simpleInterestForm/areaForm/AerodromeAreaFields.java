@@ -26,8 +26,8 @@ public class AerodromeAreaFields extends GridLayout{
     private ComboBox meteoConditions = new ComboBox("Meteo Conditions");
     private DateField beginPosition = new DateField();
     private DateField endPosition = new DateField();
-    private TextField bufferBefore = new TextField("Buffer Before");
-    private TextField bufferAfter = new TextField("Buffer After");
+    private TextField bufferBefore = new TextField("Buffer Before [min]");
+    private TextField bufferAfter = new TextField("Buffer After [min]");
 
     public AerodromeAreaFields(AreaOfInterestPropertyType area, String areaId){
         //set GridLayout attributes

@@ -1,16 +1,14 @@
 
 package com.frequentis.semnotam.schema._1;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import aero.aixm.ElevatedSurfacePropertyType;
 import aero.aixm.ValDistanceType;
 
+import javax.xml.bind.annotation.*;
+
 
 /**
- * <p>Java-Klasse für ShapeAreaType complex type.
+ * <p>Java-Klasse fï¿½r ShapeAreaType complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
@@ -31,6 +29,7 @@ import aero.aixm.ValDistanceType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "ShapeArea")
 @XmlType(name = "ShapeAreaType", propOrder = {
     "shape",
     "height",

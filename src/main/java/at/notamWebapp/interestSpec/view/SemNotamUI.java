@@ -2,6 +2,8 @@ package at.notamWebapp.interestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
 import at.notamWebapp.interestSpec.model.customConverter.MyConverterFactory;
+import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
+import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -11,6 +13,11 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
 import javax.servlet.annotation.WebServlet;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -27,12 +34,35 @@ public class SemNotamUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         VaadinSession session = getSession();
-        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(300);
+
         session.setConverterFactory(new MyConverterFactory());
 //        mainLayout.addComponents(controller.getView());
 //        setContent(mainLayout);
 
+        Properties properties = new Properties();
+        String propFileName = "config.properties";
         getPage().setTitle("SemNotam WebApp");
+
+        InputStream inputStream = null;
+
+
+        try {
+            inputStream = new FileInputStream(propFileName);
+            if(inputStream!=null) {
+                properties.load(inputStream);
+                String semNotamWebServiceUrl = (String) properties.get("semNotamWebServiceUrl");
+                String containerDescriptionServiceUrl = (String) properties.get("containerDescriptionServiceUrl");
+                int timeOutInterval = Integer.parseInt((String) properties.get("timeOutInterval"));
+                new SpecificInterestWS(semNotamWebServiceUrl);
+                new GeneralInterestWS(containerDescriptionServiceUrl);
+                VaadinSession.getCurrent().getSession().setMaxInactiveInterval(timeOutInterval);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         // Create a navigator to control the views
         navigator = new Navigator(this, this);
@@ -49,5 +79,4 @@ public class SemNotamUI extends UI {
     @VaadinServletConfiguration(ui = SemNotamUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
-
 }

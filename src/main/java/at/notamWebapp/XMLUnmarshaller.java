@@ -81,7 +81,7 @@ public class XMLUnmarshaller{
                 case "PeriodOfInterestType":
                     result.setPeriodOfInterest((PeriodOfInterestType) JAXBIntrospector.getValue(unmarshaller.unmarshal(xmlWithNamespace(generalInterestPropertyXML))));
                     break;
-                case "AreaOfInterestType":
+                case "ShapeAreaType":
                     result.setShapeArea((ShapeAreaType) JAXBIntrospector.getValue(unmarshaller.unmarshal(xmlWithNamespace(generalInterestPropertyXML))));
                     break;
             }

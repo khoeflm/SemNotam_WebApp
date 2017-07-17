@@ -40,8 +40,8 @@ public class TransitionAreaFields extends GridLayout {
     private ElevatedCurveField elevatedCurveField = new ElevatedCurveField();
     private DateField beginPosition = new DateField("Begin Position");
     private DateField endPosition = new DateField("End Position");
-    private TextField bufferBefore = new TextField("Buffer Before");
-    private TextField bufferAfter = new TextField("Buffer After");
+    private TextField bufferBefore = new TextField("Buffer Before [min]");
+    private TextField bufferAfter = new TextField("Buffer After [min]");
     private TextField horizontalBuffer = new TextField("Horizontal Buffer");
     private TextField verticalBuffer = new TextField("Vertical Buffer");
     private SemNotamController controller;

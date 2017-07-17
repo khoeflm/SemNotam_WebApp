@@ -11,6 +11,8 @@ public class GeneralInterestForm extends Panel {
 
     private Button bTempFilterDim, bTempDim, bSpatialFilterDim, bSpatialDim, bSpatial4dDim,
             bAircraftDim, bDataFormat, bDataType;
+    private Button delTempFilterDim, delTempDim, delSpatialFilterDim, delSpatialDim, delSpatial4Dim, delAircraftDim,
+            delDataFormat, delDataType;
     private TextField tfTempFilterDim, tfTempDim, tfSpatialFilterDim, tfSpatialDim, tfSpatial4dDim,
             tfAircraftDim, tfDataFormat, tfDataType;
     private GridLayout giFormLayout;
@@ -19,7 +21,7 @@ public class GeneralInterestForm extends Panel {
 
     public GeneralInterestForm(GeneralInterest controller){
         setCaption("General Interest");
-        giFormLayout = new GridLayout(2, 8);
+        giFormLayout = new GridLayout(3, 8);
         giFormLayout.setSpacing(true);
         giFormLayout.setMargin(true);
         giFormLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
@@ -44,6 +46,7 @@ public class GeneralInterestForm extends Panel {
         tfDataFormat.setEnabled(false);
         tfDataType.setEnabled(false);
 
+        // Webservice Call Buttons
         bTempFilterDim = new Button( null ,controller);
         bTempDim = new Button(null, controller);
         bSpatialFilterDim = new Button(null, controller);
@@ -71,12 +74,32 @@ public class GeneralInterestForm extends Panel {
         bDataFormat.setId("gi7");
         bDataType.setId("gi8");
 
-        bTempDim.setEnabled(true);
-        bSpatialDim.setEnabled(true);
+        bTempDim.setEnabled(false);
+        bSpatialDim.setEnabled(false);
 
-        giFormLayout.addComponents(tfTempFilterDim, bTempFilterDim, tfTempDim, bTempDim, tfSpatialFilterDim, bSpatialFilterDim,
-                tfSpatialDim, bSpatialDim, tfSpatial4dDim, bSpatial4dDim, tfAircraftDim, bAircraftDim, tfDataFormat, bDataFormat,
-                tfDataType, bDataType);
+        //Buttons to delete Concepts
+        delTempFilterDim = new Button("Delete", controller);
+        delTempDim = new Button("Delete", controller);
+        delSpatialFilterDim = new Button("Delete", controller);
+        delSpatialDim = new Button("Delete", controller);
+        delSpatial4Dim = new Button("Delete", controller);
+        delAircraftDim = new Button("Delete", controller);
+        delDataFormat = new Button("Delete", controller);
+        delDataType = new Button("Delete", controller);
+
+        delTempFilterDim.setId("del1");
+        delTempDim.setId("del2");
+        delSpatialFilterDim.setId("del3");
+        delSpatialDim.setId("del4");
+        delSpatial4Dim.setId("del5");
+        delAircraftDim.setId("del6");
+        delDataFormat.setId("del7");
+        delDataType.setId("del8");
+
+        giFormLayout.addComponents(tfTempFilterDim, bTempFilterDim, delTempFilterDim, tfTempDim, bTempDim, delTempDim,
+                tfSpatialFilterDim, bSpatialFilterDim, delSpatialFilterDim, tfSpatialDim, bSpatialDim, delSpatialDim,
+                tfSpatial4dDim, bSpatial4dDim, delSpatial4Dim, tfAircraftDim, bAircraftDim, delAircraftDim,
+                tfDataFormat, bDataFormat, delDataFormat, tfDataType, bDataType, delDataType);
 
         giFormLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
     }
@@ -130,8 +153,18 @@ public class GeneralInterestForm extends Panel {
         return generalInterestController;
     }
 
-    public void setConceptInElw(String concept) {
+    public void setConceptInElw(String concept) {}
 
+    public Button getbTempDim() {
+        return bTempDim;
+    }
+
+    public Button getbSpatialDim() {
+        return bSpatialDim;
+    }
+
+    public Button getbSpatial4dDim() {
+        return bSpatial4dDim;
     }
 
     public void removeWindow() {

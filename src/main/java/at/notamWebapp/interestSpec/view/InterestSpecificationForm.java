@@ -41,6 +41,8 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     //MenuBar is Added
     public InterestSpecificationForm(){
         setWidth("99% ");
+        generalInterest = new GeneralInterest().getForm();
+
         this.controller = new SemNotamController(this);
         Label lTitle1 = new Label("SemNOTAM - Web Application");
         HorizontalLayout isStartMenuHorLay = new HorizontalLayout();
@@ -61,7 +63,6 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         isStartMenuHorLay.setComponentAlignment(bEvaluateInterestSpec, Alignment.BOTTOM_CENTER);
 
         imbForm = new InterestMenuBarForm(controller);
-        generalInterest = new GeneralInterest().getForm();
         disableGeneral = new CheckBox("Disable General Interest");
         disableSpecific = new CheckBox("Disable Specific Interest");
 
@@ -329,18 +330,19 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     // GETTER METHODS:
 
     public String getRootElement(){
-        if(interestForms.getComponentCount() > 1){
-            new Notification("There is more than one Root Element for the Specific Interest").show(Page.getCurrent());
-            return "-1";
+        if(!disableSpecific.getValue()) {
+            if (interestForms.getComponentCount() > 1) {
+                new Notification("There is more than one Root Element for the Specific Interest").show(Page.getCurrent());
+                return "-1";
+            } else if (interestForms.getComponentCount() < 1) {
+                new Notification("There is no Specific Interest").show(Page.getCurrent());
+                return "-1";
+            } else {
+                String rootElement = interestForms.getComponent(0).getId();
+                return rootElement;
+            }
         }
-        else if(interestForms.getComponentCount() < 1){
-            new Notification("There is no Specific Interest").show(Page.getCurrent());
-            return "-1";
-        }
-        else {
-            String rootElement = interestForms.getComponent(0).getId();
-            return rootElement;
-        }
+        return "-1";
     }
 
     public Panel getInterestForm(String id) {

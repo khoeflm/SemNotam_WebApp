@@ -4,6 +4,7 @@ import aero.aixm.CodeSignalPerformanceILSType;
 import aero.aixm.ElevatedPointPropertyType;
 import aero.aixm.ElevatedPointType;
 import at.notamWebapp.interestSpec.controller.SemNotamController;
+import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import at.notamWebapp.interestSpec.view.InterestSpecificationForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.FlightPathInterestForm;
 import com.frequentis.semnotam.schema._1.*;
@@ -31,6 +32,7 @@ public class InterestSpecificationService{
     private HashMap<String, ElevatedPointType> elevatedPointMap;
     private HashMap<String, List<ElevatedPointPropertyType>> posListMap;
     private ArrayList<String> chosenComplexInterests;
+    private GeneralInterestModel generalInterest;
     private int idCounter = 0;
     private SemNotamController controller;
 
@@ -38,13 +40,17 @@ public class InterestSpecificationService{
         this.view = controller.getView();
         this.controller = controller;
         interestSpec = new InterestSpecificationType();
+        NotamSetMetaInformationPropertyType notamSetMetaInformationPropertyType = new NotamSetMetaInformationPropertyType();
+        MetaInfoType metaInfoType = new MetaInfoType();
+        interestSpec.setMetaInformation(notamSetMetaInformationPropertyType);
+        interestSpec.getMetaInformation().setNotamSetMetaInformation(metaInfoType);
         interest = new InterestPropertyType();
         rootBinaryInterest = new BinaryIntersectionInterestType();
         interest.setBinaryIntersectionInterest(rootBinaryInterest);
         interestMap = new HashMap<>();
         elevatedPointMap = new HashMap<>();
         chosenComplexInterests = new ArrayList<>();
-
+        generalInterest = view.getGeneralInterestForm().getGeneralInterestController().getModel();
     }
 
     public void setInterestSpec(InterestSpecificationType is){
@@ -73,8 +79,10 @@ public class InterestSpecificationService{
             undefinedInterest.setUndefinedInterest(new UndefinedInterestType());
             if(generalInterestDefined) {
                 InterestPropertyType generalInterestProperty = new InterestPropertyType();
-                generalInterestProperty.setIntersectionInterest(view.getGeneralInterestForm().getGeneralInterestController().
-                        getGeneralIntersectionInterest());
+                generalInterestProperty.setIntersectionInterest(generalInterest.getIntersectionInterest());
+                RelevanceOptionPropertyType relevanceOption = new RelevanceOptionPropertyType();
+                relevanceOption.setRelevanceRuleOption(generalInterest.getRelevanceOption());
+                interestSpec.getMetaInformation().getNotamSetMetaInformation().setRuleOption(relevanceOption);
                 rootBinaryInterest.setLeftHand(generalInterestProperty);
             }
             else{

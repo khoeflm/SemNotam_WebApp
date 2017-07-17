@@ -9,20 +9,20 @@ import java.util.List;
  * Created by khoef on 28.03.2017.
  */
 public class GeneralInterestWS {
+    private static ContainerDescriptionService client;
 
+    public GeneralInterestWS(String containerDescriptionServiceUrl){
+        client = loadCDS(containerDescriptionServiceUrl);
+    }
 
-
-
-    private static ContainerDescriptionService loadCDS(){
+    private static ContainerDescriptionService loadCDS(String containerDescriptionsServiceUrl){
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setAddress("http://localhost:8081/SemNotamWebService/services/ContainerDescriptionServicePort");
+        factory.setAddress(containerDescriptionsServiceUrl);
         factory.setServiceClass(ContainerDescriptionService.class);
         return (ContainerDescriptionService)factory.create();
-
     }
 
     public static List<String> selectConceptForFacet(String facetUri){
-        ContainerDescriptionService client = loadCDS();
         try {
             List<String> response = client.selectConceptForFacet(facetUri);
             return response;
@@ -34,7 +34,6 @@ public class GeneralInterestWS {
     }
 
     public static String getInterestFromConcept(String ontologyUri, String conceptUri) {
-        ContainerDescriptionService client = loadCDS();
         return client.getInterestFromConcept(ontologyUri, conceptUri);
     }
 }

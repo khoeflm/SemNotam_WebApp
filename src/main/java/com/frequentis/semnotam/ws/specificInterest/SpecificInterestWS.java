@@ -11,17 +11,21 @@ import java.util.List;
  * Created by khoef on 31.03.2017.
  */
 public class SpecificInterestWS {
+    private static SemNotamWebService client;
 
-    private static SemNotamWebService loadWS(){
+    public SpecificInterestWS(String semNotamWsUrl){
+        client = loadWS(semNotamWsUrl);
+    }
+
+    private static SemNotamWebService loadWS(String semNotamWsUrl){
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setAddress("http://localhost:8081/SemNotamWebService/services/SemNotamWebServicePort");
+        factory.setAddress(semNotamWsUrl);
         factory.setServiceClass(SemNotamWebService.class);
         return (SemNotamWebService)factory.create();
 
     }
 
     public static List<String> getAircraftTypeIds(){
-        SemNotamWebService client = loadWS();
         try {
             return client.getAircraftTypeIds() ;
         } catch (Exception e) {
@@ -31,7 +35,6 @@ public class SpecificInterestWS {
     }
 
     public static List<String> getATSSegmentIds() {
-        SemNotamWebService client = loadWS();
         try {
             return client.getAtsSegmentIds() ;
         } catch (Exception e) {
@@ -41,7 +44,6 @@ public class SpecificInterestWS {
     }
 
     public static List<String> getTransitionSegmentIds() {
-        SemNotamWebService client = loadWS();
         try {
             return client.getTransitionSegmentIds() ;
         } catch (Exception e) {
@@ -51,7 +53,6 @@ public class SpecificInterestWS {
     }
 
     public static List<String> getAerodromeIds(){
-        SemNotamWebService client = loadWS();
         try {
             return client.getAerodromeIds() ;
         } catch (Exception e) {
@@ -61,7 +62,6 @@ public class SpecificInterestWS {
     }
 
     public static InterestSpecResultType evaluateIS(InterestSpecificationType is){
-        SemNotamWebService client = loadWS();
         try {
             return client.evaluate(is);
         } catch (Exception e){

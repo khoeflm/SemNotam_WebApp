@@ -41,8 +41,8 @@ public class AtsAreaFields extends GridLayout {
     private ElevatedCurveField elevatedCurveField = new ElevatedCurveField();
     private DateField beginPosition = new DateField();
     private DateField endPosition = new DateField();
-    private TextField bufferBefore = new TextField("Buffer Before");
-    private TextField bufferAfter = new TextField("Buffer After");
+    private TextField bufferBefore = new TextField("Buffer Before [min]");
+    private TextField bufferAfter = new TextField("Buffer After [min]");
     private SemNotamController controller;
 
 
