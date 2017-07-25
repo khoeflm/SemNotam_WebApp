@@ -1,7 +1,7 @@
 package at.notamWebapp.evaluatedInterestSpec.controller;
 
-import at.notamWebapp.DBConnector;
-import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.util.DBConnector;
+import at.notamWebapp.util.XMLUnmarshaller;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;

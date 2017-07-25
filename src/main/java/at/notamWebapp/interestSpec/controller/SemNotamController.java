@@ -1,9 +1,6 @@
 package at.notamWebapp.interestSpec.controller;
 
-import at.notamWebapp.DBConnector;
-import at.notamWebapp.GoogleMapsDrawer;
-import at.notamWebapp.XMLParserService;
-import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.util.*;
 import at.notamWebapp.interestSpec.FlightPlanLoader;
 import at.notamWebapp.interestSpec.model.InterestSpecificationService;
 import at.notamWebapp.interestSpec.view.AddAreaOfInterestForm;
@@ -75,15 +72,21 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
     ================================================================================================================*/
     //Save Interest Spec in File
         if(clickEvent.getButton().getId().equals("saveIS")){
-            String filename = view.getInterestSpecID().getValue();
-            InterestSpecificationType interestSpec = model.getSavableInterestSpec(view.getRootElement(), filename, !view.getDisableSpecific().getValue(),
-                    !view.getDisableGeneral().getValue());
-            if(interestSpec!=null) {
-                if (toXml.noSuchFileExists(filename)) {
-                    toXml.createXMLFile(interestSpec, filename);
-                } else {
-                    view.setAlreadyExistingFileWindow(filename);
+            if(view.getGeneralInterestForm().isValid() || view.getDisableGeneral().getValue()) {
+                String filename = view.getInterestSpecID().getValue();
+                InterestSpecificationType interestSpec = model.getSavableInterestSpec(view.getRootElement(), filename, !view.getDisableSpecific().getValue(),
+                        !view.getDisableGeneral().getValue());
+                if (interestSpec != null) {
+                    if (toXml.noSuchFileExists(filename)) {
+                        toXml.createXMLFile(interestSpec, filename);
+                    } else {
+                        view.setAlreadyExistingFileWindow(filename);
+                    }
                 }
+            } else{
+                new Notification("At least one General Interest Dimension has to be chosen!",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
             }
         }
         //Continue the saving off the file although there is an already existing file with the same name
@@ -102,6 +105,20 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             view.getInterestSpecID().focus();
         }
 
+    /*================================================================================================================
+    ================================================================================================================*/
+        // Validate Interest Spec
+        else if(clickEvent.getButton().getId().equals("valIS")){
+            String filename = view.getInterestSpecID().getValue();
+            if(!filename.equals("")) {
+                try {
+                    Validation.validateXmlFile(filename);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
     /*================================================================================================================
     ================================================================================================================*/
@@ -110,6 +127,8 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         else if(clickEvent.getButton().getId().equals("loadIS")){
             view.addLoadInterestWindow();
         }
+
+
 
 
     /*================================================================================================================
@@ -298,9 +317,20 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
     ================================================================================================================*/
 
     public void addLoadedInterestSpec(InterestSpecificationType interestSpec) {
-        InterestPropertyType specificInterest = interestSpec.getInterest().getBinaryIntersectionInterest().getRightHand();
+        view.getDisableSpecific().setValue(false);
+        view.getDisableGeneral().setValue(false);
         model.setInterestSpec(interestSpec);
-        this.addLoadedInterestSpec(specificInterest);
+        InterestPropertyType specificInterest = interestSpec.getInterest().getBinaryIntersectionInterest().getRightHand();
+        InterestPropertyType generalInterest = interestSpec.getInterest().getBinaryIntersectionInterest().getLeftHand();
+        if(generalInterest.getUndefinedInterest() != null){
+            view.getDisableGeneral().setValue(true);
+        }
+        if(specificInterest.getUndefinedInterest() != null){
+            view.getDisableSpecific().setValue(true);
+        }
+        else {
+            this.addLoadedInterestSpec(specificInterest);
+        }
     }
 
 
@@ -406,6 +436,10 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         }
     }
 
+
+    /*================================================================================================================
+    ================================================================================================================*/
+    //Load InterestSpec
     @Override
     public void itemClick(ItemClickEvent itemClickEvent) {
         if(itemClickEvent.getComponent().getId().equals("existingISTable")){
@@ -415,7 +449,15 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             view.removeLoadInterestWindow();
             InterestSpecificationType interestSpec = XMLUnmarshaller.unmarshalInterestSpecification(
                     new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
-            this.addLoadedInterestSpec(interestSpec);
+            if(interestSpec.getInterest().getBinaryIntersectionInterest() != null) {
+                this.addLoadedInterestSpec(interestSpec);
+            } else {
+                new Notification("File is not in the correct format!<br/> " +
+                        "(Root Element has to be Binary Intersection Interest)",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }
         }
     }
+
 }

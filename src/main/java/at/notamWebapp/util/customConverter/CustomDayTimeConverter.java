@@ -1,4 +1,4 @@
-package at.notamWebapp.interestSpec.model.customConverter;
+package at.notamWebapp.util.customConverter;
 
 import com.frequentis.semnotam.schema._1.CodeTimeOfDayBaseType;
 import com.vaadin.data.util.converter.Converter;

@@ -7,6 +7,7 @@ import at.notamWebapp.interestSpec.controller.SemNotamController;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import at.notamWebapp.interestSpec.view.InterestSpecificationForm;
 import at.notamWebapp.interestSpec.view.complexInterestForms.FlightPathInterestForm;
+import at.notamWebapp.util.NotamMetaInfoFactory;
 import com.frequentis.semnotam.schema._1.*;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
@@ -40,10 +41,7 @@ public class InterestSpecificationService{
         this.view = controller.getView();
         this.controller = controller;
         interestSpec = new InterestSpecificationType();
-        NotamSetMetaInformationPropertyType notamSetMetaInformationPropertyType = new NotamSetMetaInformationPropertyType();
-        MetaInfoType metaInfoType = new MetaInfoType();
-        interestSpec.setMetaInformation(notamSetMetaInformationPropertyType);
-        interestSpec.getMetaInformation().setNotamSetMetaInformation(metaInfoType);
+        interestSpec.setMetaInformation(NotamMetaInfoFactory.createDefaultMetaInfo());
         interest = new InterestPropertyType();
         rootBinaryInterest = new BinaryIntersectionInterestType();
         interest.setBinaryIntersectionInterest(rootBinaryInterest);
@@ -78,15 +76,14 @@ public class InterestSpecificationService{
             InterestPropertyType undefinedInterest = new InterestPropertyType();
             undefinedInterest.setUndefinedInterest(new UndefinedInterestType());
             if(generalInterestDefined) {
+                interestSpec.setMetaInformation(NotamMetaInfoFactory.createMetaInfo(generalInterest));
                 InterestPropertyType generalInterestProperty = new InterestPropertyType();
                 generalInterestProperty.setIntersectionInterest(generalInterest.getIntersectionInterest());
-                RelevanceOptionPropertyType relevanceOption = new RelevanceOptionPropertyType();
-                relevanceOption.setRelevanceRuleOption(generalInterest.getRelevanceOption());
-                interestSpec.getMetaInformation().getNotamSetMetaInformation().setRuleOption(relevanceOption);
                 rootBinaryInterest.setLeftHand(generalInterestProperty);
             }
             else{
                 rootBinaryInterest.setLeftHand(undefinedInterest);
+                interestSpec.setMetaInformation(NotamMetaInfoFactory.createDefaultMetaInfo());
             }
             if(specificInterestDefined) {
                 rootBinaryInterest.setRightHand(interestMap.get(rootElement));
@@ -101,7 +98,7 @@ public class InterestSpecificationService{
         return null;
     }
 
-    public void saveInterestSpec() {
+/*    public void saveInterestSpec() {
         String interestSpecID = view.getInterestSpecID().getValue();
         String rootElement = view.getRootElement();
         String filename;
@@ -124,12 +121,10 @@ public class InterestSpecificationService{
             else{
                 rootBinaryInterest.setRightHand(undefinedInterest);
             }
-
             interestSpec.setId(filename);
             interestSpec.setInterest(interest);
-
         }
-    }
+    }*/
 
     public void addInterest(String selectedInterest) {
         idCounter ++;

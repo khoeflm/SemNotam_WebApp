@@ -1,4 +1,4 @@
-package at.notamWebapp;
+package at.notamWebapp.util;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

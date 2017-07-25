@@ -33,6 +33,7 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
     private Button bLoadInterestSpec = new Button("Load IS");
     private Button bSaveInterestSpec = new Button("Save IS");
     private Button bEvaluateInterestSpec = new Button("Eval IS");
+    private Button bValidateInterestSpec = new Button ("Validate IS");
     private LoadInterestWindow loadInterestWindow;
     private AlreadyExistingFileWindow alreadyExistingFileWindow;
 
@@ -52,15 +53,20 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         bLoadInterestSpec.setId("loadIS");
         bSaveInterestSpec.setId("saveIS");
         bEvaluateInterestSpec.setId("evalIS");
+        bValidateInterestSpec.setId("valIS");
         bSaveInterestSpec.addClickListener(controller);
         bLoadInterestSpec.addClickListener(controller);
         bEvaluateInterestSpec.addClickListener(controller);
-        isStartMenuHorLay.addComponents(interestSpecID, bSaveInterestSpec, bLoadInterestSpec, bEvaluateInterestSpec);
+        bValidateInterestSpec.addClickListener(controller);
+        isStartMenuHorLay.addComponents(interestSpecID, bSaveInterestSpec, bLoadInterestSpec, bEvaluateInterestSpec,
+                bValidateInterestSpec);
         isStartMenuHorLay.setMargin(true);
         isStartMenuHorLay.setSpacing(true);
         isStartMenuHorLay.setComponentAlignment(bLoadInterestSpec, Alignment.BOTTOM_CENTER);
         isStartMenuHorLay.setComponentAlignment(bSaveInterestSpec, Alignment.BOTTOM_CENTER);
         isStartMenuHorLay.setComponentAlignment(bEvaluateInterestSpec, Alignment.BOTTOM_CENTER);
+        isStartMenuHorLay.setComponentAlignment(bValidateInterestSpec, Alignment.BOTTOM_CENTER);
+
 
         imbForm = new InterestMenuBarForm(controller);
         disableGeneral = new CheckBox("Disable General Interest");

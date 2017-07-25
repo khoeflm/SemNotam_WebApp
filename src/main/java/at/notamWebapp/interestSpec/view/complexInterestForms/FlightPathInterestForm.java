@@ -1,7 +1,7 @@
 package at.notamWebapp.interestSpec.view.complexInterestForms;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
-import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.util.XMLUnmarshaller;
 import at.notamWebapp.interestSpec.view.AddAreaOfInterestForm;
 import at.notamWebapp.interestSpec.view.SemNotamForm;
 import at.notamWebapp.interestSpec.model.AreaFormFactory;

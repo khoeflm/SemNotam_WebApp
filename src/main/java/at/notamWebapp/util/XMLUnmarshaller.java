@@ -1,4 +1,4 @@
-package at.notamWebapp;
+package at.notamWebapp.util;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import com.frequentis.semnotam.schema._1.*;

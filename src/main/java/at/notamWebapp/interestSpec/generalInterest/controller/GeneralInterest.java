@@ -1,6 +1,6 @@
 package at.notamWebapp.interestSpec.generalInterest.controller;
 
-import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.util.XMLUnmarshaller;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import at.notamWebapp.interestSpec.generalInterest.view.ElementLoadWindow;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
@@ -184,10 +184,12 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
             case "7":
                 value = itemClickEvent.getItem().toString();
                 view.getTfDataFormat().setValue(value);
+                model.setDataModel(value);
                 break;
             case "8":
                 value = itemClickEvent.getItem().toString();
                 view.getTfDataType().setValue(value);
+                model.setDataType(value);
                 break;
         }
         view.getElw().setVisible(false);

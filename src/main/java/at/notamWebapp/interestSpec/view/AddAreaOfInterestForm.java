@@ -2,7 +2,7 @@ package at.notamWebapp.interestSpec.view;
 
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
-import at.notamWebapp.XMLUnmarshaller;
+import at.notamWebapp.util.XMLUnmarshaller;
 import com.vaadin.ui.*;
 
 /**

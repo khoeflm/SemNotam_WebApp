@@ -1,4 +1,4 @@
-package at.notamWebapp;
+package at.notamWebapp.util;
 
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.schema._1.ObjectFactory;

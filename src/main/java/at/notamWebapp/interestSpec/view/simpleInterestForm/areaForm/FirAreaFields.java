@@ -1,8 +1,8 @@
 package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 
-import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
+import at.notamWebapp.util.customConverter.CustomDateConverter;
+import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
+import at.notamWebapp.util.customConverter.CustomDurationConverter;
 import com.frequentis.semnotam.schema._1.AerodromeAreaType;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.frequentis.semnotam.schema._1.FirAreaType;

@@ -1,4 +1,4 @@
-package at.notamWebapp;
+package at.notamWebapp.util;
 
 import aero.aixm.ElevatedPointPropertyType;
 import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;

@@ -9,6 +9,7 @@ public class GeneralInterestModel {
     private InterestPropertyType interest;
     private IntersectionInterestType intersectionInterest;
     private RelevanceOptionType relevanceOption;
+    private String dataType, dataModel;
 
     public GeneralInterestModel(){
         intersectionInterest = new IntersectionInterestType();
@@ -29,5 +30,21 @@ public class GeneralInterestModel {
 
     public RelevanceOptionType getRelevanceOption() {
         return relevanceOption;
+    }
+
+    public void setDataModel(String dataModel) {
+        this.dataModel = dataModel;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getDataModel() {
+        return dataModel;
+    }
+
+    public String getDataType() {
+        return dataType;
     }
 }

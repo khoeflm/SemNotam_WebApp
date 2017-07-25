@@ -9,8 +9,8 @@
 
   <import namespace="http://www.aixm.aero/schema/5.1"
     schemaLocation="../AIXM_Features.xsd"/>
-<!--  <import namespace="http://www.opengis.net/gml/3.2"
-    schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd" /> -->
+  <import namespace="http://www.opengis.net/gml/3.2"
+    schemaLocation="../ISO_19136_Schemas/gml.xsd" />
   <import namespace="http://www.w3.org/1999/xlink"
     schemaLocation="../xlink/xlinks.xsd"/>
 
@@ -19,12 +19,12 @@
 
   <complexType name="InterestSpecificationType">
     <sequence>
-      <element name="timeStamp" type="dateTime" minOccurs="0" />
+      <element name="detectionTimestamp" type="dateTime" minOccurs="0" />
       <element name="metaInformation" type="tns:NotamSetMetaInformationPropertyType" minOccurs="0" />
       <element name="interest" type="tns:InterestPropertyType" minOccurs="0" />
       <element name="interestSpecificData" type="tns:InterestSpecificDataPropertyType" minOccurs="0" maxOccurs="unbounded"/>
     </sequence>
-    <attribute name="id" type="token" use="required" />
+    <attribute ref="gml:id" use="required" />
   </complexType>
 
   <!--+++++++++++++++++++++Meta Information+++++++++++++++++ -->
@@ -43,7 +43,9 @@
       <element name="filter" type="tns:FilterInformationPropertyType" minOccurs="0" />
       <element name="arrangement" type="tns:GroupingArrangementPropertyType" minOccurs="0" />
       <element name="ranking" type="tns:RankingStrategyPropertyType" minOccurs="0" maxOccurs="unbounded"/>
-      
+      <element name="ruleOption" type="tns:RelevanceOptionPropertyType" />     
+	  <element name="dataType" type="token" minOccurs="0" />  
+	  <element name="dataFormat" type="token" minOccurs="0" />  
     </sequence>
   </complexType>
 
@@ -218,17 +220,42 @@
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <complexType name="RankingStrategyPropertyType">
     <choice>
-      <element name="TemporalRanking" type="tns:RankingStrategyType" />
-      <element name="SpatialRanking" type="tns:RankingStrategyType" />
+      <element name="TemporalRanking" type="tns:TemporalRankingStrategyType" />
+      <element name="SpatialRanking" type="tns:SpatialRankingStrategyType" />
     </choice>
   </complexType>
 
-  <complexType name="RankingStrategyType">
+  <complexType name="TemporalRankingStrategyType">
     <sequence>
-      <element name="rankingStrategy" type="token" />
+      <element name="rankingStrategy" type="tns:CodeTemporalRankingStrategyBaseType" />
       <element name="rankingDirection" type="tns:CodeRankingDirectionBaseType" minOccurs="0" />
     </sequence>
   </complexType>
+  
+  <simpleType name="CodeTemporalRankingStrategyBaseType">
+    <restriction base="string">
+      <enumeration value="PUBLICATION_TIME"/>
+      <enumeration value="VALID_TIME_BEGIN"/>
+      <enumeration value="VALID_TIME_END"/>
+      <enumeration value="ACTIVE_TIME_BEGIN"/>
+      <enumeration value="ACTIVE_TIME_END"/>
+    </restriction>
+  </simpleType>
+  
+  <complexType name="SpatialRankingStrategyType">
+    <sequence>
+      <element name="rankingStrategy" type="tns:CodeSpatialRankingStrategyBaseType" />
+      <element name="rankingDirection" type="tns:CodeRankingDirectionBaseType" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <simpleType name="CodeSpatialRankingStrategyBaseType">
+    <restriction base="string">
+      <enumeration value="EUCLIDEAN_DISTANCE"/>
+      <enumeration value="DISTANCE_FROM_BEAM"/>
+      <enumeration value="PERPENDICULAR_DISTANCE"/>
+    </restriction>
+  </simpleType>
 
   <simpleType name="CodeRankingDirectionBaseType">
     <restriction base="string">
@@ -237,6 +264,37 @@
     </restriction>
   </simpleType>
 
+  <!--+++++++++++++++++++++++RelevanceOption+++++++++++++++ -->
+  <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <complexType name="RelevanceOptionPropertyType">
+    <sequence>
+      <element name="RelevanceRuleOption" type="tns:RelevanceOptionType" />
+    </sequence>
+  </complexType>
+  
+  <complexType name="RelevanceOptionType">
+    <sequence>
+      <element name="spatialRelevanceRules" type="tns:CodeSpatialRelevanceType" />
+  	  <element name="temporalRelevanceRules" type="tns:CodeTemporalRelevanceType" />
+    </sequence>
+  </complexType>
+  
+  <simpleType name="CodeSpatialRelevanceType">
+    <restriction base="token">
+      <enumeration value="NONE" />
+      <enumeration value="BOUNDING_BOX" />
+      <enumeration value="SHAPE" />
+    </restriction>
+  </simpleType>
+  
+  <simpleType name="CodeTemporalRelevanceType">
+    <restriction base="token">
+      <enumeration value="NONE" />
+      <enumeration value="VALID_TIME" />
+      <enumeration value="ACTIVE_TIME" />
+    </restriction>
+  </simpleType>  
+  
   <!--+++++++++++++++++++++InterestSpecificData+++++++++++++ -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <complexType name="InterestSpecificDataPropertyType">
@@ -266,6 +324,7 @@
       <element name="FlightPlanInterest" type="tns:FlightPlanInterestType" />
       <element name="FlightPathInterest" type="tns:FlightPathInterestType" />
       <!-- <element name="simpleInterest" type="tns:SimpleInterestType"/> -->
+	  <element name="UndefinedInterest" type="tns:UndefinedInterestType" />
       <element name="AttributeOfInterest" type="tns:AttributeOfInterestType" />
       <element name="PeriodOfInterest" type="tns:PeriodOfInterestType" />
       <element name="AircraftOfInterest" type="tns:AircraftOfInterestType" />
@@ -438,6 +497,13 @@
   </complexType>
 
   <!--+++++++++++++++++++++Period Interest+++++++++++++++++ -->
+  <complexType name="UndefinedInterestType">
+	  <complexContent>
+		  <extension base="tns:SimpleInterestType">
+			</extension>
+		</complexContent>
+  </complexType>  
+  
   <complexType name="PeriodOfInterestPropertyType">
     <choice>
       <element name="PeriodOfInterest" type="tns:PeriodOfInterestType" />
@@ -493,6 +559,7 @@
             <element name="capabilities" type="tns:CapabilityPropertyType" minOccurs="0" />
             <element name="flightCharacteristics" type="aixm:FlightCharacteristicPropertyType" minOccurs="0" /> -->
           </sequence>
+          <element name="ilsCat" type="aixm:CodeSignalPerformanceILSType" />
         </choice>
       </extension>
     </complexContent>
@@ -734,7 +801,7 @@
 
   <complexType name="ConceptDefinedAreaType">
     <complexContent>
-      <extension base="tns:AreaOfInterestType">
+      <extension base="tns:UnscopedAreaType">
         <sequence>
           <element name="conceptName" type="token" />
           <element name="restriction" type="tns:RestrictionPropertyType" minOccurs="0" />
@@ -759,58 +826,56 @@
   <!-- Restrictions -->
   <complexType name="RestrictionPropertyType">
     <choice>
-      <element name="ValueRestriction" type="tns:ValueRestrictionType" />
-      <element name="NestedRestriction" type="tns:NestedRestrictionType" />
-      <element name="NotamRestriction" type="tns:NotamRestrictionType" />
+	  <element name="NestedRestriction" type="tns:NestedRestrictionType" />
+	  <element name="LeafRestriction" type="tns:LeafRestrictionType" />
     </choice>
   </complexType>
-
-  <complexType name="ValueRestrictionType">
-    <sequence>
-      <element name="attributeIri" type="anyURI" />
-      <choice minOccurs="0">
-        <sequence>
-          <element name="value_string" type="string" /> 
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-        <sequence>
-          <element name="value_decimal" type="decimal" />
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-        <sequence>
-          <element name="value_dateTime" type="dateTime" />
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-      </choice>
-    </sequence>
-  </complexType>
-
+  
   <complexType name="NestedRestrictionType">
     <sequence>
       <element name="attributeIri" type="anyURI" />
       <element name="restriction" type="tns:RestrictionPropertyType" />
     </sequence>
   </complexType>
+  
+  <complexType name="LeafRestrictionType">
+	<sequence>
+	  <choice minOccurs="0">
+		<sequence>
+		  <element name="value_string" type="string" /> 
+		  <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
+		</sequence>
+		<sequence>
+		  <element name="value_decimal" type="decimal" />
+		  <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
+		</sequence>
+		<sequence>
+		  <element name="value_dateTime" type="dateTime" />
+		  <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
+		</sequence>
+	  </choice>
+	</sequence>
+  </complexType>
+
+  <complexType name="QualifiedRestrictionType">
+	<complexContent>
+      <extension base="tns:LeafRestrictionType">
+		<sequence>
+		  <element name="attributeIri" type="anyURI" />
+		</sequence>
+      </extension>
+    </complexContent>
+  </complexType>
 
   <!-- For external usage. Attribute name equal to some name of a SemNOTAM attribute (without namespace) -->
-  <complexType name="NotamRestrictionType">
-    <sequence>
-      <element name="attributeName" type="token" />
-      <choice minOccurs="0">
-        <sequence>
-          <element name="value_string" type="string" /> 
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-        <sequence>
-          <element name="value_decimal" type="decimal" />
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-        <sequence>
-          <element name="value_dateTime" type="dateTime" />
-          <element name="operator" type="tns:CodeOperatorType" minOccurs="0" />
-        </sequence>
-      </choice>
-    </sequence>
+  <complexType name="UnqualifiedRestrictionType">
+	<complexContent>
+      <extension base="tns:LeafRestrictionType">
+		<sequence>
+		  <element name="attributeName" type="token" />
+		</sequence>
+      </extension>
+    </complexContent>
   </complexType>
 
   <!--+++++++++++++++++++++++++Misc.+++++++++++++++++++++++ -->

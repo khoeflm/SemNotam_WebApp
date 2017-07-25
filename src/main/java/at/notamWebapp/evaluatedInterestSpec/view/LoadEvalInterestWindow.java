@@ -11,7 +11,7 @@ public class LoadEvalInterestWindow extends Window {
     private FormLayout lMask = new FormLayout();
     private Label windowTitle = new Label("Look for an already existing Interest!");
     private Label errorMessages = new Label("");
-    private TextField interestName = new TextField("Interest Name");
+    private TextField interestName = new TextField("Filter by Result Name");
     private Button bloadInt = new Button("Load");
     private Table resultTable = new Table();
 

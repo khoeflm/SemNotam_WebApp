@@ -1,6 +1,6 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
-import at.notamWebapp.DBConnector;
+import at.notamWebapp.util.DBConnector;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.vaadin.ui.*;

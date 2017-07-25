@@ -1,4 +1,4 @@
-package at.notamWebapp.interestSpec.model.customConverter;
+package at.notamWebapp.util.customConverter;
 
 import aero.aixm.ValDistanceType;
 import com.vaadin.data.util.converter.Converter;

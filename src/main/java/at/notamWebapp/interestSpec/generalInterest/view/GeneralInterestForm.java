@@ -100,7 +100,6 @@ public class GeneralInterestForm extends Panel {
                 tfSpatialFilterDim, bSpatialFilterDim, delSpatialFilterDim, tfSpatialDim, bSpatialDim, delSpatialDim,
                 tfSpatial4dDim, bSpatial4dDim, delSpatial4Dim, tfAircraftDim, bAircraftDim, delAircraftDim,
                 tfDataFormat, bDataFormat, delDataFormat, tfDataType, bDataType, delDataType);
-
         giFormLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
     }
 
@@ -169,5 +168,12 @@ public class GeneralInterestForm extends Panel {
 
     public void removeWindow() {
         getUI().removeWindow(getElw());
+    }
+
+
+    public boolean isValid() {
+        if(tfAircraftDim.isEmpty()&&tfSpatial4dDim.isEmpty()&&tfSpatialDim.isEmpty()&&tfTempDim.isEmpty()){
+            return false;
+        } else return true;
     }
 }

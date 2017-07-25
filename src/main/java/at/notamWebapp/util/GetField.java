@@ -1,4 +1,4 @@
-package at.notamWebapp;
+package at.notamWebapp.util;
 
 import aero.aixm.AirportHeliportType;
 import aero.aixm.message.BasicMessageMemberAIXMPropertyType;

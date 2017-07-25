@@ -1,7 +1,7 @@
 package at.notamWebapp.interestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
-import at.notamWebapp.interestSpec.model.customConverter.MyConverterFactory;
+import at.notamWebapp.util.customConverter.MyConverterFactory;
 import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.annotations.Theme;

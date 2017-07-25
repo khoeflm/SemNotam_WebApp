@@ -1,6 +1,6 @@
 package at.notamWebapp.interestSpec.view;
 
-import at.notamWebapp.DBConnector;
+import at.notamWebapp.util.DBConnector;
 import at.notamWebapp.interestSpec.controller.SemNotamController;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.vaadin.ui.*;
@@ -13,9 +13,9 @@ import java.util.List;
 public class LoadInterestWindow extends Window {
     private VerticalLayout lPopUp = new VerticalLayout();
     private FormLayout lMask = new FormLayout();
-    private Label text1 = new Label("Look for an already existing Interest!");
+    private Label text1 = new Label("Look for an already existing Interest:");
     private Label errorMessages = new Label("");
-    private TextField name = new TextField("Interest Name");
+    private TextField name = new TextField("Filter by Interest Name");
     private Table existingIS = new Table();
     private Button bloadInt = new Button("Load");
 

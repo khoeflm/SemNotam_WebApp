@@ -1,6 +1,6 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
-import at.notamWebapp.GoogleMapsDrawer;
+import at.notamWebapp.util.GoogleMapsDrawer;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;

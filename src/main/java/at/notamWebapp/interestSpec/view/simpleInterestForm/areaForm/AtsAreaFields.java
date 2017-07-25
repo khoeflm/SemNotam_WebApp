@@ -1,22 +1,18 @@
 package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 
 import at.notamWebapp.interestSpec.controller.SemNotamController;
-import at.notamWebapp.interestSpec.model.GetPointIdentifier;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
+import at.notamWebapp.util.customConverter.CustomDateConverter;
+import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
+import at.notamWebapp.util.customConverter.CustomDurationConverter;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.frequentis.semnotam.schema._1.AtsAreaType;
-import com.frequentis.semnotam.schema._1.ElevatedPointReferencePropertyType;
-import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
-import net.opengis.gml.GeodesicStringType;
 
 import java.util.List;
 
@@ -128,11 +124,11 @@ public class AtsAreaFields extends GridLayout {
 
         identifier.addValueChangeListener(valueChangeEvent -> {
             AtsAreaType specArea = area.getAtsArea();
-            setElevatedProperties(specArea, valueChangeEvent);
+            controller.getElevatedDataController().setElevatedProperties(specArea, valueChangeEvent, identifier);
         });
         elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
             AtsAreaType specArea = area.getAtsArea();
-            setElevatedPoint(specArea);
+            controller.getElevatedDataController().setElevatedPoint(specArea, identifier);
         });
 
         bufferBefore.addValueChangeListener(valueChangeEvent ->
@@ -208,42 +204,7 @@ public class AtsAreaFields extends GridLayout {
         );
     }
 
-    private void setElevatedProperties(AtsAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
-        try {
-            if (!identifier.isValid()) {
-                identifier.setValidationVisible(true);
-            } else {
-                identifier.setValidationVisible(false);
-                identifier.setComponentError(null);
-                identifier.commit();
-                setElevatedCurveId(specArea, valueChangeEvent);
-                setElevatedPoint(specArea);
-            }
-        } catch (Validator.EmptyValueException e) {
-            // A required value was missing
-        }
-    }
 
-    private void setElevatedPoint(AtsAreaType atsArea) {
-        if(!identifier.getValue().toString().isEmpty()) {
-            GeodesicStringType geodesicStringType = (GeodesicStringType) atsArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().
-                    getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
-            List<Double> pointList = geodesicStringType.getPosList().getValue();
-            controller.getElevatedDataController().setElevatedPoint(identifier.getValue().toString(), pointList);
-            ElevatedPointReferencePropertyType startPoint = new ElevatedPointReferencePropertyType();
-            ElevatedPointReferencePropertyType endPoint = new ElevatedPointReferencePropertyType();
-            startPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getFirstPointId(identifier.getValue().toString()));
-            endPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getSecondPointId(identifier.getValue().toString()));
-            atsArea.getSegmentShape().getSegmentShapeArea().setStartPoint(startPoint);
-            atsArea.getSegmentShape().getSegmentShapeArea().setEndPoint(endPoint);
-        }
-    }
 
-    private void setElevatedCurveId(AtsAreaType atsArea, Property.ValueChangeEvent valueChangeEvent) {
-        String identifier = (String) valueChangeEvent.getProperty().getValue();
-        String firstPointId = GetPointIdentifier.getFirstPointId(identifier);
-        String secondPointId = GetPointIdentifier.getSecondPointId(identifier);
-        atsArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().getElevatedCurve().setId("ElevatedCurvePoint"+
-                firstPointId +"Point"+secondPointId);
-    }
+
 }

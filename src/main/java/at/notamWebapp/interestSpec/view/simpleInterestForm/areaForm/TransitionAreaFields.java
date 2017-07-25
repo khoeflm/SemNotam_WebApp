@@ -1,10 +1,10 @@
 package at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm;
 
+import at.notamWebapp.interestSpec.controller.ElevatedDataController;
 import at.notamWebapp.interestSpec.controller.SemNotamController;
-import at.notamWebapp.interestSpec.model.GetPointIdentifier;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDateConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDayTimeConverter;
-import at.notamWebapp.interestSpec.model.customConverter.CustomDurationConverter;
+import at.notamWebapp.util.customConverter.CustomDateConverter;
+import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
+import at.notamWebapp.util.customConverter.CustomDurationConverter;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.frequentis.semnotam.schema._1.ElevatedPointReferencePropertyType;
@@ -290,8 +290,8 @@ public class TransitionAreaFields extends GridLayout {
             controller.getElevatedDataController().setElevatedPoint(identifier.getValue().toString(), pointList);
             ElevatedPointReferencePropertyType startPoint = new ElevatedPointReferencePropertyType();
             ElevatedPointReferencePropertyType endPoint = new ElevatedPointReferencePropertyType();
-            startPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getFirstPointId(identifier.getValue().toString()));
-            endPoint.setHref("#ElevatedPoint" + GetPointIdentifier.getSecondPointId(identifier.getValue().toString()));
+            startPoint.setHref("#ElevatedPoint" + ElevatedDataController.getFirstPointId(identifier.getValue().toString()));
+            endPoint.setHref("#ElevatedPoint" + ElevatedDataController.getSecondPointId(identifier.getValue().toString()));
             transArea.getSegmentShape().getSegmentShapeArea().setStartPoint(startPoint);
             transArea.getSegmentShape().getSegmentShapeArea().setEndPoint(endPoint);
         }
@@ -299,8 +299,8 @@ public class TransitionAreaFields extends GridLayout {
 
     private void setElevatedCurveId(TransitionAreaType transArea, Property.ValueChangeEvent valueChangeEvent) {
         String identifier = (String) valueChangeEvent.getProperty().getValue();
-        String firstPointId = GetPointIdentifier.getFirstPointId(identifier);
-        String secondPointId = GetPointIdentifier.getSecondPointId(identifier);
+        String firstPointId = ElevatedDataController.getFirstPointId(identifier);
+        String secondPointId = ElevatedDataController.getSecondPointId(identifier);
         transArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().getElevatedCurve().setId("ElevatedCurvePoint"+
                 firstPointId +"Point"+secondPointId);
     }
