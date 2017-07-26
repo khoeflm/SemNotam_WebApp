@@ -8,21 +8,26 @@ import com.vaadin.ui.*;
  */
 public class EvaluatedInterestMenuBarForm extends Panel {
     private Label findExIS, findExRS;
-    private Button bFindExIS;
     private VerticalLayout mainLayout;
     private GridLayout layoutI;
     private Button bLoadResult = new Button("Find");
     private Button bSaveResult = new Button("Save RS");
+    private Button bFindExIS = new Button("Find");
     private TextField resultID = new TextField();
 
 
     public EvaluatedInterestMenuBarForm(EvalNotamController controller){
         setCaption("Find existing InterestSpecification(Result)");
 
-        bLoadResult.setId("loadRS");
+        bLoadResult.setId("findExRS");
+        bLoadResult.addClickListener(controller);
+
         bSaveResult.setId("saveRS");
         bSaveResult.addClickListener(controller);
-        bLoadResult.addClickListener(controller);
+
+        bFindExIS.setId("findExIS");
+        bFindExIS.addClickListener(controller);
+
         HorizontalLayout saveRS = new HorizontalLayout();
         saveRS.addComponents(resultID, bSaveResult);
 
@@ -30,9 +35,7 @@ public class EvaluatedInterestMenuBarForm extends Panel {
         layoutI.setSizeFull();
         findExIS = new Label("Find and Evaluate existing InterestSpecification:");
         findExRS = new Label("Find existing ResultSet:");
-        bFindExIS = new Button("Find");
-        bFindExIS.setId("findExIS");
-        bFindExIS.addClickListener(controller);
+
         layoutI.addComponent(findExRS,0,0);
         layoutI.addComponent(findExIS,0,1);
         layoutI.addComponent(bLoadResult,1,0);

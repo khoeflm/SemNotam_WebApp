@@ -1,18 +1,17 @@
 package at.notamWebapp.evaluatedInterestSpec.controller;
 
-import at.notamWebapp.util.DBConnector;
-import at.notamWebapp.util.XMLUnmarshaller;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
+import at.notamWebapp.util.DBConnector;
+import at.notamWebapp.util.XMLUnmarshaller;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
+import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Button;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by khoef on 27.04.2017.
@@ -34,31 +33,10 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
 
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
-        if (clickEvent.getButton().getId().equals("findExRS")){
+        if(clickEvent.getButton().getId().equals("findExIS")){
             view.addLoadEvalInterestWindow();
-            view.setResultsVisible();
         }
-        else if(clickEvent.getButton().getId().equals("findExIS")){
-            InterestSpecificationType is = new InterestSpecificationType();
-            model.loadResultfromWS(is);
-            fillNotamFilterOptions();
-            view.drawMapElements(model);
-            view.setResultsVisible();
-        }
-        else if(clickEvent.getButton().getId().equals("queryRS")){
-            DBConnector conn = new DBConnector();
-            try {
-                List<String> rsIdList = conn.loadResultIds();
-                int i = 1;
-                for(String rsItem : rsIdList){
-                    view.getLoadEvalInterestWindow().getResultTable().addItem(new Object[]{rsItem}, i);
-                    i++;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(clickEvent.getButton().getId().equals("loadRS")){
+        else if(clickEvent.getButton().getId().equals("findExRS")){
             view.addLoadResultWindow();
         }
 
@@ -101,12 +79,26 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
         }
 
         if(itemClickEvent.getComponent().getId().equals("existingRSTable")){
-            String existingIS = itemClickEvent.getItem().toString();
+            String existingRS = itemClickEvent.getItem().toString();
             DBConnector conn = new DBConnector();
-            String interestString = conn.loadExistingResult(existingIS);
+            String interestString = conn.loadExistingResult(existingRS);
             view.removeLoadResultWindow();
             InterestSpecResultType interestSpec = XMLUnmarshaller.unmarshalInterestSpecResult(
                     new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
+            model.setResult(interestSpec);
+            fillNotamFilterOptions();
+            view.drawMapElements(model);
+            view.setResultsVisible();
+        }
+
+        if(itemClickEvent.getComponent().getId().equals("existingISTable")){
+            String existingIS = itemClickEvent.getItem().toString();
+            DBConnector conn = new DBConnector();
+            String interestString = conn.loadExistingInterest(existingIS);
+            InterestSpecificationType is = XMLUnmarshaller.unmarshalInterestSpecification(interestString);
+
+            InterestSpecResultType interestSpec = SpecificInterestWS.evaluateInterestSpecification(is);
+            view.removeLoadResultWindow();
             model.setResult(interestSpec);
             fillNotamFilterOptions();
             view.drawMapElements(model);

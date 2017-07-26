@@ -69,4 +69,13 @@ public class SpecificInterestWS {
             return null;
         }
     }
+
+    public static InterestSpecResultType evaluateInterestSpecification(InterestSpecificationType is){
+        try {
+            return client.evaluateInterestSpecification(is, true);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

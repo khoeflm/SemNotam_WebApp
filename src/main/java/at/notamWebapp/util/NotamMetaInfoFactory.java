@@ -3,6 +3,8 @@ package at.notamWebapp.util;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import com.frequentis.semnotam.schema._1.*;
 
+import java.math.BigInteger;
+
 /**
  * Created by khoef on 24.07.2017.
  */
@@ -13,6 +15,8 @@ public class NotamMetaInfoFactory {
         RelevanceOptionPropertyType relevanceOptionPropertyType = new RelevanceOptionPropertyType();
         RelevanceOptionType relevanceOptionType = new RelevanceOptionType();
         notamSetMetaInformationPropertyType.setNotamSetMetaInformation(metaInfoType);
+        metaInfoType.setAnnotation(setAnnotation());
+        metaInfoType.setFilter(setFilter());
         metaInfoType.setRuleOption(relevanceOptionPropertyType);
         relevanceOptionPropertyType.setRelevanceRuleOption(relevanceOptionType);
         relevanceOptionType.setSpatialRelevanceRules(CodeSpatialRelevanceType.SHAPE);
@@ -31,4 +35,111 @@ public class NotamMetaInfoFactory {
         notamSetMetaInformationPropertyType.setNotamSetMetaInformation(metaInfoType);
         return notamSetMetaInformationPropertyType;
     }
+
+    private static AnnotationInformationPropertyType setAnnotation() {
+        AnnotationInformationPropertyType annotationInformationPropertyType = new AnnotationInformationPropertyType();
+        AnnotationInformationType annotationInformationType = new AnnotationInformationType();
+        AnnotationPropertyType annotationPropertyType = new AnnotationPropertyType();
+        AnnotationType annotationType = new AnnotationType();
+        AnnotationGroupingPropertyType annotationGroupingPropertyType = new AnnotationGroupingPropertyType();
+        GroupingType groupingType = new GroupingType();
+
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGrouping> --> <AnnotationGrouping>
+
+        annotationInformationPropertyType.setAnnotationInformation(annotationInformationType);
+        annotationInformationType.getHasAnnotation().add(annotationPropertyType);
+        annotationPropertyType.setAnnotation(annotationType);
+        annotationType.setHasGrouping(annotationGroupingPropertyType);
+        annotationGroupingPropertyType.setAnnotationGrouping(groupingType);
+        groupingType.setGroupingName("Importance");
+
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGroup> --> <AnnotationGroup> --> <groupName> --> <groupOrder>
+
+        AnnotationGroupPropertyType annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        GroupType groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Unknown Importance");
+        groupType.setGroupOrder(BigInteger.ONE);
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Flight Critical");
+        groupType.setGroupOrder(BigInteger.valueOf(2));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Special Consideration");
+        groupType.setGroupOrder(BigInteger.valueOf(3));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Operational Restriction");
+        groupType.setGroupOrder(BigInteger.valueOf(4));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Potential Hazard");
+        groupType.setGroupOrder(BigInteger.valueOf(5));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Additional Information");
+        groupType.setGroupOrder(BigInteger.valueOf(6));
+
+        return annotationInformationPropertyType;
+    }
+
+    private static FilterInformationPropertyType setFilter() {
+        FilterInformationPropertyType filterInformationPropertyType = new FilterInformationPropertyType();
+        FilterInformationType filterInformationType = new FilterInformationType();
+        FilterPropertyType filterPropertyType = new FilterPropertyType();
+        FilterType filterType = new FilterType();
+        FilterGroupingPropertyType filterGroupingPropertyType = new FilterGroupingPropertyType();
+        GroupingType groupingType = new GroupingType();
+        FilterGroupPropertyType filterGroupPropertyType = new FilterGroupPropertyType();
+        GroupType groupType = new GroupType();
+
+        /* <filter>
+                <FilterInformation>
+                    <hasFilter>
+                        <Filter>
+                            <hasGrouping>
+                                <FilterGrouping>
+                                    <groupingName>Relevance</groupingName>
+                                </FilterGrouping>
+                            </hasGrouping>
+                            <hasGroup>
+                                <FilterGroup>
+                                    <groupName>Relevant</groupName>
+         ...
+        */
+
+        filterInformationPropertyType.setFilterInformation(filterInformationType);
+        filterInformationType.getHasFilter().add(filterPropertyType);
+        filterPropertyType.setFilter(filterType);
+        filterType.setHasGrouping(filterGroupingPropertyType);
+        filterGroupingPropertyType.setFilterGrouping(groupingType);
+        groupingType.setGroupingName("Relevance");
+        filterType.getHasGroup().add(filterGroupPropertyType);
+        filterGroupPropertyType.setFilterGroup(groupType);
+        groupType.setGroupName("Relevant");
+
+        return filterInformationPropertyType;
+    }
+
 }

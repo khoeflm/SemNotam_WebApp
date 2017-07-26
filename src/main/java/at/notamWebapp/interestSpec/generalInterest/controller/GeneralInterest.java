@@ -12,6 +12,7 @@ import com.vaadin.ui.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by khoef on 27.03.2017.
@@ -88,26 +89,52 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 view.getTfTempFilterDim().clear();
                 break;
             case "del2":
+                List<InterestPropertyType> interestList;
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getPeriodOfInterest() == null)
+                        .collect(Collectors.toList());
+                model.getIntersectionInterest().getHasMember().clear();
+                model.getIntersectionInterest().getHasMember().addAll(interestList);
+
                 view.getTfTempDim().clear();
                 if(view.getTfSpatialDim().isEmpty()){
                     view.getbSpatial4dDim().setEnabled(true);
                 }
+
                 break;
             case "del3":
                 view.getTfSpatialFilterDim().clear();
                 break;
             case "del4":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getShapeArea() == null)
+                        .collect(Collectors.toList());
+                model.getIntersectionInterest().getHasMember().clear();
+                model.getIntersectionInterest().getHasMember().addAll(interestList);
+
                 view.getTfSpatialDim().clear();
                 if(view.getTfTempDim().isEmpty()){
                     view.getbSpatial4dDim().setEnabled(true);
                 }
                 break;
             case "del5":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getShapeArea() == null)
+                        .collect(Collectors.toList());
+                model.getIntersectionInterest().getHasMember().clear();
+                model.getIntersectionInterest().getHasMember().addAll(interestList);
+
                 view.getTfSpatial4dDim().clear();
                 view.getTfSpatialDim().setEnabled(true);
                 view.getTfTempDim().setEnabled(true);
                 break;
             case "del6":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getAircraftOfInterest() == null)
+                        .collect(Collectors.toList());
+                model.getIntersectionInterest().getHasMember().clear();
+                model.getIntersectionInterest().getHasMember().addAll(interestList);
+
                 view.getTfAircraftDim().clear();
                 break;
             case "del7":

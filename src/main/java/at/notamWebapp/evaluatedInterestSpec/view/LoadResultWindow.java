@@ -45,6 +45,7 @@ public class LoadResultWindow extends Window {
                     if(existingRS.size()<=10){
                         existingRS.setPageLength(existingRS.size());
                     }
+                    existingRS.addItemClickListener(controller);
                     existingRS.setVisible(true);
                     existingRS.setPageLength(10);
                 }

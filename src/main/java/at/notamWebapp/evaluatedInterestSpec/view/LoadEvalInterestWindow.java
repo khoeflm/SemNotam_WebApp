@@ -1,38 +1,60 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
+import at.notamWebapp.util.DBConnector;
+import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.vaadin.ui.*;
+
+import java.util.List;
 
 /**
  * Created by khoef on 20.03.2017.
  */
 public class LoadEvalInterestWindow extends Window {
-    private VerticalLayout mainLayout = new VerticalLayout();
+    private VerticalLayout lPopUp = new VerticalLayout();
     private FormLayout lMask = new FormLayout();
-    private Label windowTitle = new Label("Look for an already existing Interest!");
+    private Label text1 = new Label("Look for an already existing Interest:");
     private Label errorMessages = new Label("");
-    private TextField interestName = new TextField("Filter by Result Name");
+    private TextField name = new TextField("Filter by Interest Name");
+    private Table existingIS = new Table();
     private Button bloadInt = new Button("Load");
-    private Table resultTable = new Table();
 
     public LoadEvalInterestWindow(EvalNotamController controller){
-        mainLayout.addComponent(lMask);
-        lMask.addComponents(windowTitle, interestName, bloadInt, errorMessages, resultTable);
-        setContent(mainLayout);
-        mainLayout.setMargin(true);
-        bloadInt.addClickListener(controller);
-        bloadInt.setId("queryRS");
-        resultTable.setId("resultTable");
-        resultTable.setPageLength(resultTable.size());
-        resultTable.setSelectable(true);
-        resultTable.setImmediate(true);
-        resultTable.addItemClickListener(controller);
+        lPopUp.addComponent(lMask);
+        lMask.addComponents(text1, name, bloadInt, errorMessages, existingIS);
+        setContent(lPopUp);
+        lPopUp.setMargin(true);
+        name.setNullRepresentation("");
+        existingIS.addContainerProperty("Item", String.class, null);
+        existingIS.setId("existingISTable");
+        existingIS.setSelectable(true);
+        existingIS.setImmediate(true);
+        existingIS.addItemClickListener(controller);
+        existingIS.setVisible(false);
+        bloadInt.addClickListener(clickEvent ->
+                {
+                    DBConnector dbconn = new DBConnector();
+                    String interestString = null;
+                    InterestSpecificationType interestSpec = null;
+                    List<String> isList = dbconn.loadExistingInterests(name.getValue());
+                    for(String s : isList){
+                        existingIS.addItem(new Object[]{s}, s);
+                    }
+                    if(existingIS.size()<=10){
+                        existingIS.setPageLength(existingIS.size());
+                    }
+                    existingIS.setVisible(true);
+                    existingIS.setPageLength(10);
+                }
+        );
+        //  bloadInt.setId("queryIS");
+        //table.addValueChangeListener(controller);
     }
 
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        interestName.setValue("");
+        //      name.setValue("");
     }
 
     public void showLoadErrorMessage(String interestString) {
@@ -41,7 +63,7 @@ public class LoadEvalInterestWindow extends Window {
         }
     }
 
-    public Table getResultTable() {
-        return resultTable;
+    public Table getExistingISTable() {
+        return existingIS;
     }
 }
