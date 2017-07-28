@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class EvaluatedInterestService {
 
-    private InterestSpecResultType result = new InterestSpecResultType();
+    private InterestSpecResultType result;
     private EvalNotamController controller;
 
     public EvaluatedInterestService(EvalNotamController evalNotamController) {
@@ -129,4 +129,9 @@ public class EvaluatedInterestService {
     }
 
 
+    public boolean isValid() {
+        if(result != null){
+            return true;
+        }else return false;
+    }
 }

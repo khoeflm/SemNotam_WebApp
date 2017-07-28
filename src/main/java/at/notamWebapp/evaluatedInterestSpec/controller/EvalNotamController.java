@@ -8,7 +8,9 @@ import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -44,13 +46,28 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
     ================================================================================================================*/
 
         else if(clickEvent.getButton().getId().equals("saveRS")) {
-            String filename = view.getMenu().getResultID().getValue();
-            if (model.getResult() != null) {
-                if (conn.noSuchFileExists(filename)) {
-                    conn.createResult(model.getResult(), filename);
-                } else {
-                    view.setAlreadyExistingFileWindow(filename);
+            if(view.getMenu().getResultID().isValid() && model.isValid()) {
+                String filename = view.getMenu().getResultID().getValue();
+                if (model.getResult() != null) {
+                    if (conn.noSuchFileExists(filename)) {
+                        conn.createResult(model.getResult(), filename);
+                    } else {
+                        view.setAlreadyExistingFileWindow(filename);
+                    }
                 }
+            }else if(!view.getMenu().getResultID().isValid()){
+                view.getMenu().getResultID().focus();
+                new Notification("Only [A-Z],[a-z],[0-9] and \"_\" are allowed for the Result ID",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }else if(!model.isValid()){
+                view.getMenu().getResultID().focus();
+                new Notification("No Evaluated Interest Specification found",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }else {
+                new Notification("Something went wrong. IS not saved",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
             }
         }
         //Continue the saving off the file although there is an already existing file with the same name
@@ -98,7 +115,7 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
             InterestSpecificationType is = XMLUnmarshaller.unmarshalInterestSpecification(interestString);
 
             InterestSpecResultType interestSpec = SpecificInterestWS.evaluateInterestSpecification(is);
-            view.removeLoadResultWindow();
+            view.removeLoadEvalInterestWindow();
             model.setResult(interestSpec);
             fillNotamFilterOptions();
             view.drawMapElements(model);

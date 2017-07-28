@@ -1,6 +1,8 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.*;
 
 /**
@@ -46,6 +48,10 @@ public class EvaluatedInterestMenuBarForm extends Panel {
         layoutI.setColumnExpandRatio(0, (float) 0.33);
         layoutI.setColumnExpandRatio(1, (float) 0.33);
         layoutI.setColumnExpandRatio(2, (float) 0.33);
+
+        resultID.addValidator(new StringLengthValidator("Wrong length",1,35,false));
+        resultID.addValidator(new RegexpValidator("\\w+","Only [A-Z],[a-z],[0-9] and [_] are allowed"));
+        resultID.setValidationVisible(false);
     }
 
     public TextField getResultID() {
