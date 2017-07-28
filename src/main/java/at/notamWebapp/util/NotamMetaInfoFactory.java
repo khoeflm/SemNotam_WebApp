@@ -39,16 +39,17 @@ public class NotamMetaInfoFactory {
     private static AnnotationInformationPropertyType setAnnotation() {
         AnnotationInformationPropertyType annotationInformationPropertyType = new AnnotationInformationPropertyType();
         AnnotationInformationType annotationInformationType = new AnnotationInformationType();
+        annotationInformationPropertyType.setAnnotationInformation(annotationInformationType);
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGrouping> --> <AnnotationGrouping> --> <groupingName>
+
+        //Importance
         AnnotationPropertyType annotationPropertyType = new AnnotationPropertyType();
         AnnotationType annotationType = new AnnotationType();
         AnnotationGroupingPropertyType annotationGroupingPropertyType = new AnnotationGroupingPropertyType();
         GroupingType groupingType = new GroupingType();
 
-
-        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
-        // <hasGrouping> --> <AnnotationGrouping>
-
-        annotationInformationPropertyType.setAnnotationInformation(annotationInformationType);
         annotationInformationType.getHasAnnotation().add(annotationPropertyType);
         annotationPropertyType.setAnnotation(annotationType);
         annotationType.setHasGrouping(annotationGroupingPropertyType);
@@ -58,6 +59,8 @@ public class NotamMetaInfoFactory {
 
         // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
         // <hasGroup> --> <AnnotationGroup> --> <groupName> --> <groupOrder>
+
+        //Importance Groups
 
         AnnotationGroupPropertyType annotationGroupPropertyType = new AnnotationGroupPropertyType();
         annotationType.getHasGroup().add(annotationGroupPropertyType);
@@ -100,6 +103,63 @@ public class NotamMetaInfoFactory {
         annotationGroupPropertyType.setAnnotationGroup(groupType);
         groupType.setGroupName("Additional Information");
         groupType.setGroupOrder(BigInteger.valueOf(6));
+
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGrouping> --> <AnnotationGrouping> --> <groupingName>
+
+        //Flight Phase
+        annotationPropertyType = new AnnotationPropertyType();
+        annotationType = new AnnotationType();
+        annotationGroupingPropertyType = new AnnotationGroupingPropertyType();
+        groupingType = new GroupingType();
+
+        annotationInformationType.getHasAnnotation().add(annotationPropertyType);
+        annotationPropertyType.setAnnotation(annotationType);
+        annotationType.setHasGrouping(annotationGroupingPropertyType);
+        annotationGroupingPropertyType.setAnnotationGrouping(groupingType);
+        groupingType.setGroupingName("Flight Phase");
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGroup> --> <AnnotationGroup> --> <groupName> --> <groupOrder>
+
+        //Importance Groups
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("preFlight");
+        groupType.setGroupOrder(BigInteger.ONE);
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("departure");
+        groupType.setGroupOrder(BigInteger.valueOf(2));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("enRoute");
+        groupType.setGroupOrder(BigInteger.valueOf(3));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("arrival");
+        groupType.setGroupOrder(BigInteger.valueOf(4));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("diversion");
+        groupType.setGroupOrder(BigInteger.valueOf(5));
+
 
         return annotationInformationPropertyType;
     }

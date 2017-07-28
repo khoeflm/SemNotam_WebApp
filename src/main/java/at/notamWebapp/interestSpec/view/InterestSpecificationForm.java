@@ -9,6 +9,8 @@ import at.notamWebapp.interestSpec.view.simpleInterestForm.AttributeOfInterestFo
 import at.notamWebapp.interestSpec.view.simpleInterestForm.PeriodOfInterestForm;
 import at.notamWebapp.interestSpec.view.simpleInterestForm.areaForm.AreaOfInterestForm;
 import com.frequentis.semnotam.schema._1.*;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -99,6 +101,10 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         addComponent(generalInterest);
         addComponent(disableSpecific);
         addComponents(imbForm, interestForms);
+
+        interestSpecID.addValidator(new StringLengthValidator("Wrong length",1,35,false));
+        interestSpecID.addValidator(new RegexpValidator("\\w+","Only [A-Z],[a-z],[0-9] and [_] are allowed"));
+        interestSpecID.setValidationVisible(false);
     }
 
     @Override
@@ -339,10 +345,10 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
         if(!disableSpecific.getValue()) {
             if (interestForms.getComponentCount() > 1) {
                 new Notification("There is more than one Root Element for the Specific Interest").show(Page.getCurrent());
-                return "-1";
+                return ">1";
             } else if (interestForms.getComponentCount() < 1) {
                 new Notification("There is no Specific Interest").show(Page.getCurrent());
-                return "-1";
+                return "<1";
             } else {
                 String rootElement = interestForms.getComponent(0).getId();
                 return rootElement;
@@ -416,5 +422,12 @@ public class InterestSpecificationForm extends FormLayout implements SemNotamFor
 
     public void removeExistingFileWindow() {
         getUI().removeWindow(alreadyExistingFileWindow);
+    }
+
+
+    public boolean isSpecificInterestFormValid() {
+        if(interestSpecID.isValid() && (interestForms.getComponentCount() == 1 || disableSpecific.getValue())){
+            return true;
+        } else return false;
     }
 }

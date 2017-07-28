@@ -72,7 +72,8 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
     ================================================================================================================*/
     //Save Interest Spec in File
         if(clickEvent.getButton().getId().equals("saveIS")){
-            if(view.getGeneralInterestForm().isValid() || view.getDisableGeneral().getValue()) {
+            if((view.getGeneralInterestForm().isValid() || view.getDisableGeneral().getValue())
+                    && view.isSpecificInterestFormValid()) {
                 String filename = view.getInterestSpecID().getValue();
                 InterestSpecificationType interestSpec = model.getSavableInterestSpec(view.getRootElement(), filename, !view.getDisableSpecific().getValue(),
                         !view.getDisableGeneral().getValue());
@@ -83,10 +84,38 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                         view.setAlreadyExistingFileWindow(filename);
                     }
                 }
-            } else{
-                new Notification("At least one General Interest Dimension has to be chosen!",
+            }else if(view.getInterestSpecID().getValue().length() == 0){
+                view.getInterestSpecID().focus();
+                new Notification("You must add a Name for your Interest Specification",
                         Notification.Type.ERROR_MESSAGE)
                         .show(Page.getCurrent());
+            }
+            else if(view.getInterestSpecID().getValue().length() > 35){
+                view.getInterestSpecID().focus();
+                new Notification("The name of your InterestSpecification is to long",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }
+            else if(!view.getInterestSpecID().isValid()){
+                view.getInterestSpecID().focus();
+                new Notification("Only [A-Z],[a-z],[0-9] and \"_\" are allowed for the Interest Specification ID",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }
+            else if(view.getRootElement().equals("<1")){
+                new Notification("There is no Specific Interest",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            }
+            else if(view.getRootElement().equals(">1")){
+                new Notification("There is more than one Root Element for the Specific Interest",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            }
+            else if(!view.getGeneralInterestForm().isValid() && !view.getDisableGeneral().getValue()){
+                new Notification("At least one General Interest Dimension has to be chosen or General Interest is disabled!",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            }else {
+                new Notification("Something went wrong. IS not saved",
+                        Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
             }
         }
         //Continue the saving off the file although there is an already existing file with the same name
