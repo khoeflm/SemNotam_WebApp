@@ -175,6 +175,7 @@ public class NotamViewForm extends Panel {
     }
 
     private void fillNotamTable(BeanItemContainer<NotamTableRow> beans){
+        notamViewVertLayout.removeAllComponents();
         this.notamTable = new Table();
         notamTable.setId("notamTable");
         notamTable.setContainerDataSource(beans);
