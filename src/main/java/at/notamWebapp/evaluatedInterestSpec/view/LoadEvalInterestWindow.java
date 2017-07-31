@@ -19,7 +19,6 @@ public class LoadEvalInterestWindow extends Window {
     private Button bloadInt = new Button("Filter");
 
     public LoadEvalInterestWindow(EvalNotamController controller){
-        focus();
         lPopUp.addComponent(lMask);
         lMask.addComponents(text1, name, bloadInt, errorMessages, existingIS);
         setContent(lPopUp);

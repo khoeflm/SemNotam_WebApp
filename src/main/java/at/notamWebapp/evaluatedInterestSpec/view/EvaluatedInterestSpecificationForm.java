@@ -92,4 +92,8 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
     public void removeExistingFileWindow() {
         getUI().removeWindow(alreadyExistingFileWindow);
     }
+
+    public LoadResultWindow getLoadResultWindow() {
+        return loadResultWindow;
+    }
 }

@@ -21,7 +21,6 @@ public class LoadResultWindow extends Window {
     private Button bloadInt = new Button("Filter");
 
     public LoadResultWindow(EvalNotamController controller){
-        focus();
         lPopUp.addComponent(lMask);
         lMask.addComponents(text1, name, bloadInt, errorMessages, existingRS);
         setContent(lPopUp);

@@ -160,6 +160,88 @@ public class NotamMetaInfoFactory {
         groupType.setGroupName("diversion");
         groupType.setGroupOrder(BigInteger.valueOf(5));
 
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGrouping> --> <AnnotationGrouping> --> <groupingName>
+
+        //Location
+        annotationPropertyType = new AnnotationPropertyType();
+        annotationType = new AnnotationType();
+        annotationGroupingPropertyType = new AnnotationGroupingPropertyType();
+        groupingType = new GroupingType();
+
+        annotationInformationType.getHasAnnotation().add(annotationPropertyType);
+        annotationPropertyType.setAnnotation(annotationType);
+        annotationType.setHasGrouping(annotationGroupingPropertyType);
+        annotationGroupingPropertyType.setAnnotationGrouping(groupingType);
+        groupingType.setGroupingName("Location");
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGroup> --> <AnnotationGroup> --> <groupName> --> <groupOrder>
+
+        //Location Groups
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Aerodrome Area");
+        groupType.setGroupOrder(BigInteger.ONE);
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Transition Area");
+        groupType.setGroupOrder(BigInteger.valueOf(2));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Aerodrome Transition");
+        groupType.setGroupOrder(BigInteger.valueOf(3));
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Segment Area");
+        groupType.setGroupOrder(BigInteger.valueOf(4));
+
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGrouping> --> <AnnotationGrouping> --> <groupingName>
+
+        //Briefing Package
+        annotationPropertyType = new AnnotationPropertyType();
+        annotationType = new AnnotationType();
+        annotationGroupingPropertyType = new AnnotationGroupingPropertyType();
+        groupingType = new GroupingType();
+
+        annotationInformationType.getHasAnnotation().add(annotationPropertyType);
+        annotationPropertyType.setAnnotation(annotationType);
+        annotationType.setHasGrouping(annotationGroupingPropertyType);
+        annotationGroupingPropertyType.setAnnotationGrouping(groupingType);
+        groupingType.setGroupingName("Briefing Package");
+
+        // <annotation> --> <AnnotationInformation> --> <hasAnnotation> --> <Annotation> -->
+        // <hasGroup> --> <AnnotationGroup> --> <groupName> --> <groupOrder>
+
+        //Importance Groups
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Essential");
+        groupType.setGroupOrder(BigInteger.ONE);
+
+        annotationGroupPropertyType = new AnnotationGroupPropertyType();
+        annotationType.getHasGroup().add(annotationGroupPropertyType);
+        groupType = new GroupType();
+        annotationGroupPropertyType.setAnnotationGroup(groupType);
+        groupType.setGroupName("Supplementary");
+        groupType.setGroupOrder(BigInteger.valueOf(2));
 
         return annotationInformationPropertyType;
     }

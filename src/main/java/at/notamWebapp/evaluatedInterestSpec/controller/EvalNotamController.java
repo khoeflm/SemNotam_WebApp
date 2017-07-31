@@ -43,9 +43,11 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
     public void buttonClick(Button.ClickEvent clickEvent) {
         if(clickEvent.getButton().getId().equals("findExIS")){
             view.addLoadEvalInterestWindow();
+            view.getLoadEvalInterestWindow().focus();
         }
         else if(clickEvent.getButton().getId().equals("findExRS")){
             view.addLoadResultWindow();
+            view.getLoadResultWindow().focus();
         }
 
     /*================================================================================================================
