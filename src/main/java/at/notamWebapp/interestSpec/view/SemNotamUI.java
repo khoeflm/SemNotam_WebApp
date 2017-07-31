@@ -2,8 +2,6 @@ package at.notamWebapp.interestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
 import at.notamWebapp.util.customConverter.MyConverterFactory;
-import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
-import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -53,8 +51,8 @@ public class SemNotamUI extends UI {
                 String semNotamWebServiceUrl = (String) properties.get("semNotamWebServiceUrl");
                 String containerDescriptionServiceUrl = (String) properties.get("containerDescriptionServiceUrl");
                 int timeOutInterval = Integer.parseInt((String) properties.get("timeOutInterval"));
-                new SpecificInterestWS(semNotamWebServiceUrl);
-                new GeneralInterestWS(containerDescriptionServiceUrl);
+  //              new SpecificInterestWS(semNotamWebServiceUrl);
+  //              new GeneralInterestWS(containerDescriptionServiceUrl);
                 VaadinSession.getCurrent().getSession().setMaxInactiveInterval(timeOutInterval);
             }
         } catch (FileNotFoundException e) {

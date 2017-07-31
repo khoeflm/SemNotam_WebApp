@@ -14,13 +14,14 @@ import java.util.List;
 public class LoadResultWindow extends Window {
     private VerticalLayout lPopUp = new VerticalLayout();
     private FormLayout lMask = new FormLayout();
-    private Label text1 = new Label("Look for an already existing Interest!");
+    private Label text1 = new Label("Look for an already existing Result:");
     private Label errorMessages = new Label("");
-    private TextField name = new TextField("Interest Name");
+    private TextField name = new TextField("Filter by (part of the) Name");
     private Table existingRS = new Table();
-    private Button bloadInt = new Button("Load");
+    private Button bloadInt = new Button("Filter");
 
     public LoadResultWindow(EvalNotamController controller){
+        focus();
         lPopUp.addComponent(lMask);
         lMask.addComponents(text1, name, bloadInt, errorMessages, existingRS);
         setContent(lPopUp);
@@ -33,21 +34,29 @@ public class LoadResultWindow extends Window {
         existingRS.setImmediate(true);
         existingRS.addItemClickListener(controller);
         existingRS.setVisible(false);
+        final DBConnector dbconn = new DBConnector();
+        InterestSpecificationType interestSpec = null;
+        List<String> isList = dbconn.loadExistingResults(name.getValue());
+        for(String s : isList){
+            existingRS.addItem(new Object[]{s}, s);
+        }
+        if(existingRS.size()<=10){
+            existingRS.setPageLength(existingRS.size());
+        } else {
+            existingRS.setPageLength(10);
+        }
+        existingRS.addItemClickListener(controller);
+        existingRS.setVisible(true);
         bloadInt.addClickListener(clickEvent ->
                 {
-                    DBConnector dbconn = new DBConnector();
-                    String interestString = null;
-                    InterestSpecificationType interestSpec = null;
-                    List<String> isList = dbconn.loadExistingResults(name.getValue());
-                    for(String s : isList){
+                   List<String> isListFiltered = dbconn.loadExistingResults(name.getValue());
+                   existingRS.removeAllItems();
+                    for(String s : isListFiltered){
                         existingRS.addItem(new Object[]{s}, s);
                     }
                     if(existingRS.size()<=10){
                         existingRS.setPageLength(existingRS.size());
                     }
-                    existingRS.addItemClickListener(controller);
-                    existingRS.setVisible(true);
-                    existingRS.setPageLength(10);
                 }
         );
     }

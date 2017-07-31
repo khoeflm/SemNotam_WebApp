@@ -1,24 +1,30 @@
 package at.notamWebapp.evaluatedInterestSpec.controller;
 
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
+import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
 import at.notamWebapp.util.DBConnector;
 import at.notamWebapp.util.XMLUnmarshaller;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.Page;
+import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.MarkerClickListener;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Created by khoef on 27.04.2017.
  */
-public class EvalNotamController implements Button.ClickListener, ItemClickEvent.ItemClickListener {
+public class EvalNotamController implements Button.ClickListener, ItemClickEvent.ItemClickListener, MarkerClickListener {
 
     EvaluatedInterestService model;
     EvaluatedInterestSpecificationForm view;
@@ -94,8 +100,7 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
             model.setResult(model.loadResultFromDB(itemClickEvent.getItem().toString()));
             fillNotamFilterOptions();
         }
-
-        if(itemClickEvent.getComponent().getId().equals("existingRSTable")){
+        else if(itemClickEvent.getComponent().getId().equals("existingRSTable")){
             String existingRS = itemClickEvent.getItem().toString();
             DBConnector conn = new DBConnector();
             String interestString = conn.loadExistingResult(existingRS);
@@ -107,8 +112,7 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
             view.drawMapElements(model);
             view.setResultsVisible();
         }
-
-        if(itemClickEvent.getComponent().getId().equals("existingISTable")){
+        else if(itemClickEvent.getComponent().getId().equals("existingISTable")){
             String existingIS = itemClickEvent.getItem().toString();
             DBConnector conn = new DBConnector();
             String interestString = conn.loadExistingInterest(existingIS);
@@ -121,12 +125,25 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
             view.drawMapElements(model);
             view.setResultsVisible();
         }
+        else if(itemClickEvent.getComponent().getId().equals("notamTable")){
+            BeanItem<NotamTableRow> item = (BeanItem<NotamTableRow>) itemClickEvent.getItem();
+            NotamTableRow selectedNotam = item.getBean();
+            List<LatLon> notamPosition = model.getNotamPosition(selectedNotam.getNotamId());
+            view.getNotamMap().setInfoWindow(selectedNotam);
+            view.getNotamMap().fitToBounds(notamPosition);
+        }
     }
 
+
+
     public void fillNotamFilterOptions(){
-        view.getNotamView().setImportanceLevel(model.getImportanceLevels());
-        view.getNotamView().setBriefingPhaseLevels(model.getBriefingPhaseLevels());
+        view.getNotamView().setFilterLevels(model.getFilterLevels());
         view.getNotamView().setNotamTable(model.getNotamTableValues(), view.getNotamMap());
         view.getNotamView().getClassificationCheckboxesLayout().setVisible(true);
+    }
+
+    @Override
+    public void markerClicked(GoogleMapMarker googleMapMarker) {
+        view.getNotamView().selectTableItem(googleMapMarker.getCaption());
     }
 }

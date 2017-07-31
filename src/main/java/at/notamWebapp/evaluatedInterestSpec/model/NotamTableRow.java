@@ -6,18 +6,20 @@ import java.util.List;
  * Created by khoef on 01.05.2017.
  */
 public class NotamTableRow {
-    private String notamId, notamText, begin, end, importance, briefingPhase;
+    private String notamId, notamText, begin, end, importance, flightPhase, briefingPackage, location;
     private List<Double> pos;
 
     public NotamTableRow(String notamId, String notamText, String begin, String end, String importance,
-                         String briefingPhase, List<Double> pos){
+                         String flightPhase, List<Double> pos, String briefingPackage, String location){
         this.notamId = notamId;
         this.notamText = notamText;
         this.begin = begin;
         this.end = end;
         this.importance = importance;
-        this.briefingPhase = briefingPhase;
+        this.flightPhase = flightPhase;
         this.pos = pos;
+        this.briefingPackage = briefingPackage;
+        this.location = location;
     }
 
     /*=================================================================================================================
@@ -64,12 +66,12 @@ public class NotamTableRow {
         this.importance = importance;
     }
 
-    public String getBriefingPhase() {
-        return briefingPhase;
+    public String getFlightPhase() {
+        return flightPhase;
     }
 
-    public void setBriefingPhase(String briefingPhase) {
-        this.briefingPhase = briefingPhase;
+    public void setFlightPhase(String flightPhase) {
+        this.flightPhase = flightPhase;
     }
 
     public void setPos(List<Double> pos) {
@@ -78,5 +80,21 @@ public class NotamTableRow {
 
     public List<Double> getPos() {
         return pos;
+    }
+
+    public void setBriefingPackage(String briefingPackage) {
+        this.briefingPackage = briefingPackage;
+    }
+
+    public String getBriefingPackage() {
+        return briefingPackage;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

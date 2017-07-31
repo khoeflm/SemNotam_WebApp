@@ -455,13 +455,10 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
 
     @Override
     public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
-        if(googleMapsDrawer == null){
-            googleMapsDrawer = new GoogleMapsDrawer();
-        }
         String path = selectedTabChangeEvent.getComponent().getParent().getId();
         if(model.getInterestSpec().getInterestSpecificData().size() != 0){
             model.refreshInterestSpecData(path);
-            googleMapsDrawer.drawFlightPath(view.getFlightPathInterestForm(path).getGoogleMap(),model.getPosListMap().get(path));
+            googleMapsDrawer.drawFlightPath(model.getPosListMap().get(path));
         }
     }
 

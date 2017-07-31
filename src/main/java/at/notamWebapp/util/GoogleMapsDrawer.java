@@ -1,9 +1,11 @@
 package at.notamWebapp.util;
 
 import aero.aixm.ElevatedPointPropertyType;
+import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolyline;
@@ -17,10 +19,22 @@ import java.util.List;
  */
 public class GoogleMapsDrawer {
     GoogleMapPolyline flightpathPolyLine;
+    GoogleMapInfoWindow infoWindow;
     List<GoogleMapMarker> markerList;
     List<GoogleMapPolygon> polygonList;
+    EvalNotamController controller;
+    GoogleMap map;
+    GoogleMapMarker infoWindowMarker;
 
-    public void drawFlightPath(GoogleMap map, List<ElevatedPointPropertyType> pointList){
+    public GoogleMapsDrawer(EvalNotamController controller, GoogleMap googleMap) {
+        map = googleMap;
+        this.controller = controller;
+        map.addMarkerClickListener(controller);
+        infoWindowMarker = new GoogleMapMarker();
+        infoWindow =  new GoogleMapInfoWindow();
+    }
+
+    public void drawFlightPath(List<ElevatedPointPropertyType> pointList){
         map.removePolyline(flightpathPolyLine);
         List<LatLon> points = new ArrayList<>();
         Double biggestLat = 0.0, biggestLon = 0.0, smallestLat = 0.0, smallestLon = 0.0;
@@ -50,55 +64,82 @@ public class GoogleMapsDrawer {
         map.addPolyline(flightpathPolyLine);
     }
 
-    public void drawNotamMarkers(GoogleMap googleMap, List<NotamTableRow> notamTableValues) {
+    public void drawNotamMarkers(List<NotamTableRow> notamTableValues) {
         if(markerList == null){
             markerList = new ArrayList<>();
         }else if(markerList.size() != 0){
             for(GoogleMapMarker marker : markerList){
-                googleMap.removeMarker(marker);
+                map.removeMarker(marker);
             }
         }
         if(polygonList == null){
             polygonList = new ArrayList<>();
         }else if(markerList.size() != 0){
             for(GoogleMapPolygon marker : polygonList){
-                googleMap.removePolygonOverlay(marker);
+                map.removePolygonOverlay(marker);
             }
         }
         for(NotamTableRow row : notamTableValues){
+            LatLon centerPosition = getNotamCenterPosition(row.getPos());
             if(row.getPos().size()<=2) {
-                GoogleMapMarker marker = new GoogleMapMarker(row.getNotamId(), new LatLon(row.getPos().get(0),
-                        row.getPos().get(1)), true);
-                if(row.getImportance().equalsIgnoreCase("flight critical")) {
+                GoogleMapMarker marker = new GoogleMapMarker(row.getNotamId(), centerPosition, false);
+                if (row.getImportance().equalsIgnoreCase("flight critical")) {
                     marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_red1.png");
-                }else if(row.getImportance().equalsIgnoreCase("operational restriction")) {
+                } else if (row.getImportance().equalsIgnoreCase("operational restriction")) {
                     marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_blue1.png");
-                }else if(row.getImportance().equalsIgnoreCase("potential hazard")) {
+                } else if (row.getImportance().equalsIgnoreCase("potential hazard")) {
                     marker.setIconUrl("VAADIN/themes/mytheme/icons/warning_black1.png");
-                }else{
+                } else {
                     marker.setIconUrl("VAADIN/themes/mytheme/icons/info1.png");
                 }
-                googleMap.addMarker(marker);
                 markerList.add(marker);
-            }else{
+                map.addMarker(marker);
+            }
+
+            else if(row.getPos().size()>2) {
+                GoogleMapMarker marker = new GoogleMapMarker(row.getNotamId(), centerPosition, false);
+                markerList.add(marker);
+                map.addMarker(marker);
+                GoogleMapPolygon polygon = new GoogleMapPolygon();
                 List<LatLon> posList = new ArrayList<>();
-                GoogleMapPolygon marker = new GoogleMapPolygon();
-                for(int i = 0; i+1 < row.getPos().size(); i=i+2) {
-                    posList.add(new LatLon(row.getPos().get(i),row.getPos().get(i+1)));
+                for (int i = 0; i + 1 < row.getPos().size(); i = i + 2) {
+                    posList.add(new LatLon(row.getPos().get(i), row.getPos().get(i + 1)));
                 }
-                if(row.getImportance().equalsIgnoreCase("flight critical")) {
-                    marker.setFillColor("#FF0000");
-                }else if(row.getImportance().equalsIgnoreCase("operational restriction")) {
-                    marker.setFillColor("#FFFF00");
-                }else if(row.getImportance().equalsIgnoreCase("potential hazard")) {
-                    marker.setFillColor("#00FFFF");
-                }else{
-                    marker.setFillColor("#FFFFFF");
-                }
-                marker.setCoordinates(posList);
-                googleMap.addPolygonOverlay(marker);
-                polygonList.add(marker);
+                polygon.setFillColor("#FFFFFF");
+                polygon.setCoordinates(posList);
+                polygon.setId(Double.doubleToLongBits(row.getPos().get(0)));
+                map.addPolygonOverlay(polygon);
+                polygonList.add(polygon);
             }
         }
+    }
+
+    private LatLon getNotamCenterPosition(List<Double> posList) {
+        Double latSum = 0.0, lonSum = 0.0;
+        for(int i=0; i < posList.size(); i = i+2){
+            latSum = latSum + posList.get(i);
+            lonSum = lonSum + posList.get(i+1);
+        }
+        return new LatLon(latSum/(posList.size()/2),lonSum/(posList.size()/2));
+    }
+
+    public void fitToBounds(List<LatLon> notamPosition) {
+        map.setMaxZoom(14);
+        map.fitToBounds(notamPosition.get(1), notamPosition.get(0));
+    }
+
+    public void setInfoWindow(NotamTableRow selectedNotam) {
+        closeInfoWindow();
+        for(GoogleMapMarker notamMarker : markerList) {
+            if(notamMarker.getCaption().equals(selectedNotam.getNotamId())) {
+                infoWindow.setAnchorMarker(notamMarker);
+                infoWindow.setContent(selectedNotam.getNotamText() + System.lineSeparator() + selectedNotam.getImportance());
+                map.openInfoWindow(infoWindow);
+            }
+        }
+    }
+
+    public void closeInfoWindow() {
+        map.closeInfoWindow(infoWindow);
     }
 }

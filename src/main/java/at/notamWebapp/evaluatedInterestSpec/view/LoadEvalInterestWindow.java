@@ -2,7 +2,6 @@ package at.notamWebapp.evaluatedInterestSpec.view;
 
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.util.DBConnector;
-import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.vaadin.ui.*;
 
 import java.util.List;
@@ -15,11 +14,12 @@ public class LoadEvalInterestWindow extends Window {
     private FormLayout lMask = new FormLayout();
     private Label text1 = new Label("Look for an already existing Interest:");
     private Label errorMessages = new Label("");
-    private TextField name = new TextField("Filter by Interest Name");
+    private TextField name = new TextField("Filter by (part of the) Name");
     private Table existingIS = new Table();
-    private Button bloadInt = new Button("Load");
+    private Button bloadInt = new Button("Filter");
 
     public LoadEvalInterestWindow(EvalNotamController controller){
+        focus();
         lPopUp.addComponent(lMask);
         lMask.addComponents(text1, name, bloadInt, errorMessages, existingIS);
         setContent(lPopUp);
@@ -30,21 +30,30 @@ public class LoadEvalInterestWindow extends Window {
         existingIS.setSelectable(true);
         existingIS.setImmediate(true);
         existingIS.addItemClickListener(controller);
-        existingIS.setVisible(false);
+        final DBConnector dbconn = new DBConnector();
+        List<String> isList = dbconn.loadExistingInterests(name.getValue());
+        for(String s : isList){
+            existingIS.addItem(new Object[]{s}, s);
+        }
+        if(existingIS.size()<=10){
+            existingIS.setPageLength(existingIS.size());
+        } else {
+            existingIS.setPageLength(10);
+        }
+        existingIS.setVisible(true);
         bloadInt.addClickListener(clickEvent ->
                 {
-                    DBConnector dbconn = new DBConnector();
-                    String interestString = null;
-                    InterestSpecificationType interestSpec = null;
-                    List<String> isList = dbconn.loadExistingInterests(name.getValue());
-                    for(String s : isList){
+                    List<String> isListFiltered = dbconn.loadExistingInterests(name.getValue());
+                    existingIS.removeAllItems();
+                    for(String s : isListFiltered){
                         existingIS.addItem(new Object[]{s}, s);
                     }
                     if(existingIS.size()<=10){
                         existingIS.setPageLength(existingIS.size());
+                    } else {
+                        existingIS.setPageLength(10);
                     }
                     existingIS.setVisible(true);
-                    existingIS.setPageLength(10);
                 }
         );
         //  bloadInt.setId("queryIS");
