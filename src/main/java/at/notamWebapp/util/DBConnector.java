@@ -124,11 +124,14 @@ public class DBConnector {
                 }
             });
         }
-        List<String> fileNames = new ArrayList<>();
-        for (File f : files) {
-            fileNames.add(f.getName());
+        if(files != null) {
+            List<String> fileNames = new ArrayList<>();
+            for (File f : files) {
+                fileNames.add(f.getName());
+            }
+            return fileNames;
         }
-        return fileNames;
+        return null;
     }
 
     public String loadExistingInterest(String filename) {

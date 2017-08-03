@@ -30,21 +30,31 @@ public class LoadInterestWindow extends Window {
         existingIS.setSelectable(true);
         existingIS.setImmediate(true);
         existingIS.addItemClickListener(controller);
-        existingIS.setVisible(false);
+        existingIS.setWidth("80%");
+        final DBConnector dbconn = new DBConnector();
+        List<String> isList = dbconn.loadExistingInterests(name.getValue());
+        if(isList != null) {
+            for (String s : isList) {
+                existingIS.addItem(new Object[]{s}, s);
+            }
+            if (existingIS.size() <= 10) {
+                existingIS.setPageLength(existingIS.size());
+            } else existingIS.setPageLength(10);
+        }
+        existingIS.setVisible(true);
         bloadInt.addClickListener(clickEvent ->
             {
-                DBConnector dbconn = new DBConnector();
                 String interestString = null;
                 InterestSpecificationType interestSpec = null;
-                List<String> isList = dbconn.loadExistingInterests(name.getValue());
-                for(String s : isList){
-                    existingIS.addItem(new Object[]{s}, s);
+                List<String> isListFiltered = dbconn.loadExistingInterests(name.getValue());
+                if(isListFiltered != null) {
+                    for (String s : isListFiltered) {
+                        existingIS.addItem(new Object[]{s}, s);
+                    }
+                    if (existingIS.size() <= 10) {
+                        existingIS.setPageLength(existingIS.size());
+                    } else existingIS.setPageLength(10);
                 }
-                if(existingIS.size()<=10){
-                    existingIS.setPageLength(existingIS.size());
-                }
-                existingIS.setVisible(true);
-                existingIS.setPageLength(10);
             }
         );
         //  bloadInt.setId("queryIS");

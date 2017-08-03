@@ -32,30 +32,34 @@ public class LoadResultWindow extends Window {
         existingRS.setSelectable(true);
         existingRS.setImmediate(true);
         existingRS.addItemClickListener(controller);
-        existingRS.setVisible(false);
+        existingRS.setWidth("80%");
         final DBConnector dbconn = new DBConnector();
         InterestSpecificationType interestSpec = null;
         List<String> isList = dbconn.loadExistingResults(name.getValue());
-        for(String s : isList){
-            existingRS.addItem(new Object[]{s}, s);
+        if(isList != null) {
+            for (String s : isList) {
+                existingRS.addItem(new Object[]{s}, s);
+            }
+            if (existingRS.size() <= 10) {
+                existingRS.setPageLength(existingRS.size());
+            } else {
+                existingRS.setPageLength(10);
+            }
+            existingRS.addItemClickListener(controller);
         }
-        if(existingRS.size()<=10){
-            existingRS.setPageLength(existingRS.size());
-        } else {
-            existingRS.setPageLength(10);
-        }
-        existingRS.addItemClickListener(controller);
         existingRS.setVisible(true);
         bloadInt.addClickListener(clickEvent ->
                 {
                    List<String> isListFiltered = dbconn.loadExistingResults(name.getValue());
-                   existingRS.removeAllItems();
-                    for(String s : isListFiltered){
-                        existingRS.addItem(new Object[]{s}, s);
-                    }
-                    if(existingRS.size()<=10){
-                        existingRS.setPageLength(existingRS.size());
-                    }
+                   if(isListFiltered != null) {
+                       existingRS.removeAllItems();
+                       for (String s : isListFiltered) {
+                           existingRS.addItem(new Object[]{s}, s);
+                       }
+                       if (existingRS.size() <= 10) {
+                           existingRS.setPageLength(existingRS.size());
+                       } else existingRS.setPageLength(10);
+                   }
                 }
         );
     }

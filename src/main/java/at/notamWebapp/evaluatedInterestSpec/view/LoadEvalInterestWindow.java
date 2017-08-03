@@ -24,33 +24,38 @@ public class LoadEvalInterestWindow extends Window {
         setContent(lPopUp);
         lPopUp.setMargin(true);
         name.setNullRepresentation("");
-        existingIS.addContainerProperty("Item", String.class, null);
+        existingIS.addContainerProperty("Existing Interest Specification", String.class, null);
         existingIS.setId("existingISTable");
         existingIS.setSelectable(true);
         existingIS.setImmediate(true);
         existingIS.addItemClickListener(controller);
+        existingIS.setWidth("80%");
         final DBConnector dbconn = new DBConnector();
         List<String> isList = dbconn.loadExistingInterests(name.getValue());
-        for(String s : isList){
-            existingIS.addItem(new Object[]{s}, s);
-        }
-        if(existingIS.size()<=10){
-            existingIS.setPageLength(existingIS.size());
-        } else {
-            existingIS.setPageLength(10);
+        if(isList != null) {
+            for (String s : isList) {
+                existingIS.addItem(new Object[]{s}, s);
+            }
+            if (existingIS.size() <= 10) {
+                existingIS.setPageLength(existingIS.size());
+            } else {
+                existingIS.setPageLength(10);
+            }
         }
         existingIS.setVisible(true);
         bloadInt.addClickListener(clickEvent ->
                 {
                     List<String> isListFiltered = dbconn.loadExistingInterests(name.getValue());
-                    existingIS.removeAllItems();
-                    for(String s : isListFiltered){
-                        existingIS.addItem(new Object[]{s}, s);
-                    }
-                    if(existingIS.size()<=10){
-                        existingIS.setPageLength(existingIS.size());
-                    } else {
-                        existingIS.setPageLength(10);
+                    if(isListFiltered != null) {
+                        existingIS.removeAllItems();
+                        for (String s : isListFiltered) {
+                            existingIS.addItem(new Object[]{s}, s);
+                        }
+                        if (existingIS.size() <= 10) {
+                            existingIS.setPageLength(existingIS.size());
+                        } else {
+                            existingIS.setPageLength(10);
+                        }
                     }
                     existingIS.setVisible(true);
                 }
