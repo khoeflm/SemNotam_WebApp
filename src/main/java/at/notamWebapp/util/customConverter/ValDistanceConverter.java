@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 29.01.2017.
  */
 public class ValDistanceConverter implements Converter<String, ValDistanceType> {

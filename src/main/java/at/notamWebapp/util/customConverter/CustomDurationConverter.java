@@ -10,6 +10,7 @@ import javax.xml.datatype.Duration;
 import java.util.Locale;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 31.01.2017.
  */
 public class CustomDurationConverter implements Converter<String, Duration> {

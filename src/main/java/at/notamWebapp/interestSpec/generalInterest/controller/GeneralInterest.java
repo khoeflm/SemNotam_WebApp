@@ -1,8 +1,8 @@
 package at.notamWebapp.interestSpec.generalInterest.controller;
 
-import at.notamWebapp.util.XMLUnmarshaller;
+import at.notamWebapp.util.xmlHandler.XMLUnmarshaller;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
-import at.notamWebapp.interestSpec.generalInterest.view.ElementLoadWindow;
+import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindow;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
 import com.frequentis.semnotam.schema._1.*;
 import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;

@@ -10,6 +10,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 29.01.2017.
  */
 public class MyConverterFactory extends DefaultConverterFactory{
@@ -19,9 +20,6 @@ public class MyConverterFactory extends DefaultConverterFactory{
         if(presentationType == String.class && modelType == ValDistanceType.class){
             return (Converter<PRESENTATION, MODEL>) new ValDistanceConverter();
         }
-   //     else if(presentationType == String.class && modelType == ElevatedPointReferencePropertyType.class){
-   //         return (Converter<PRESENTATION, MODEL>) new ElevatedPointConverter();
-   //     }
         else if(presentationType == Date.class && modelType == XMLGregorianCalendar.class){
             return (Converter<PRESENTATION, MODEL>) new CustomDateConverter();
         }

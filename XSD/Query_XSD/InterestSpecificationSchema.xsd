@@ -559,7 +559,6 @@
             <element name="capabilities" type="tns:CapabilityPropertyType" minOccurs="0" />
             <element name="flightCharacteristics" type="aixm:FlightCharacteristicPropertyType" minOccurs="0" /> -->
           </sequence>
-          <element name="ilsCat" type="aixm:CodeSignalPerformanceILSType" />
         </choice>
       </extension>
     </complexContent>
@@ -883,6 +882,7 @@
 
   <!-- Spatial Buffer -->
   <complexType name="SpatialBufferPropertyType">
+    <sequence>
     <sequence>
       <element name="SpatialBuffer" type="tns:SpatialBufferType" />
     </sequence>

@@ -3,8 +3,8 @@ package at.notamWebapp.evaluatedInterestSpec.controller;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import at.notamWebapp.evaluatedInterestSpec.model.NotamTableRow;
 import at.notamWebapp.evaluatedInterestSpec.view.EvaluatedInterestSpecificationForm;
-import at.notamWebapp.util.DBConnector;
-import at.notamWebapp.util.XMLUnmarshaller;
+import at.notamWebapp.util.xmlHandler.XMLParserService;
+import at.notamWebapp.util.xmlHandler.XMLUnmarshaller;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
@@ -22,16 +22,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 27.04.2017.
  */
 public class EvalNotamController implements Button.ClickListener, ItemClickEvent.ItemClickListener, MarkerClickListener {
 
-    EvaluatedInterestService model;
-    EvaluatedInterestSpecificationForm view;
-    DBConnector conn = new DBConnector();
+    private EvaluatedInterestService model;
+    private EvaluatedInterestSpecificationForm view;
 
     public EvalNotamController(EvaluatedInterestSpecificationForm view){
-        this.model = new EvaluatedInterestService(this);
+        this.model = new EvaluatedInterestService();
         this.view = view;
     }
 
@@ -57,8 +57,8 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
             if(view.getMenu().getResultID().isValid() && model.isValid()) {
                 String filename = view.getMenu().getResultID().getValue();
                 if (model.getResult() != null) {
-                    if (conn.noSuchFileExists(filename)) {
-                        conn.createResult(model.getResult(), filename);
+                    if (XMLParserService.noSuchFileExists(filename, "tmp/Result")) {
+                        XMLParserService.createXMLFile(model.getResult(), filename, "tmp/Result");
                     } else {
                         view.setAlreadyExistingFileWindow(filename);
                     }
@@ -82,7 +82,7 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
         else if(clickEvent.getButton().getId().equals("contSave")){
             String filename = view.getMenu().getResultID().getValue();
             if(model.getResult()!=null) {
-                conn.createResult(model.getResult(), filename);
+                XMLParserService.createXMLFile(model.getResult(), filename, "tmp/Result");
             }
             view.removeExistingFileWindow();
         }
@@ -98,28 +98,24 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
 
     @Override
     public void itemClick(ItemClickEvent itemClickEvent) {
-        if (itemClickEvent.getComponent().getId().equals("resultTable")) {
-            model.setResult(model.loadResultFromDB(itemClickEvent.getItem().toString()));
-            fillNotamFilterOptions();
-        }
-        else if(itemClickEvent.getComponent().getId().equals("existingRSTable")){
-            String existingRS = itemClickEvent.getItem().toString();
-            DBConnector conn = new DBConnector();
-            String interestString = conn.loadExistingResult(existingRS);
+        if(itemClickEvent.getComponent().getId().equals("existingRSTable")){
+            String existingRSName = itemClickEvent.getItem().toString();
+            String interestString = XMLUnmarshaller.loadXMLFile(existingRSName, "tmp/Result");
             view.removeLoadResultWindow();
-            InterestSpecResultType interestSpec = XMLUnmarshaller.unmarshalInterestSpecResult(
-                    new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
+            InterestSpecResultType interestSpec = null;
+            if (interestString != null) {
+                interestSpec = XMLUnmarshaller.unmarshalInterestSpecResult(
+                        new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
+            }
             model.setResult(interestSpec);
             fillNotamFilterOptions();
             view.drawMapElements(model);
             view.setResultsVisible();
         }
         else if(itemClickEvent.getComponent().getId().equals("existingISTable")){
-            String existingIS = itemClickEvent.getItem().toString();
-            DBConnector conn = new DBConnector();
-            String interestString = conn.loadExistingInterest(existingIS);
+            String existingISName = itemClickEvent.getItem().toString();
+            String interestString = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/InterestSpecification/");
             InterestSpecificationType is = XMLUnmarshaller.unmarshalInterestSpecification(interestString);
-
             InterestSpecResultType interestSpec = SpecificInterestWS.evaluateInterestSpecification(is);
             view.removeLoadEvalInterestWindow();
             model.setResult(interestSpec);
@@ -136,13 +132,17 @@ public class EvalNotamController implements Button.ClickListener, ItemClickEvent
         }
     }
 
+    /*================================================================================================================
+    ================================================================================================================*/
 
-
-    public void fillNotamFilterOptions(){
+    private void fillNotamFilterOptions(){
         view.getNotamView().setFilterLevels(model.getFilterLevels());
         view.getNotamView().setNotamTable(model.getNotamTableValues(), view.getNotamMap());
         view.getNotamView().getClassificationCheckboxesLayout().setVisible(true);
     }
+
+    /*================================================================================================================
+    ================================================================================================================*/
 
     @Override
     public void markerClicked(GoogleMapMarker googleMapMarker) {

@@ -1,6 +1,11 @@
 package at.notamWebapp.evaluatedInterestSpec.view;
 
-import at.notamWebapp.interestSpec.view.AlreadyExistingFileWindow;
+import at.notamWebapp.evaluatedInterestSpec.view.forms.EvaluatedInterestMenuBarForm;
+import at.notamWebapp.evaluatedInterestSpec.view.forms.NotamMapForm;
+import at.notamWebapp.evaluatedInterestSpec.view.forms.NotamViewForm;
+import at.notamWebapp.evaluatedInterestSpec.view.windows.LoadEvalInterestWindow;
+import at.notamWebapp.evaluatedInterestSpec.view.windows.LoadResultWindow;
+import at.notamWebapp.interestSpec.specificInterest.view.windows.AlreadyExistingFileWindow;
 import at.notamWebapp.evaluatedInterestSpec.controller.EvalNotamController;
 import at.notamWebapp.evaluatedInterestSpec.model.EvaluatedInterestService;
 import com.vaadin.navigator.View;
@@ -8,6 +13,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 23.03.2017.
  */
 public class EvaluatedInterestSpecificationForm extends FormLayout implements View{
@@ -20,7 +26,6 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
     private AlreadyExistingFileWindow alreadyExistingFileWindow;
 
     public EvaluatedInterestSpecificationForm() {
-
         controller = new EvalNotamController(this);
         menu = new EvaluatedInterestMenuBarForm(controller);
         notamView = new NotamViewForm(controller);
@@ -29,7 +34,6 @@ public class EvaluatedInterestSpecificationForm extends FormLayout implements Vi
         notamView.setVisible(false);
         notamMap.setVisible(false);
         addComponents(menu, notamView, notamMap);
-        this.controller = controller;
         loadEvalInterestWindow = new LoadEvalInterestWindow(controller);
         loadEvalInterestWindow.setVisible(false);
         setWidth("99%");

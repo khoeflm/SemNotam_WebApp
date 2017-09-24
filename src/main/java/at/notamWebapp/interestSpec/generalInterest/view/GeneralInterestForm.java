@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.generalInterest.view;
 
 import at.notamWebapp.interestSpec.generalInterest.controller.GeneralInterest;
+import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindow;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 

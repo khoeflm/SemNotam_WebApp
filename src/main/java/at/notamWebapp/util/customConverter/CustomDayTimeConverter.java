@@ -6,6 +6,7 @@ import com.vaadin.data.util.converter.Converter;
 import java.util.Locale;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 17.06.2017.
  */
 public class CustomDayTimeConverter implements Converter<Object, CodeTimeOfDayBaseType> {

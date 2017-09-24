@@ -1,21 +1,23 @@
+//
+// Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.11 generiert 
+// Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+// ï¿½nderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
+// Generiert: 2017.03.23 um 08:13:26 AM CET 
+//
+
 
 package com.frequentis.semnotam.schema._1;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für LeafRestrictionType complex type.
+ * <p>Java-Klasse fï¿½r LeafRestrictionType complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
@@ -57,10 +59,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class LeafRestrictionType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "operator", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "value_dateTime", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "value_string", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "value_decimal", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "value_dateTime", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "value_decimal", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "operator", namespace = "http://semnotam.frequentis.com/schema/1.0", type = JAXBElement.class, required = false)
     })
     protected List<JAXBElement<?>> content;
 
@@ -70,11 +72,11 @@ public class LeafRestrictionType {
      * <p>
      * Sie rufen diese "catch-all"-Eigenschaft aus folgendem Grund ab: 
      * Der Feldname "Operator" wird von zwei verschiedenen Teilen eines Schemas verwendet. Siehe: 
-     * Zeile 850 von file:/C:/Users/semnota_1/Desktop/trunk/SemNotamWsdl2Java/wsdl/xsd/Query_XSD/InterestSpecificationSchema.xsd
-     * Zeile 846 von file:/C:/Users/semnota_1/Desktop/trunk/SemNotamWsdl2Java/wsdl/xsd/Query_XSD/InterestSpecificationSchema.xsd
+     * Zeile 850 von file:/C:/Users/semnota_1/Desktop/trunk/SemNotamJaxb/src/xsd/Query_XSD/InterestSpecificationSchema.xsd
+     * Zeile 846 von file:/C:/Users/semnota_1/Desktop/trunk/SemNotamJaxb/src/xsd/Query_XSD/InterestSpecificationSchema.xsd
      * <p>
-     * Um diese Eigenschaft zu entfernen, wenden Sie eine Eigenschaftenanpassung für eine
-     * der beiden folgenden Deklarationen an, um deren Namen zu ändern: 
+     * Um diese Eigenschaft zu entfernen, wenden Sie eine Eigenschaftenanpassung fï¿½r eine
+     * der beiden folgenden Deklarationen an, um deren Namen zu ï¿½ndern: 
      * Gets the value of the content property.
      * 
      * <p>
@@ -92,10 +94,10 @@ public class LeafRestrictionType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
      * {@link JAXBElement }{@code <}{@link BigDecimal }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 
      */

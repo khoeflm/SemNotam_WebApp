@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
+ * SemNOTAM Project (User Interface)
  * Created by khoef on 31.01.2017.
  */
 public class CustomDateConverter implements Converter<Date, XMLGregorianCalendar>{

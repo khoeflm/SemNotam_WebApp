@@ -264,9 +264,12 @@ Generiert: 2016.11.21 um 08:59:48 PM CET
     <bindings if-exists="true" scd="~tns:RestrictionPropertyType">
       <class ref="com.frequentis.semnotam.schema._1.RestrictionPropertyType"/>
     </bindings>
-    <bindings if-exists="true" scd="~tns:ValueRestrictionType">
-      <class ref="com.frequentis.semnotam.schema._1.ValueRestrictionType"/>
+    <bindings if-exists="true" scd="~tns:QualifiedRestrictionType">
+      <class ref="com.frequentis.semnotam.schema._1.QualifiedRestrictionType"/>
     </bindings>
+     <bindings if-exists="true" scd="~tns:UnqualifiedRestrictionType">
+          <class ref="com.frequentis.semnotam.schema._1.UnqualifiedRestrictionType"/>
+        </bindings>
     <bindings if-exists="true" scd="~tns:NestedRestrictionType">
       <class ref="com.frequentis.semnotam.schema._1.NestedRestrictionType"/>
     </bindings>
