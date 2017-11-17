@@ -883,7 +883,6 @@
   <!-- Spatial Buffer -->
   <complexType name="SpatialBufferPropertyType">
     <sequence>
-    <sequence>
       <element name="SpatialBuffer" type="tns:SpatialBufferType" />
     </sequence>
   </complexType>

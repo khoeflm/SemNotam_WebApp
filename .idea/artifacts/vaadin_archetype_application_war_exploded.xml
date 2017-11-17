@@ -4,7 +4,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="SemNotam_WebApplication" />
+          <element id="module-output" name="vaadin-archetype-application" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-server:7.7.6" />
@@ -54,14 +54,26 @@
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-ws-addr:3.1.10" />
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-ws-policy:3.1.10" />
           <element id="library" level="project" name="Maven: org.apache.neethi:neethi:3.0.3" />
+          <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-transports-http-jetty:3.1.10" />
+          <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-transports-http:3.1.10" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-server:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-util:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-io:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-security:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-continuation:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-http:9.2.15.v20160210" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.22" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-icons:2.0.0" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.9.3" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/vaadin-archetype-application-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="SemNotam_WebApplication/web/Web" />
-      <element id="gwt-compiler-output" facet="SemNotam_WebApplication/gwt/GWT" />
+      <element id="javaee-facet-resources" facet="vaadin-archetype-application/web/Web" />
+      <element id="gwt-compiler-output" facet="vaadin-archetype-application/gwt/GWT" />
     </root>
   </artifact>
 </component>
