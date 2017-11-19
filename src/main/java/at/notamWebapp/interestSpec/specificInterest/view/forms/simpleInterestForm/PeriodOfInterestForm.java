@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm;
 
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import com.frequentis.semnotam.schema._1.PeriodOfInterestType;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -13,7 +14,7 @@ import com.vaadin.ui.*;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 20.11.2016.
  */
-public class PeriodOfInterestForm extends Panel {
+public class PeriodOfInterestForm extends Panel implements FormValidatorInterface {
     private DateField dfOccStartTime = new DateField("Occurence Time (beginPos):");
     private DateField dfOccEndTime = new DateField("Occurence Time (endPos):");
     private DateField dfDetStartTime = new DateField("Detection Time (beginPos):");
@@ -47,6 +48,22 @@ public class PeriodOfInterestForm extends Panel {
         dfOccEndTime.setResolution(Resolution.MINUTE);
         dfDetEndTime.setResolution(Resolution.MINUTE);
         dfDetStartTime.setResolution(Resolution.MINUTE);
+
+        dfOccStartTime.setRequired(true);
+        dfOccStartTime.setRequiredError("Required");
+        dfOccStartTime.setValidationVisible(false);
+
+        dfOccEndTime.setRequired(true);
+        dfOccEndTime.setRequiredError("Required");
+        dfOccEndTime.setValidationVisible(false);
+
+        dfDetEndTime.setRequired(true);
+        dfDetEndTime.setRequiredError("Required");
+        dfDetEndTime.setValidationVisible(false);
+
+        dfDetStartTime.setRequired(true);
+        dfDetStartTime.setRequiredError("Required");
+        dfDetStartTime.setValidationVisible(false);
 
         setCaption("Period of Interest");
         setContent(poifVertLayout);
@@ -132,5 +149,21 @@ public class PeriodOfInterestForm extends Panel {
                     }else dfOccStartTime.commit();
                 }
         );
+    }
+
+    public boolean isValid(){
+        if(!dfOccStartTime.isValid()) {
+            dfOccStartTime.setValidationVisible(true);
+        }
+        if(!dfOccEndTime.isValid()){
+            dfOccEndTime.setValidationVisible(true);
+        }
+        if(!dfDetStartTime.isValid()) {
+            dfDetStartTime.setValidationVisible(true);
+        }
+        if(!dfDetEndTime.isValid()){
+            dfDetEndTime.setValidationVisible(true);
+        }
+        return dfOccStartTime.isValid() && dfOccEndTime.isValid() && dfDetStartTime.isValid() && dfDetEndTime.isValid();
     }
 }

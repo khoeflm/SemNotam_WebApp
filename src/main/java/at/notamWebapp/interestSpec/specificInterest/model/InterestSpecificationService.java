@@ -88,9 +88,9 @@ public class InterestSpecificationService{
                 //Aircraft
                 AircraftOfInterestPropertyType aircPropType = new AircraftOfInterestPropertyType();
                 AircraftOfInterestType aircraft = new AircraftOfInterestType();
-                aircraft.setAircraftTypeName("");
+                aircraft.setAircraftTypeName(null);
                 aircraft.setIlsCat(new CodeSignalPerformanceILSType());
-                aircraft.getIlsCat().setValue("");
+                aircraft.getIlsCat().setValue(null);
 
                 //Period
                 PeriodOfInterestPropertyType perPropType = new PeriodOfInterestPropertyType();
@@ -172,9 +172,9 @@ public class InterestSpecificationService{
                 break;
             case "3":
                 aircraft = new AircraftOfInterestType();
-                aircraft.setAircraftTypeName("");
+                aircraft.setAircraftTypeName(null);
                 aircraft.setIlsCat(new CodeSignalPerformanceILSType());
-                aircraft.getIlsCat().setValue("");
+                aircraft.getIlsCat().setValue(null);
                 dummyInterest = new InterestPropertyType();
                 dummyInterest.setAircraftOfInterest(aircraft);
                 interest.setAircraftOfInterest(aircraft);

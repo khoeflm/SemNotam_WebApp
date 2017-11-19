@@ -65,6 +65,8 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         return SpecificInterestWS.getAircraftTypeIds();
     }
 
+    private List<String> loadNotamConceptsFromWS(){ return SpecificInterestWS.getNotamConcepts();}
+
     @Override
     public void buttonClick(Button.ClickEvent clickEvent) {
 
@@ -112,7 +114,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                         Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
             }
             else if(!view.getGeneralInterestForm().isValid() && !view.getDisableGeneral().getValue()){
-                new Notification("At least one General Interest Dimension has to be chosen or General Interest is disabled!",
+                new Notification("At least one General Interest Dimension has to be chosen or General Interest must be disabled!",
                         Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
             }else {
                 new Notification("Something went wrong. IS not saved",
@@ -191,7 +193,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                         view.addFlightPathInterest(idCounter, interest.getFlightPathInterest());
                         break;
                     case "5":
-                        view.addAttributeOfInterest(idCounter, interest.getAttributeOfInterest());
+                        view.addAttributeOfInterest(idCounter, interest.getAttributeOfInterest(), loadNotamConceptsFromWS());
                         break;
                     case "6":
                         view.addBinaryIntersect(idCounter);
@@ -392,6 +394,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
 
 
     private Panel addLoadedInterestSpec(InterestPropertyType interest) {
+        idCounter++;
         if(interest.getFlightPlanInterest() != null){
             model.addToInterestMap("FPLA", interest, idCounter);
             return view.addFlightPlanInterest(idCounter, interest.getFlightPlanInterest(), loadAircraftIdsFromWS());
@@ -410,7 +413,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         }
         else if(interest.getAttributeOfInterest() != null){
             model.addToInterestMap("ATTR", interest, idCounter);
-            return view.addAttributeOfInterest(idCounter, interest.getAttributeOfInterest());
+            return view.addAttributeOfInterest(idCounter, interest.getAttributeOfInterest(), loadNotamConceptsFromWS());
         }
         else if(interest.getBinaryIntersectionInterest() != null){
             model.addToInterestMap("BINI", interest, idCounter);

@@ -22,6 +22,9 @@ public class NestedRestrictionField extends VerticalLayout implements Property.V
         nestedAttributeIri = new TextField("Field");
         restrictionField = new RestrictionField();
 
+        nestedAttributeIri.setRequired(true);
+        nestedAttributeIri.setValidationVisible(false);
+        nestedAttributeIri.setRequiredError("Required");
         nestedAttributeIri.setImmediate(true);
 
         HorizontalLayout panelLayout = new HorizontalLayout(nestedAttributeIri, restrictionField);
@@ -48,6 +51,9 @@ public class NestedRestrictionField extends VerticalLayout implements Property.V
     }
 
     public boolean isValid() {
+        if(!nestedAttributeIri.isValid()) {
+            nestedAttributeIri.setValidationVisible(true);
+        }
         return nestedAttributeIri.getValue() != null && restrictionField.isValid();
     }
 

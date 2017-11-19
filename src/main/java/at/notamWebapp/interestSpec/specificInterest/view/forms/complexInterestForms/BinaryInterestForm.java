@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.complexInterestForms;
 
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 23.12.2016.
  */
-public abstract class BinaryInterestForm extends Panel{
+public abstract class BinaryInterestForm extends Panel implements FormValidatorInterface{
 
     private ArrayList<ComboBox> comboBoxList;
     private VerticalLayout vertLayout;
@@ -50,7 +51,10 @@ public abstract class BinaryInterestForm extends Panel{
     Layout initInterestComboBox(){
         HorizontalLayout horLay = new HorizontalLayout();
         ComboBox cb = new ComboBox();
+        cb.setRequired(true);
         cb.setId("150");
+        cb.setRequiredError("Required");
+        cb.setValidationVisible(false);
         comboBoxList.add(cb);
         cb.setCaption("Interest "+ (comboBoxList.indexOf(cb)+1));
         cb.addFocusListener(controller);
@@ -104,5 +108,16 @@ public abstract class BinaryInterestForm extends Panel{
 
     public SemNotamController getController() {
         return controller;
+    }
+
+    public boolean isValid(){
+        if(!getCbRightInterest().isValid()) {
+            getCbRightInterest().setValidationVisible(true);
+        }
+        if(!getCbLeftInterest().isValid()){
+            getCbLeftInterest().setValidationVisible(true);
+        }
+        return getCbLeftInterest().isValid() && getCbRightInterest().isValid();
+
     }
 }

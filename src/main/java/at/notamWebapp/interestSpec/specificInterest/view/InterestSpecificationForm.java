@@ -4,6 +4,7 @@ import at.notamWebapp.interestSpec.generalInterest.controller.GeneralInterest;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.AddAreaOfInterestForm;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.InterestMenuBarForm;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.complexInterestForms.*;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.AircraftOfInterestForm;
@@ -203,8 +204,8 @@ public class InterestSpecificationForm extends FormLayout implements View{
     /*================================================================================================================
     ================================================================================================================*/
 
-    public AttributeOfInterestForm addAttributeOfInterest(int id, AttributeOfInterestType attribute) {
-        AttributeOfInterestForm aoiForm = new AttributeOfInterestForm(controller, id, attribute);
+    public AttributeOfInterestForm addAttributeOfInterest(int id, AttributeOfInterestType attribute, List<String> predefinedConcepts) {
+        AttributeOfInterestForm aoiForm = new AttributeOfInterestForm(controller, id, attribute, predefinedConcepts);
         interestList.add(aoiForm);
         interestForms.addComponent(aoiForm);
         return aoiForm;
@@ -324,6 +325,14 @@ public class InterestSpecificationForm extends FormLayout implements View{
 
 
     public boolean isSpecificInterestFormValid() {
-        return interestSpecID.isValid() && (interestForms.getComponentCount() == 1 || disableSpecific.getValue());
+        boolean isValid = true;
+        for(Panel p : interestList){
+            if(p instanceof FormValidatorInterface){
+                if(!((FormValidatorInterface) p).isValid()) {
+                    isValid = false;
+                }
+            }
+        }
+        return interestSpecID.isValid() && isValid && (interestForms.getComponentCount() == 1 || disableSpecific.getValue());
     }
 }

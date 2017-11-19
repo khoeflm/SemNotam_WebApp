@@ -78,4 +78,13 @@ public class SpecificInterestWS {
             return null;
         }
     }
+
+    public static List<String> getNotamConcepts(){
+        try {
+            return client.getNotamConcepts();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -20,7 +20,7 @@ public class ElevatedDataController {
     private InterestSpecificationForm view;
     private InterestSpecificationService model;
 
-    public ElevatedDataController(InterestSpecificationForm view, InterestSpecificationService model) {
+    ElevatedDataController(InterestSpecificationForm view, InterestSpecificationService model) {
         this.view = view;
         this.model = model;
     }
@@ -47,7 +47,7 @@ public class ElevatedDataController {
 
     public static String getFirstPointId(String segmentId){
         if(segmentId!="") {
-            if(segmentId.indexOf("-") != -1) {
+            if(segmentId.contains("-")) {
                 int x = segmentId.indexOf("-");
                 return segmentId.substring(0, x);
             }else{
@@ -59,7 +59,7 @@ public class ElevatedDataController {
 
     public static String getSecondPointId(String segmentId){
         if(segmentId!="") {
-            if(segmentId.indexOf("-") != -1) {
+            if(segmentId.contains("-")) {
                 int x = segmentId.indexOf("-");
                 int y = segmentId.length();
                 return segmentId.substring(x + 1, y);

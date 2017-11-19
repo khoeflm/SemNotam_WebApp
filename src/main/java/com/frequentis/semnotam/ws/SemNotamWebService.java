@@ -151,4 +151,10 @@ public interface SemNotamWebService {
     @ResponseWrapper(localName = "getAerodromeIdsResponse", targetNamespace = "http://ws.semnotam.frequentis.com/", className = "com.frequentis.semnotam.ws.GetAerodromeIdsResponse")
     @WebResult(name = "return", targetNamespace = "")
     public java.util.List<java.lang.String> getAerodromeIds();
+
+    @WebMethod
+    @RequestWrapper(localName = "getNotamConcepts", targetNamespace = "http://ws.semnotam.frequentis.com/", className = "com.frequentis.semnotam.ws.GetNotamConcepts")
+    @ResponseWrapper(localName = "getNotamConceptsResponse", targetNamespace = "http://ws.semnotam.frequentis.com/", className = "com.frequentis.semnotam.ws.GetNotamsConceptsResponse")
+    @WebResult(name = "return", targetNamespace = "")
+    public java.util.List<java.lang.String> getNotamConcepts();
 }

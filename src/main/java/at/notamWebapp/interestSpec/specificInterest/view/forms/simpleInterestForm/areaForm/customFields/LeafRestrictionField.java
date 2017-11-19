@@ -102,16 +102,25 @@ public class LeafRestrictionField extends VerticalLayout{
 
     private void setValueDateField() {
         value_dateTime = new DateField("Value");
+        value_dateTime.setRequired(true);
+        value_dateTime.setRequiredError("Required");
+        value_dateTime.setValidationVisible(false);
 //        value_dateTime.setImmediate(true);
     }
 
     private void setValueStringField() {
         value_string = new TextField("Value");
+        value_string.setRequired(true);
+        value_string.setRequiredError("Required");
+        value_string.setValidationVisible(false);
 //        value_string.setImmediate(true);
     }
 
     private void setValueDecimalField() {
         value_decimal = new TextField("Value");
+        value_decimal.setRequired(true);
+        value_decimal.setRequiredError("Required");
+        value_decimal.setValidationVisible(false);
  //       value_decimal.setImmediate(true);
         value_decimal.addValidator(new DoubleRangeValidator("",0.0, 999999999.99));
     }
@@ -146,6 +155,9 @@ public class LeafRestrictionField extends VerticalLayout{
         restrictionType.addItems("QualifiedRestriction", "UnqualifiedRestriction");
         restrictionType.setItemCaption("QualifiedRestriction", "QualifiedRestriction");
         restrictionType.setItemCaption("UnqualifiedRestriction", "UnqualifiedRestriction");
+        restrictionType.setRequired(true);
+        restrictionType.setRequiredError("Required");
+        restrictionType.setValidationVisible(false);
     }
 
 
@@ -183,13 +195,30 @@ public class LeafRestrictionField extends VerticalLayout{
     }
 
     public boolean isValid() {
-        return operator.getValue() != null && valueType.getValue() != null &&
-                (value_dateTime.getValue() !=null || value_decimal.getValue() != null || value_string.getValue() != null);
+        if(valueLayout.getComponentCount() != 0) {
+            TextField valueField = (TextField) valueLayout.getComponent(0);
+            if (!valueField.isValid()) {
+                valueField.setValidationVisible(true);
+            }
+            if (valueField.isValid()){
+                if( !operator.isValid()) {
+                    operator.setValidationVisible(true);
+                }
+            }
+            if(!restrictionType.isValid()){
+                operator.setValidationVisible(true);
+            }
+            return operator.isValid() && valueType.getValue() != null && valueField.isValid() && restrictionType.isValid();
+        }
+        else return false;
     }
 
     private void setOperatorComboBox(){
         operator = new ComboBox("Operator");
 
+        operator.setRequired(true);
+        operator.setRequiredError("Required");
+        operator.setValidationVisible(false);
         operator.addItems("=", "!=", "&lt;", "&gt;", "&lt=", "&gt=");
         operator.setItemCaption("=", "=");
         operator.setItemCaption("!=", "!=");
