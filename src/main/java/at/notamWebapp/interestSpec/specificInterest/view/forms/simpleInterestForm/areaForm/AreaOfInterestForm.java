@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm;
 
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
 import com.vaadin.ui.*;
 
@@ -8,7 +9,7 @@ import com.vaadin.ui.*;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 23.11.2016.
  */
-public class AreaOfInterestForm extends Panel {
+public class AreaOfInterestForm extends Panel implements FormValidatorInterface {
     private GridLayout areaFormLayout;
     private Button hide, up, down;
     private VerticalLayout buttons1;
@@ -81,5 +82,15 @@ public class AreaOfInterestForm extends Panel {
 
     public AreaOfInterestPropertyType getArea() {
         return area;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean isValid = true;
+        FormValidatorInterface areaFields = (FormValidatorInterface) getAreaFormLayout().getComponent(0,0);
+        if(!areaFields.isValid()) {
+            isValid = false;
+        }
+        return isValid;
     }
 }

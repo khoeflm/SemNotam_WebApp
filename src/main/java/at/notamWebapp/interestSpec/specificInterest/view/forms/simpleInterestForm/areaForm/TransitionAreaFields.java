@@ -2,6 +2,7 @@ package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestFo
 
 import at.notamWebapp.interestSpec.specificInterest.controller.ElevatedDataController;
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.util.customConverter.CustomDurationConverter;
@@ -24,7 +25,7 @@ import java.util.List;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 28.01.2017.
  */
-public class TransitionAreaFields extends GridLayout {
+public class TransitionAreaFields extends GridLayout implements FormValidatorInterface{
 
     private ComboBox identifier = new ComboBox("Identifier");
     private ComboBox aerodromeDesignator = new ComboBox("Aerodrome Designator");
@@ -49,6 +50,19 @@ public class TransitionAreaFields extends GridLayout {
         aerodromeDesignator.addItems(aerodromeIds);
         identifier.setRequired(true);
         aerodromeDesignator.setRequired(true);
+        beginPosition.setRequired(true);
+        endPosition.setRequired(true);
+
+        identifier.setValidationVisible(false);
+        beginPosition.setValidationVisible(false);
+        endPosition.setValidationVisible(false);
+        aerodromeDesignator.setValidationVisible(false);
+
+
+        identifier.setRequiredError("Required");
+        beginPosition.setRequiredError("Required");
+        endPosition.setRequiredError("Required");
+        aerodromeDesignator.setRequiredError("Required");
 
 
         //Set width of the single fields
@@ -304,5 +318,26 @@ public class TransitionAreaFields extends GridLayout {
         String secondPointId = ElevatedDataController.getSecondPointId(identifier);
         transArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().getElevatedCurve().setId("ElevatedCurvePoint"+
                 firstPointId +"Point"+secondPointId);
+    }
+
+    public boolean isValid() {
+        boolean isValid = true;
+        if(!identifier.isValid()){
+            identifier.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!beginPosition.isValid()){
+            beginPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!endPosition.isValid()){
+            endPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!aerodromeDesignator.isValid()){
+            aerodromeDesignator.setValidationVisible(true);
+            isValid = false;
+        }
+        return isValid;
     }
 }

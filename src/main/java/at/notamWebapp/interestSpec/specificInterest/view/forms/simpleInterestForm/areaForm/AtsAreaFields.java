@@ -1,6 +1,7 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm;
 
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
@@ -20,7 +21,7 @@ import java.util.List;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 28.01.2017.
  */
-public class AtsAreaFields extends GridLayout {
+public class AtsAreaFields extends GridLayout implements FormValidatorInterface{
 
     private ComboBox identifier = new ComboBox("Identifier");
     private DateField beginPosition = new DateField();
@@ -203,7 +204,20 @@ public class AtsAreaFields extends GridLayout {
         );
     }
 
-
-
-
+    public boolean isValid() {
+        boolean isValid = true;
+        if(!identifier.isValid()){
+            identifier.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!beginPosition.isValid()){
+            beginPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!endPosition.isValid()){
+            endPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        return isValid;
+    }
 }

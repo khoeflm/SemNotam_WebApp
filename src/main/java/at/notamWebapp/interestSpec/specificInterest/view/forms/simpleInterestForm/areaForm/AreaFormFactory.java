@@ -26,6 +26,7 @@ public class AreaFormFactory{
                     break;
                 case"FirAreaType":
                     areaForm.getAreaFormLayout().addComponent(new FirAreaFields(area, areaId), 0, 0);
+                    break;
                 case "ShapeAreaType":
                     areaForm.getAreaFormLayout().addComponent(new ShapeAreaFields(area, areaId), 0,0);
                     break;

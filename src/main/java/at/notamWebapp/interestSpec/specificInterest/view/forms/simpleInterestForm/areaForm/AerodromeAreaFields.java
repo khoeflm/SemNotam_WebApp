@@ -1,5 +1,6 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm;
 
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.util.customConverter.CustomDurationConverter;
@@ -16,11 +17,11 @@ import com.vaadin.ui.*;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 25.01.2017.
  */
-class AerodromeAreaFields extends GridLayout{
+class AerodromeAreaFields extends GridLayout implements FormValidatorInterface{
 
     private TextField designator = new TextField("Designator");
-    private DateField beginPosition = new DateField();
-    private DateField endPosition = new DateField();
+    private DateField beginPosition = new DateField("Begin Position");
+    private DateField endPosition = new DateField("End Position");
 
     AerodromeAreaFields(AreaOfInterestPropertyType area, String areaId){
         Label areaId1 = new Label();
@@ -70,6 +71,16 @@ class AerodromeAreaFields extends GridLayout{
         timeOfDay.setConverter(new CustomDayTimeConverter());
 
         designator.setRequired(true);
+        beginPosition.setRequired(true);
+        endPosition.setRequired(true);
+
+        designator.setValidationVisible(false);
+        beginPosition.setValidationVisible(false);
+        endPosition.setValidationVisible(false);
+
+        designator.setRequiredError("Required");
+        beginPosition.setRequiredError("Required");
+        endPosition.setRequiredError("Required");
 
         //set ComboBox values
         //Day, Night --> Time of Day
@@ -173,5 +184,23 @@ class AerodromeAreaFields extends GridLayout{
                     }else beginPosition.commit();
                 }
         );
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean isValid = true;
+        if(!designator.isValid()){
+            designator.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!beginPosition.isValid()){
+            beginPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        if(!endPosition.isValid()){
+            endPosition.setValidationVisible(true);
+            isValid = false;
+        }
+        return isValid;
     }
 }

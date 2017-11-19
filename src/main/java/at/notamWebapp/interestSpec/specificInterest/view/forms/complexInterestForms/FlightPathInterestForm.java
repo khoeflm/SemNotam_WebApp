@@ -2,6 +2,7 @@ package at.notamWebapp.interestSpec.specificInterest.view.forms.complexInterestF
 
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.AddAreaOfInterestForm;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.AreaFormFactory;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.AreaOfInterestForm;
 import at.notamWebapp.util.googleMapsService.GoogleMapsDrawer;
@@ -19,7 +20,7 @@ import java.util.LinkedList;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 20.11.2016.
  */
-public class FlightPathInterestForm extends Panel {
+public class FlightPathInterestForm extends Panel implements FormValidatorInterface{
 
     private AddAreaOfInterestForm addAreaForm;
     private VerticalLayout fpiLayout = new VerticalLayout();
@@ -92,6 +93,7 @@ public class FlightPathInterestForm extends Panel {
         areaIndex++;
         AreaOfInterestForm  areaForm = areaFormFactory.initAreaForm(area, getId()+"AREA"+areaIndex);
         fpiLayout.addComponent(areaForm);
+        flightPath.add(areaForm);
     //    setContent(areaForm);
     }
 
@@ -125,5 +127,15 @@ public class FlightPathInterestForm extends Panel {
 
     public GoogleMapsDrawer getGoogleMapsDrawer() {
         return googleMapsDrawer;
+    }
+
+    public boolean isValid(){
+        boolean isValid = true;
+        for(AreaOfInterestForm area : flightPath){
+            if(!((FormValidatorInterface) area).isValid()){
+                isValid = false;
+            }
+        }
+        return isValid;
     }
 }

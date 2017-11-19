@@ -1,5 +1,6 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm;
 
+import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.util.customConverter.CustomDurationConverter;
@@ -16,7 +17,7 @@ import com.vaadin.ui.*;
  * SemNOTAM Project (User Interface)
  * Created by khoef on 28.01.2017.
  */
-public class ShapeAreaFields extends GridLayout {
+public class ShapeAreaFields extends GridLayout implements FormValidatorInterface{
 
     private DateField beginPosition = new DateField("Begin Position");
     private DateField endPosition = new DateField("End Position");
@@ -187,5 +188,9 @@ public class ShapeAreaFields extends GridLayout {
                     }else beginPosition.commit();
                 }
         );
+    }
+
+    public boolean isValid() {
+        return true;
     }
 }
