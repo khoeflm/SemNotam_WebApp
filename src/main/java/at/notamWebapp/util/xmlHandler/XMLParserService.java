@@ -8,7 +8,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 /**
  * SemNOTAM Project (User Interface)
@@ -40,4 +43,21 @@ public class XMLParserService {
         File[] files = dir.listFiles((dir1, name) -> name.equals(filename + ".xml"));
         return files == null || files.length == 0;
     }
- }
+
+    public static void createGeneralInterestFile(ArrayList<String> dimStringList, String filename, String path) {
+        try {
+            File dir = new File(path);
+            dir.mkdirs();
+            File file = new File(dir, filename+".xml");
+            FileWriter fw = new FileWriter(file);
+            for(String dim : dimStringList) {
+                if(dim != "") {
+                    fw.write(dim + ';');
+                } else fw.write(" ;");
+            }
+            fw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

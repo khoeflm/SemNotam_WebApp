@@ -5,6 +5,8 @@ import com.frequentis.semnotam.schema._1.InterestSpecificationType;
 import com.frequentis.semnotam.ws.SemNotamWebService;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
+import javax.xml.ws.WebServiceException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +30,10 @@ public class SpecificInterestWS {
     public static List<String> getAircraftTypeIds(){
         try {
             return client.getAircraftTypeIds() ;
+        } catch (WebServiceException e){
+            ArrayList<String> errorList = new ArrayList<>();
+            errorList.add("WebService not connected or reachable");
+            return errorList;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

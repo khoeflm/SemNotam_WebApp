@@ -42,10 +42,16 @@ public abstract class BinaryInterestForm extends Panel implements FormValidatorI
 
     public void addLeftInterest(Panel p){
         leftIntLayout.addComponent(p, 1, 0);
+        comboBoxList.get(0).addItems(controller.getModel().getInterestMap().keySet());
+        comboBoxList.get(0).select(p.getId());
+        controller.addChosenComplexInterests(p.getId());
     }
 
     public void addRightInterest(Panel p){
         rightIntLayout.addComponent(p,1,0);
+        comboBoxList.get(1).addItems(controller.getModel().getInterestMap().keySet());
+        comboBoxList.get(1).select(p.getId());
+        controller.addChosenComplexInterests(p.getId());
     }
 
     Layout initInterestComboBox(){

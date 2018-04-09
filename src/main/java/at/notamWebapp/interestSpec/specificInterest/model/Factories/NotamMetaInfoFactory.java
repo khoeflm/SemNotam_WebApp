@@ -26,15 +26,11 @@ public class NotamMetaInfoFactory {
     }
 
     public static NotamSetMetaInformationPropertyType createMetaInfo(GeneralInterestModel generalInterest) {
-        NotamSetMetaInformationPropertyType notamSetMetaInformationPropertyType = new NotamSetMetaInformationPropertyType();
-        MetaInfoType metaInfoType = new MetaInfoType();
-        RelevanceOptionPropertyType relevanceOption = new RelevanceOptionPropertyType();
-        relevanceOption.setRelevanceRuleOption(generalInterest.getRelevanceOption());
-        metaInfoType.setRuleOption(relevanceOption);
-        metaInfoType.setDataType(generalInterest.getDataType());
-        metaInfoType.setDataFormat(generalInterest.getDataModel());
-        notamSetMetaInformationPropertyType.setNotamSetMetaInformation(metaInfoType);
-        return notamSetMetaInformationPropertyType;
+        NotamSetMetaInformationPropertyType metaInfo = createDefaultMetaInfo();
+        metaInfo.getNotamSetMetaInformation().getRuleOption().setRelevanceRuleOption(generalInterest.getRelevanceOption());
+        metaInfo.getNotamSetMetaInformation().setDataType(generalInterest.getDataType());
+        metaInfo.getNotamSetMetaInformation().setDataFormat(generalInterest.getDataModel());
+        return metaInfo;
     }
 
     private static AnnotationInformationPropertyType setAnnotation() {

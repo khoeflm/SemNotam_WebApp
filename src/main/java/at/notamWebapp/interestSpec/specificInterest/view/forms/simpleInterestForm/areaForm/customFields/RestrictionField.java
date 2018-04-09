@@ -35,10 +35,11 @@ public class RestrictionField extends VerticalLayout implements Property.ValueCh
         restrictionPanel.setContent(panelLayout);
 
         restrictionType.addItems("NestedRestriction", "LeafRestriction");
+        restrictionType.setNullSelectionItemId("");
         restrictionType.setItemCaption("NestedRestriciton", "NestedRestriction");
         restrictionType.setItemCaption("LeafRestriction", "LeafRestriction");
         restrictionType.addValueChangeListener(valueChangeEvent -> setNewRestriction());
-        restrictionType.setRequired(true);
+    //    restrictionType.setRequired(true);
         restrictionType.setRequiredError("Required");
         restrictionType.setValidationVisible(false);
 
@@ -93,6 +94,9 @@ public class RestrictionField extends VerticalLayout implements Property.ValueCh
 
     public boolean isValid() {
         if (restrictionType.isValid()) {
+            if(restrictionType.getValue() == null){
+                return true;
+            }
             if (restrictionType.getValue().equals("NestedRestriction")) {
                 NestedRestrictionField resField = (NestedRestrictionField) childLayout.getComponent(0);
                 return resField.isValid();
@@ -107,30 +111,32 @@ public class RestrictionField extends VerticalLayout implements Property.ValueCh
     }
 
     private void setNewRestriction(){
-        if(restrictionType.getValue().equals("NestedRestriction")){
-            if(restriction.getNestedRestriction() == null){
-                restriction.setNestedRestriction(new NestedRestrictionType());
+        if(restrictionType.getValue() != null){
+            if(restrictionType.getValue().equals("NestedRestriction")){
+                if(restriction.getNestedRestriction() == null){
+                    restriction.setNestedRestriction(new NestedRestrictionType());
+                }
+                if(nestedField == null){
+                    nestedField = new NestedRestrictionField();
+                }
+                childLayout.removeAllComponents();
+                nestedField.setInternalValue(restriction.getNestedRestriction());
+                nestedField.addValueChangeListener(this);
+                childLayout.addComponent(nestedField);
             }
-            if(nestedField == null){
-                nestedField = new NestedRestrictionField();
+            else if (restrictionType.getValue().equals("LeafRestriction")){
+                if(restriction.getLeafRestriction() == null){
+                    restriction.setLeafRestriction(new LeafRestrictionType());
+                }
+                if(leafField == null){
+                    leafField = new LeafRestrictionField();
+                }
+                childLayout.removeAllComponents();
+                leafField.setInternalValue(restriction.getLeafRestriction());
+                leafField.addValueChangeListener(this);
+                childLayout.addComponent(leafField);
             }
-            childLayout.removeAllComponents();
-            nestedField.setInternalValue(restriction.getNestedRestriction());
-            nestedField.addValueChangeListener(this);
-            childLayout.addComponent(nestedField);
-        }
-        else if (restrictionType.getValue().equals("LeafRestriction")){
-            if(restriction.getLeafRestriction() == null){
-                restriction.setLeafRestriction(new LeafRestrictionType());
-            }
-            if(leafField == null){
-                leafField = new LeafRestrictionField();
-            }
-            childLayout.removeAllComponents();
-            leafField.setInternalValue(restriction.getLeafRestriction());
-            leafField.addValueChangeListener(this);
-            childLayout.addComponent(leafField);
-        }
+        } else childLayout.removeAllComponents();
     }
 
     @Override

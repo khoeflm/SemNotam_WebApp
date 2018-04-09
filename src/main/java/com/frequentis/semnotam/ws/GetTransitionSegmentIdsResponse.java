@@ -1,16 +1,16 @@
 
 package com.frequentis.semnotam.ws;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * <p>Java-Klasse für getTransitionSegmentIdsResponse complex type.
+ * <p>Java-Klasse fï¿½r getTransitionSegmentIdsResponse complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 

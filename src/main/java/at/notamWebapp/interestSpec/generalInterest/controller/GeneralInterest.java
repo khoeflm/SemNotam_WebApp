@@ -1,10 +1,13 @@
 package at.notamWebapp.interestSpec.generalInterest.controller;
 
-import at.notamWebapp.util.xmlHandler.XMLUnmarshaller;
 import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
-import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindow;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
-import com.frequentis.semnotam.schema._1.*;
+import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindow;
+import at.notamWebapp.util.xmlHandler.XMLUnmarshaller;
+import com.frequentis.semnotam.schema._1.CodeSpatialRelevanceType;
+import com.frequentis.semnotam.schema._1.CodeTemporalRelevanceType;
+import com.frequentis.semnotam.schema._1.InterestPropertyType;
+import com.frequentis.semnotam.schema._1.IntersectionInterestType;
 import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Button;
@@ -87,6 +90,10 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
             //Delete Button click handling
             case "del1":
                 view.getTfTempFilterDim().clear();
+                view.getbTempDim().setEnabled(false);
+                model.getRelevanceOption().setTemporalRelevanceRules(null);
+                model.getRelevanceOption().setTemporalRelevanceRules(CodeTemporalRelevanceType.VALID_TIME);
+                buttonClick(new Button.ClickEvent(view.getDelTempDim()));
                 break;
             case "del2":
                 List<InterestPropertyType> interestList;
@@ -104,6 +111,10 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 break;
             case "del3":
                 view.getTfSpatialFilterDim().clear();
+                view.getbSpatialDim().setEnabled(false);
+                model.getRelevanceOption().setSpatialRelevanceRules(null);
+                model.getRelevanceOption().setSpatialRelevanceRules(CodeSpatialRelevanceType.SHAPE);
+                buttonClick(new Button.ClickEvent(view.getDelSpatialDim()));
                 break;
             case "del4":
                 interestList = model.getIntersectionInterest().getHasMember().stream()
@@ -169,10 +180,12 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 if(!value.isEmpty()) {
                     model.getRelevanceOption().setTemporalRelevanceRules(CodeTemporalRelevanceType.fromValue(value));
                 } else{
-                    model.getRelevanceOption().setTemporalRelevanceRules(CodeTemporalRelevanceType.NONE);
+                    model.getRelevanceOption().setTemporalRelevanceRules(CodeTemporalRelevanceType.VALID_TIME);
                 }
                 view.getTfTempFilterDim().setValue(value);
-                view.getbTempDim().setEnabled(true);
+                if(!value.equals("NONE") && view.getTfSpatial4dDim().isEmpty()) {
+                    view.getbTempDim().setEnabled(true);
+                }
                 break;
             case "2":
                 value = itemClickEvent.getItem().toString();
@@ -185,10 +198,12 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 if(!value.isEmpty()) {
                     model.getRelevanceOption().setSpatialRelevanceRules(CodeSpatialRelevanceType.fromValue(value));
                 } else{
-                    model.getRelevanceOption().setSpatialRelevanceRules(CodeSpatialRelevanceType.NONE);
+                    model.getRelevanceOption().setSpatialRelevanceRules(CodeSpatialRelevanceType.SHAPE);
                 }
                 view.getTfSpatialFilterDim().setValue(value);
-                view.getbSpatialDim().setEnabled(true);
+                if(!value.equals("NONE") && view.getTfSpatial4dDim().isEmpty()) {
+                    view.getbSpatialDim().setEnabled(true);
+                }
                 break;
             case "4":
                 value = itemClickEvent.getItem().toString();
@@ -200,6 +215,9 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 value = itemClickEvent.getItem().toString();
                 view.getTfSpatial4dDim().setValue(getDim(value));
                 setGeneralInterestData(this.ontologyUri, value);
+                if(view.getTfSpatialDim().getValue().equals("NONE") || view.getTfTempDim().getValue().equals("NONE")) {
+                    view.getbTempDim().setEnabled(false);
+                }
                 view.getbSpatialDim().setEnabled(false);
                 view.getbTempDim().setEnabled(false);
                 break;

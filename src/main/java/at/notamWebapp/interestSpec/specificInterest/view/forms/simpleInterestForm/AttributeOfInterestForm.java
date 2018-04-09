@@ -54,7 +54,7 @@ public class AttributeOfInterestForm extends Panel implements Property.ValueChan
         cbConceptName.setValue(attribute.getConceptName());
         cbConceptName.addValueChangeListener(this);
 
-        cbConceptName.setRequired(true);
+    //    cbConceptName.setRequired(true);
         cbConceptName.setValidationVisible(false);
         cbConceptName.setRequiredError("Required");
 

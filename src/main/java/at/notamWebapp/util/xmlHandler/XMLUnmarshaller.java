@@ -1,12 +1,12 @@
 package at.notamWebapp.util.xmlHandler;
 
+import at.notamWebapp.util.skyVectorFPHandler.FlightPlan;
 import at.notamWebapp.util.validator.MyValidationEventHandler;
 import com.frequentis.semnotam.schema._1.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import at.notamWebapp.util.skyVectorFPHandler.FlightPlan;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;

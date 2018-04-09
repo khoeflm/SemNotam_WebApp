@@ -5,6 +5,10 @@ import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindo
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by khoef on 01.03.2017.
  */
@@ -167,6 +171,14 @@ public class GeneralInterestForm extends Panel {
         return bSpatial4dDim;
     }
 
+    public Button getDelTempDim() {
+        return delTempDim;
+    }
+
+    public Button getDelSpatialDim() {
+        return delSpatialDim;
+    }
+
     public void removeWindow() {
         getUI().removeWindow(getElw());
     }
@@ -176,5 +188,30 @@ public class GeneralInterestForm extends Panel {
         if(tfAircraftDim.isEmpty()&&tfSpatial4dDim.isEmpty()&&tfSpatialDim.isEmpty()&&tfTempDim.isEmpty()){
             return false;
         } else return true;
+    }
+
+    public ArrayList<String> getDimStringList() {
+        ArrayList<String> dimStringList = new ArrayList<>();
+        dimStringList.add(tfTempFilterDim.getValue());
+        dimStringList.add(tfTempDim.getValue());
+        dimStringList.add(tfSpatialFilterDim.getValue());
+        dimStringList.add(tfSpatialDim.getValue());
+        dimStringList.add(tfSpatial4dDim.getValue());
+        dimStringList.add(tfAircraftDim.getValue());
+        dimStringList.add(tfDataFormat.getValue());
+        dimStringList.add(tfDataType.getValue());
+        return dimStringList;
+    }
+
+    public void setDimStrings(String generalInteresDims) {
+        List<String> dims = Arrays.asList(generalInteresDims.split(";"));
+        tfTempFilterDim.setValue(dims.get(0));
+        tfTempDim.setValue(dims.get(1));
+        tfSpatialFilterDim.setValue(dims.get(2));
+        tfSpatialDim.setValue(dims.get(3));
+        tfSpatial4dDim.setValue(dims.get(4));
+        tfAircraftDim.setValue(dims.get(5));
+        tfDataFormat.setValue(dims.get(6));
+        tfDataType.setValue(dims.get(7));
     }
 }

@@ -83,6 +83,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                 if (interestSpec != null) {
                     if (XMLParserService.noSuchFileExists(filename, "tmp/InterestSpecification")) {
                         XMLParserService.createXMLFile(interestSpec, filename, "tmp/InterestSpecification");
+                        XMLParserService.createGeneralInterestFile(view.getGeneralInterestForm().getDimStringList(), filename, "tmp/GeneralInterestDims");
                     } else {
                         view.setAlreadyExistingFileWindow(filename);
                     }
@@ -129,6 +130,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                     !view.getDisableSpecific().getValue(), !view.getDisableGeneral().getValue(), generalInterest);
             if(interestSpec!=null) {
                 XMLParserService.createXMLFile(interestSpec, filename, "tmp/InterestSpecification");
+                XMLParserService.createGeneralInterestFile(view.getGeneralInterestForm().getDimStringList(), filename, "tmp/GeneralInterestDims");
             }
             view.removeExistingFileWindow();
         }
@@ -350,6 +352,9 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
 
     }
 
+    /*================================================================================================================
+    ================================================================================================================*/
+
     @Override
     public void focus(FieldEvents.FocusEvent focusEvent) {
         if(focusEvent.getSource() instanceof ComboBox){
@@ -362,15 +367,26 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                 //The panel of the calling cb must not be shown in the cb
                 interestStringList.remove(panelId);
                 //Already chosen interestPanels must not be shown in the cb
-                interestStringList.remove(chosenComplexInterests);
-                cb.addItems(interestStringList);
-
+                interestStringList.removeAll(chosenComplexInterests);
+                //Get Name of already chosen interest panel and select it
+                GridLayout grid = (GridLayout) cb.getParent().getParent();
+                Panel p = (Panel) grid.getComponent(1,0);
+                if(p != null) {
+                    interestStringList.add(p.getId());
+                    interestStringList.sort(String::compareToIgnoreCase);
+                    cb.addItems(interestStringList);
+                    cb.select(p.getId());
+                }
+                else {
+                    interestStringList.sort(String::compareToIgnoreCase);
+                    cb.addItems(interestStringList);
+                }
             }
         }
     }
 
     @Override
-    public void blur(FieldEvents.BlurEvent blurEvent) {}
+    public void blur(FieldEvents.BlurEvent blurEvent) { }
 
     /*================================================================================================================
     ================================================================================================================*/
@@ -503,6 +519,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         if(itemClickEvent.getComponent().getId().equals("existingISTable")){
             String existingISName = itemClickEvent.getItem().toString();
             String interestString = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/InterestSpecification/");
+            String generalInteresDims = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/GeneralInterestDims/");
             view.removeLoadInterestWindow();
             InterestSpecificationType interestSpec = null;
             if (interestString != null) {
@@ -519,6 +536,13 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
                             .show(Page.getCurrent());
                 }
             }
+            if(generalInteresDims != null){
+                view.getGeneralInterestForm().setDimStrings(generalInteresDims);
+            }
         }
+    }
+
+    public void addChosenComplexInterests(String interestId){
+        chosenComplexInterests.add(interestId);
     }
 }

@@ -1,5 +1,6 @@
 package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.customFields;
 
+import at.notamWebapp.util.customConverter.CustomDateConverter;
 import com.frequentis.semnotam.schema._1.LeafRestrictionType;
 import com.frequentis.semnotam.schema._1.QualifiedRestrictionType;
 import com.frequentis.semnotam.schema._1.UnqualifiedRestrictionType;
@@ -105,6 +106,7 @@ public class LeafRestrictionField extends VerticalLayout{
         value_dateTime.setRequired(true);
         value_dateTime.setRequiredError("Required");
         value_dateTime.setValidationVisible(false);
+        value_dateTime.setConverter(new CustomDateConverter());
 //        value_dateTime.setImmediate(true);
     }
 
@@ -184,6 +186,10 @@ public class LeafRestrictionField extends VerticalLayout{
                                     value_decimal.getValue()));
                             break;
                         case "Date":
+     //                       ArrayList<JAXBElement<?>> list = (ArrayList<JAXBElement<?>>) leaf.getContent();
+     //                       Date value = value_dateTime.getValue();
+     //                       Converter convert = value_dateTime.getConverter();
+     //                       convert.convertToModel(value, XMLGregorianCalendar.class, null);
                             leaf.getContent().add(new JAXBElement<>(new QName("http://semnotam.frequentis.com/schema/1.0", "value_dateTime"), XMLGregorianCalendar.class,
                                     (XMLGregorianCalendar) value_dateTime.getConverter().convertToModel(value_dateTime.getValue(), XMLGregorianCalendar.class, null)));
                             break;
@@ -196,18 +202,17 @@ public class LeafRestrictionField extends VerticalLayout{
 
     public boolean isValid() {
         if(valueLayout.getComponentCount() != 0) {
-            TextField valueField = (TextField) valueLayout.getComponent(0);
-            if (!valueField.isValid()) {
-                valueField.setValidationVisible(true);
-            }
+            String fieldType = valueLayout.getComponent(0).getClass().toGenericString();
+            Field valueField = (Field) valueLayout.getComponent(0);
             if (valueField.isValid()){
                 if( !operator.isValid()) {
                     operator.setValidationVisible(true);
                 }
             }
             if(!restrictionType.isValid()){
-                operator.setValidationVisible(true);
+                restrictionType.setValidationVisible(true);
             }
+
             return operator.isValid() && valueType.getValue() != null && valueField.isValid() && restrictionType.isValid();
         }
         else return false;

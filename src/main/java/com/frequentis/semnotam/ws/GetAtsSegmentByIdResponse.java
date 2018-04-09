@@ -1,15 +1,16 @@
 
 package com.frequentis.semnotam.ws;
 
+import com.frequentis.semnotam.schema._1.AtsSegmentType;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import com.frequentis.semnotam.schema._1.AtsSegmentType;
 
 
 /**
- * <p>Java-Klasse für getAtsSegmentByIdResponse complex type.
+ * <p>Java-Klasse fï¿½r getAtsSegmentByIdResponse complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
