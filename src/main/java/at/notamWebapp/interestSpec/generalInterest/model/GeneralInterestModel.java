@@ -47,4 +47,8 @@ public class GeneralInterestModel {
     public String getDataType() {
         return dataType;
     }
+
+    public void setIntersectionInterest(IntersectionInterestType intersectionInterest) {
+        this.intersectionInterest = intersectionInterest;
+    }
 }

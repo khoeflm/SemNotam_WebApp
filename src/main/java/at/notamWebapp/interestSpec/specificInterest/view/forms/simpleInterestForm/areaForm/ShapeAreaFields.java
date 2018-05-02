@@ -65,6 +65,15 @@ public class ShapeAreaFields extends GridLayout implements FormValidatorInterfac
         TextField verticalAccuracy = new TextField("Vertical Accuracy");
         verticalAccuracy.setWidth("90%");
 
+        beginPosition.setRequired(true);
+        endPosition.setRequired(true);
+
+        beginPosition.setValidationVisible(false);
+        endPosition.setValidationVisible(false);
+
+        beginPosition.setRequiredError("Required");
+        endPosition.setRequiredError("Required");
+
         sequence.setNullRepresentation("");
         bufferBefore.setNullRepresentation("");
         bufferAfter.setNullRepresentation("");
@@ -122,7 +131,7 @@ public class ShapeAreaFields extends GridLayout implements FormValidatorInterfac
         binder.bind(verticalAccuracy, "shape.elevatedSurface.verticalAccuracy.value");
         int index = areaId.indexOf("AREA");
         sequence.setValue(areaId.substring(index+4));
-
+        sequence.commit();
 
         height.setWidth("90%");
         vertical.setWidth("90%");
@@ -172,7 +181,9 @@ public class ShapeAreaFields extends GridLayout implements FormValidatorInterfac
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else endPosition.commit();
+                    }else if(endPosition.getValue() != null) {
+                        endPosition.commit();
+                    }
                 }
         );
 
@@ -185,7 +196,10 @@ public class ShapeAreaFields extends GridLayout implements FormValidatorInterfac
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else beginPosition.commit();
+                    }else if(beginPosition.getValue() != null) {
+                        beginPosition.commit();
+                    }
+
                 }
         );
     }

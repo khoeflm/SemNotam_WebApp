@@ -121,6 +121,7 @@ class AerodromeAreaFields extends GridLayout implements FormValidatorInterface{
         binder.bind(bufferAfter, "timeBuffer.temporalBuffer.after");
         int index = areaId.indexOf("AREA");
         sequence.setValue(areaId.substring(index+4));
+        sequence.commit();
 
         //add fields to layout
         addComponent(areaId1, 0, 0);
@@ -140,7 +141,13 @@ class AerodromeAreaFields extends GridLayout implements FormValidatorInterface{
             for(int j = 0; j<=4; j++){
                 if(getComponent(i,j) != null && !(getComponent(i,j) instanceof Label)){
                     Field f = (Field) getComponent(i,j);
-                    f.addValueChangeListener(valueChangeEvent -> f.commit());
+                        f.addValueChangeListener(valueChangeEvent ->
+                        {
+                            if(f.getValue() != null) {
+                                f.commit();
+                            }
+                        });
+
                 }
             }
         }
@@ -161,27 +168,29 @@ class AerodromeAreaFields extends GridLayout implements FormValidatorInterface{
         //Validation of Start and End Time
         endPosition.addValueChangeListener(valueChangeEvent ->
                 {
-
                     if(beginPosition.getValue() != null && endPosition.getValue().before(beginPosition.getValue())){
                         endPosition.setValue(beginPosition.getValue());
                         new Notification(
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else endPosition.commit();
+                    }else if(endPosition.getValue() != null) {
+                        endPosition.commit();
+                    }
                 }
         );
 
         beginPosition.addValueChangeListener(valueChangeEvent ->
                 {
-
                     if(endPosition.getValue() != null && beginPosition.getValue().after(endPosition.getValue())){
                         beginPosition.setValue(endPosition.getValue());
                         new Notification(
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else beginPosition.commit();
+                    }else if(beginPosition.getValue() != null) {
+                        beginPosition.commit();
+                    }
                 }
         );
     }

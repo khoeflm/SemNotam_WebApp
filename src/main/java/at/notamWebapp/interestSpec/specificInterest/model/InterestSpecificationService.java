@@ -381,27 +381,20 @@ public class InterestSpecificationService{
     ================================================================================================================*/
 
     //InterestSpecificData (Reference Points Data) Methods
-    public void addInterestSpecificData(String id, ElevatedPointType elevatedPoint){
+    public void addInterestSpecificData(String pointId, ElevatedPointType elevatedPoint){
         //If it's the first InterestSpecificData, add the necessary instances to avoid a null Pointer Exception
         if(interestSpec.getInterestSpecificData().size() == 0){
             interestSpec.getInterestSpecificData().add(new InterestSpecificDataPropertyType());
             interestSpec.getInterestSpecificData().get(0).setPointData(new InterestSpecificDataType());
         }
         InterestSpecificDataType interestSpecificDataType = interestSpec.getInterestSpecificData().get(0).getPointData();
-        //Remove old Point from Point List and Interest Spec
-        if(elevatedPointMap.containsKey(id)) {
-            ElevatedPointPropertyType removePointProp = new ElevatedPointPropertyType();
-            ElevatedPointType oldPoint = elevatedPointMap.remove(id);
-            for(ElevatedPointPropertyType pointProp : interestSpecificDataType.getHasMember()){
-                if(pointProp.getElevatedPoint().equals(oldPoint)){
-                    removePointProp = pointProp;
-                }
-            }
-            interestSpecificDataType.getHasMember().remove(removePointProp);
-        }
+
+        //Remove Point from interest specific Data, if already existing
+        removeInterestSpecificData(pointId);
 
         //Add new Point to point to List
-        elevatedPointMap.put(id, elevatedPoint);
+        elevatedPointMap.put(pointId, elevatedPoint);
+
 
         //Adding new Point to Interest Specification!
         ElevatedPointPropertyType elevatedPointPropertyType = new ElevatedPointPropertyType();
@@ -410,10 +403,30 @@ public class InterestSpecificationService{
         interestSpecificDataType.getHasMember().add(elevatedPointPropertyType);
     }
 
-    public void refreshInterestSpecData(String pathId) {
+    //Remove old Point from Point List and Interest Spec
+    public void removeInterestSpecificData(String pointId){
+        InterestSpecificDataType interestSpecificDataType = interestSpec.getInterestSpecificData().get(0).getPointData();
+     //   if(elevatedPointMap.containsKey(pointId)) {
+            ElevatedPointPropertyType removePointProp = new ElevatedPointPropertyType();
+            ElevatedPointType oldPoint = elevatedPointMap.remove(pointId);
+            for(ElevatedPointPropertyType pointProp : interestSpecificDataType.getHasMember()){
+                if(pointProp.getElevatedPoint().equals(oldPoint)){
+                    removePointProp = pointProp;
+                }
+     //       }
+            interestSpecificDataType.getHasMember().remove(removePointProp);
+        }
+    }
+
+    public void refreshInterestSpecData(String pathId, String areaId) {
         FlightPathInterestType flightpath = interestMap.get(pathId).getFlightPathInterest();
         GeodesicStringType positions = null;
         List<ElevatedPointPropertyType> posList = new ArrayList<>();
+        if(areaId != null){
+            // Remove Points
+            removeInterestSpecificData(areaId + "S");
+            removeInterestSpecificData(areaId + "E");
+        }
         if (posListMap != null && posListMap.containsKey(pathId)) {
             posListMap.remove(pathId);
         }
@@ -480,6 +493,7 @@ public class InterestSpecificationService{
     }
 
     public void setInterestSpec(InterestSpecificationType is){
+        is.getInterestSpecificData().clear();
         this.interestSpec = is;
     }
 

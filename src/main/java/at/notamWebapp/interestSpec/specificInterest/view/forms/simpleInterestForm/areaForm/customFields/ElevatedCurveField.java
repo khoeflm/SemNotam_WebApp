@@ -5,6 +5,7 @@ import net.opengis.gml.*;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import java.util.List;
 
 /**
  * SemNOTAM Project (User Interface)
@@ -96,15 +97,25 @@ public class ElevatedCurveField extends CustomField<CurveSegmentArrayPropertyTyp
     }
 
     @Override
-    protected void setInternalValue(CurveSegmentArrayPropertyType newValue) {
+    public void setInternalValue(CurveSegmentArrayPropertyType newValue) {
         super.setInternalValue(newValue);
         if(newValue != null){
-            GeodesicStringType abstractCurveSegment = (GeodesicStringType) newValue.getAbstractCurveSegment().get(0).getValue();
-            if(abstractCurveSegment.getPosList().getValue().size() != 0) {
-                startPointX.setValue(String.valueOf(abstractCurveSegment.getPosList().getValue().get(0)));
-                startPointY.setValue(String.valueOf(abstractCurveSegment.getPosList().getValue().get(1)));
-                endPointX.setValue(String.valueOf(abstractCurveSegment.getPosList().getValue().get(2)));
-                endPointY.setValue(String.valueOf(abstractCurveSegment.getPosList().getValue().get(3)));
+            GeodesicStringType geodesicStringType = null;
+            LineStringSegmentType lineStringSegmentType = null;
+            List<Double> pointList = null;
+
+            if(newValue.getAbstractCurveSegment().get(0).getValue() instanceof GeodesicStringType) {
+                geodesicStringType = (GeodesicStringType) newValue.getAbstractCurveSegment().get(0).getValue();
+                pointList = geodesicStringType.getPosList().getValue();
+            }else if(newValue.getAbstractCurveSegment().get(0).getValue() instanceof LineStringSegmentType){
+                lineStringSegmentType = (LineStringSegmentType) newValue.getAbstractCurveSegment().get(0).getValue();
+                pointList = lineStringSegmentType.getPosList().getValue();
+            }
+            if(pointList.size() == 4) {
+                startPointX.setValue(String.valueOf(pointList.get(0)));
+                startPointY.setValue(String.valueOf(pointList.get(1)));
+                endPointX.setValue(String.valueOf(pointList.get(2)));
+                endPointY.setValue(String.valueOf(pointList.get(3)));
             }
         }
     }

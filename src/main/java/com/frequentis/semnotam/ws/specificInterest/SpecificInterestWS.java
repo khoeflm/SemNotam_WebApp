@@ -1,7 +1,9 @@
 package com.frequentis.semnotam.ws.specificInterest;
 
+import com.frequentis.semnotam.schema._1.AtsSegmentType;
 import com.frequentis.semnotam.schema._1.InterestSpecResultType;
 import com.frequentis.semnotam.schema._1.InterestSpecificationType;
+import com.frequentis.semnotam.schema._1.TransitionSegmentType;
 import com.frequentis.semnotam.ws.SemNotamWebService;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
@@ -88,6 +90,24 @@ public class SpecificInterestWS {
     public static List<String> getNotamConcepts(){
         try {
             return client.getNotamConcepts();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static AtsSegmentType getAtsSegmentById(String id){
+        try{
+            return client.getAtsSegmentById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static TransitionSegmentType getTransitionSegmentById(String id){
+        try{
+            return client.getTransitionSegmentById(id);
         }catch (Exception e){
             e.printStackTrace();
             return null;

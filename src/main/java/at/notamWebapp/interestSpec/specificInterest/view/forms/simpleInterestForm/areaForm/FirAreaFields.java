@@ -108,7 +108,7 @@ public class FirAreaFields extends GridLayout implements FormValidatorInterface{
         binder.bind(bufferAfter, "timeBuffer.temporalBuffer.after");
         int index = areaId.indexOf("AREA");
         sequence.setValue(areaId.substring(index+4));
-
+        sequence.commit();
 
         //add fields to layout
         addComponent(areaId1, 0, 0);
@@ -156,7 +156,9 @@ public class FirAreaFields extends GridLayout implements FormValidatorInterface{
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else endPosition.commit();
+                    }else if(endPosition.getValue() != null) {
+                        endPosition.commit();
+                    }
                 }
         );
 
@@ -169,7 +171,9 @@ public class FirAreaFields extends GridLayout implements FormValidatorInterface{
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else beginPosition.commit();
+                    }else if(beginPosition.getValue() != null) {
+                        beginPosition.commit();
+                    }
                 }
         );
     }

@@ -6,8 +6,8 @@ import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestFor
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.util.customConverter.CustomDurationConverter;
-import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
-import com.frequentis.semnotam.schema._1.AtsAreaType;
+import com.frequentis.semnotam.schema._1.*;
+import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -24,10 +24,11 @@ import java.util.List;
 public class AtsAreaFields extends GridLayout implements FormValidatorInterface{
 
     private ComboBox identifier = new ComboBox("Identifier");
-    private DateField beginPosition = new DateField();
-    private DateField endPosition = new DateField();
+    private DateField beginPosition = new DateField("Begin Position");
+    private DateField endPosition = new DateField("End Position");
     private TextField bufferBefore = new TextField("Buffer Before [min]");
     private TextField bufferAfter = new TextField("Buffer After [min]");
+    AtsAreaType area = null;
 
 
     public AtsAreaFields(AreaOfInterestPropertyType area, String areaId, List<String> predefinedAtsAreas, SemNotamController controller) {
@@ -42,7 +43,18 @@ public class AtsAreaFields extends GridLayout implements FormValidatorInterface{
         setSpacing(true);
         identifier.addItems(predefinedAtsAreas);
         identifier.setRequired(true);
+        beginPosition.setRequired(true);
+        endPosition.setRequired(true);
 
+        identifier.setValidationVisible(false);
+        beginPosition.setValidationVisible(false);
+        endPosition.setValidationVisible(false);
+
+        identifier.setRequiredError("Required");
+        beginPosition.setRequiredError("Required");
+        endPosition.setRequiredError("Required");
+
+        this.area = area.getAtsArea();
         TextField horizontalBuffer = new TextField("Horizontal Buffer");
         horizontalBuffer.setWidth("90%");
         TextField verticalBuffer = new TextField("Vertical Buffer");
@@ -97,6 +109,7 @@ public class AtsAreaFields extends GridLayout implements FormValidatorInterface{
         flightRules.addItems("IFR", "VFR");
         Label areaId1 = new Label();
         areaId1.setValue(areaId);
+        this.setId(areaId);
 
         //Bind Aerodrome Type to Bean Item
         BeanItem<AtsAreaType> item = new BeanItem<>(area.getAtsArea());
@@ -117,18 +130,23 @@ public class AtsAreaFields extends GridLayout implements FormValidatorInterface{
         binder.bind(bufferAfter, "timeBuffer.temporalBuffer.after");
         //binder.bind(startPoint, "segmentShape.segmentShapeArea.startPoint");
         //binder.bind(endPoint, "segmentShape.segmentShapeArea.endPoint");
-        binder.bind(elevatedCurveField, "segmentShape.segmentShapeArea.shapeCurve." +
-                "elevatedCurve.segments");
+        binder.bind(elevatedCurveField,"segmentShape.segmentShapeArea.shapeCurve." +
+                "elevatedCurve.segments" );
         int index = areaId.indexOf("AREA");
         sequence.setValue(areaId.substring(index+4));
-
+        sequence.commit();
         identifier.addValueChangeListener(valueChangeEvent -> {
-            AtsAreaType specArea = area.getAtsArea();
-            controller.getElevatedDataController().setElevatedProperties(specArea, valueChangeEvent, identifier);
+            String atsSegmentId = valueChangeEvent.getProperty().getValue().toString();
+            AtsSegmentType atsSegment = SpecificInterestWS.getAtsSegmentById(atsSegmentId);
+            if(atsSegmentId.equals(atsSegment.getIdentifier())) {
+                elevatedCurveField.setInternalValue(atsSegment.getShape().getElevatedCurve().getSegments());
+                controller.getElevatedDataController().setElevatedProperties(area.getAtsArea(), valueChangeEvent,
+                        identifier.getValue().toString(), this.getId());
+            }
         });
         elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
             AtsAreaType specArea = area.getAtsArea();
-            controller.getElevatedDataController().setElevatedPoint(specArea, identifier);
+            controller.getElevatedDataController().setElevatedPoint(specArea, identifier.getValue().toString(), this.getId());
         });
 
         bufferBefore.addValueChangeListener(valueChangeEvent ->

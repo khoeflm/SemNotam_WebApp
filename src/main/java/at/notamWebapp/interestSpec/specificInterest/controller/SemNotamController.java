@@ -252,11 +252,12 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
             Button delete = clickEvent.getButton();
             AreaOfInterestForm deleteInterest = (AreaOfInterestForm) delete.getParent().getParent().getParent().getParent();
             int i = deleteInterest.getId().indexOf("AREA");
+            String areaId = deleteInterest.getId();
             String pathId = deleteInterest.getId().substring(0,i);
             view.getFlightPathInterestForm(pathId).delete(deleteInterest);
             InterestPropertyType flightpath = model.getInterestMap().get(pathId);
             flightpath.getFlightPathInterest().getHasMember().remove(deleteInterest.getArea());
-            model.refreshInterestSpecData(pathId);
+            model.refreshInterestSpecData(pathId, areaId);
         }
         else if(clickEvent.getButton().getId().equals("310")){
             Button addInterestForm = clickEvent.getButton();
@@ -397,8 +398,12 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         model.setInterestSpec(interestSpec);
         InterestPropertyType specificInterest = interestSpec.getInterest().getBinaryIntersectionInterest().getRightHand();
         InterestPropertyType generalInterest = interestSpec.getInterest().getBinaryIntersectionInterest().getLeftHand();
+
         if(generalInterest.getUndefinedInterest() != null){
             view.getDisableGeneral().setValue(true);
+        }
+        else {
+            this.addLoadedGeneralInterest(generalInterest);
         }
         if(specificInterest.getUndefinedInterest() != null){
             view.getDisableSpecific().setValue(true);
@@ -464,6 +469,10 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
         return null;
     }
 
+    private void addLoadedGeneralInterest(InterestPropertyType generalInterest) {
+        view.getGeneralInterestForm().getGeneralInterestController().setIntersectionInterest(generalInterest.getIntersectionInterest());
+    }
+
     /*================================================================================================================
     ================================================================================================================*/
     //UPLOAD CONTROLLER METHODS
@@ -504,7 +513,7 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
     public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
         String path = selectedTabChangeEvent.getComponent().getParent().getId();
         if(model.getInterestSpec().getInterestSpecificData().size() != 0){
-            model.refreshInterestSpecData(path);
+            model.refreshInterestSpecData(path, null);
             GoogleMapsDrawer googleMapsDrawer = view.getFlightPathInterestForm(path).getGoogleMapsDrawer();
             googleMapsDrawer.drawFlightPath(model.getPosListMap().get(path));
         }
@@ -518,31 +527,35 @@ public class SemNotamController implements Button.ClickListener, FieldEvents.Foc
     public void itemClick(ItemClickEvent itemClickEvent) {
         if(itemClickEvent.getComponent().getId().equals("existingISTable")){
             String existingISName = itemClickEvent.getItem().toString();
-            String interestString = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/InterestSpecification/");
-            String generalInteresDims = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/GeneralInterestDims/");
-            view.removeLoadInterestWindow();
-            InterestSpecificationType interestSpec = null;
-            if (interestString != null) {
-                interestSpec = XMLUnmarshaller.unmarshalInterestSpecification(
-                        new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
-            }
-            if (interestSpec != null) {
-                if(interestSpec.getInterest().getBinaryIntersectionInterest() != null) {
-                    this.addLoadedInterestSpec(interestSpec);
-                } else {
-                    new Notification("File is not in the correct format!<br/> " +
-                            "(Root Element has to be Binary Intersection Interest)",
-                            Notification.Type.ERROR_MESSAGE)
-                            .show(Page.getCurrent());
-                }
-            }
-            if(generalInteresDims != null){
-                view.getGeneralInterestForm().setDimStrings(generalInteresDims);
-            }
+            loadExistingIS(existingISName);
         }
     }
 
     public void addChosenComplexInterests(String interestId){
         chosenComplexInterests.add(interestId);
+    }
+
+    public void loadExistingIS(String existingISName){
+        String interestString = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/InterestSpecification/");
+        String generalInteresDims = XMLUnmarshaller.loadXMLFile(existingISName, "tmp/GeneralInterestDims/");
+        view.removeLoadInterestWindow();
+        InterestSpecificationType interestSpec = null;
+        if (interestString != null) {
+            interestSpec = XMLUnmarshaller.unmarshalInterestSpecification(
+                    new ByteArrayInputStream(interestString.getBytes(StandardCharsets.UTF_8)));
+        }
+        if (interestSpec != null) {
+            if(interestSpec.getInterest().getBinaryIntersectionInterest() != null) {
+                this.addLoadedInterestSpec(interestSpec);
+            } else {
+                new Notification("File is not in the correct format!<br/> " +
+                        "(Root Element has to be Binary Intersection Interest)",
+                        Notification.Type.ERROR_MESSAGE)
+                        .show(Page.getCurrent());
+            }
+        }
+        if(generalInteresDims != null){
+            view.getGeneralInterestForm().setDimStrings(generalInteresDims);
+        }
     }
 }

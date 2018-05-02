@@ -4,10 +4,7 @@ import at.notamWebapp.interestSpec.generalInterest.model.GeneralInterestModel;
 import at.notamWebapp.interestSpec.generalInterest.view.GeneralInterestForm;
 import at.notamWebapp.interestSpec.generalInterest.view.windows.ElementLoadWindow;
 import at.notamWebapp.util.xmlHandler.XMLUnmarshaller;
-import com.frequentis.semnotam.schema._1.CodeSpatialRelevanceType;
-import com.frequentis.semnotam.schema._1.CodeTemporalRelevanceType;
-import com.frequentis.semnotam.schema._1.InterestPropertyType;
-import com.frequentis.semnotam.schema._1.IntersectionInterestType;
+import com.frequentis.semnotam.schema._1.*;
 import com.frequentis.semnotam.ws.generalInterest.GeneralInterestWS;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Button;
@@ -15,6 +12,7 @@ import com.vaadin.ui.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -44,8 +42,8 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 break;
             case "gi2":
                 List<String> temporalConcept = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/Temporal");
-                ontologyUri = temporalConcept.get(0);
-                temporalConcept.remove(0);
+                ontologyUri = temporalConcept != null ? temporalConcept.get(0) : null;
+                Objects.requireNonNull(temporalConcept).remove(0);
                 view.setElw(new ElementLoadWindow(this, temporalConcept,2));
                 break;
             case "gi3":
@@ -57,20 +55,20 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 break;
             case "gi4":
                 List<String> spatialConcept = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/Spatial");
-                ontologyUri = spatialConcept.get(0);
-                spatialConcept.remove(0);
+                ontologyUri = spatialConcept != null ? spatialConcept.get(0) : null;
+                Objects.requireNonNull(spatialConcept).remove(0);
                 view.setElw(new ElementLoadWindow(this, spatialConcept, 4));
                 break;
             case "gi5":
                 List<String> spatial4dDim = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/Spatial4D");
-                ontologyUri = spatial4dDim.get(0);
-                spatial4dDim.remove(0);
+                ontologyUri = spatial4dDim != null ? spatial4dDim.get(0) : null;
+                Objects.requireNonNull(spatial4dDim).remove(0);
                 view.setElw(new ElementLoadWindow(this, spatial4dDim, 5));
                 break;
             case "gi6":
                 List<String> aircraftTypeList = GeneralInterestWS.selectConceptForFacet("http://www.SemNotam.com/ontology/AircraftType");
-                ontologyUri = aircraftTypeList.get(0);
-                aircraftTypeList.remove(0);
+                ontologyUri = aircraftTypeList != null ? aircraftTypeList.get(0) : null;
+                Objects.requireNonNull(aircraftTypeList).remove(0);
                 view.setElw(new ElementLoadWindow(this, aircraftTypeList ,6));
                 break;
             case "gi7":
@@ -96,13 +94,7 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 buttonClick(new Button.ClickEvent(view.getDelTempDim()));
                 break;
             case "del2":
-                List<InterestPropertyType> interestList;
-                interestList = model.getIntersectionInterest().getHasMember().stream()
-                        .filter(ipt -> ipt.getPeriodOfInterest() == null)
-                        .collect(Collectors.toList());
-                model.getIntersectionInterest().getHasMember().clear();
-                model.getIntersectionInterest().getHasMember().addAll(interestList);
-
+                clearGeneralInterestDimension("TemporalDim");
                 view.getTfTempDim().clear();
                 if(view.getTfSpatialDim().isEmpty()){
                     view.getbSpatial4dDim().setEnabled(true);
@@ -117,35 +109,20 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 buttonClick(new Button.ClickEvent(view.getDelSpatialDim()));
                 break;
             case "del4":
-                interestList = model.getIntersectionInterest().getHasMember().stream()
-                        .filter(ipt -> ipt.getShapeArea() == null)
-                        .collect(Collectors.toList());
-                model.getIntersectionInterest().getHasMember().clear();
-                model.getIntersectionInterest().getHasMember().addAll(interestList);
-
+                clearGeneralInterestDimension("SpatialDim");
                 view.getTfSpatialDim().clear();
                 if(view.getTfTempDim().isEmpty()){
                     view.getbSpatial4dDim().setEnabled(true);
                 }
                 break;
             case "del5":
-                interestList = model.getIntersectionInterest().getHasMember().stream()
-                        .filter(ipt -> ipt.getShapeArea() == null)
-                        .collect(Collectors.toList());
-                model.getIntersectionInterest().getHasMember().clear();
-                model.getIntersectionInterest().getHasMember().addAll(interestList);
-
+                clearGeneralInterestDimension("SpatialDim");
                 view.getTfSpatial4dDim().clear();
                 view.getTfSpatialDim().setEnabled(true);
                 view.getTfTempDim().setEnabled(true);
                 break;
             case "del6":
-                interestList = model.getIntersectionInterest().getHasMember().stream()
-                        .filter(ipt -> ipt.getAircraftOfInterest() == null)
-                        .collect(Collectors.toList());
-                model.getIntersectionInterest().getHasMember().clear();
-                model.getIntersectionInterest().getHasMember().addAll(interestList);
-
+                clearGeneralInterestDimension("AircraftDim");
                 view.getTfAircraftDim().clear();
                 break;
             case "del7":
@@ -185,6 +162,10 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 view.getTfTempFilterDim().setValue(value);
                 if(!value.equals("NONE") && view.getTfSpatial4dDim().isEmpty()) {
                     view.getbTempDim().setEnabled(true);
+                } else if (value.equals("none")){
+                    view.getbSpatial4dDim().setEnabled(false);
+                    view.getTfSpatialDim().clear();
+                    clearGeneralInterestDimension("TemporalDim");
                 }
                 break;
             case "2":
@@ -203,6 +184,11 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
                 view.getTfSpatialFilterDim().setValue(value);
                 if(!value.equals("NONE") && view.getTfSpatial4dDim().isEmpty()) {
                     view.getbSpatialDim().setEnabled(true);
+                }
+                else if (value.equals("none")){
+                    view.getbSpatial4dDim().setEnabled(false);
+                    view.getTfSpatialDim().clear();
+                    clearGeneralInterestDimension("SpatialDim");
                 }
                 break;
             case "4":
@@ -241,18 +227,46 @@ public class GeneralInterest implements Button.ClickListener, ItemClickEvent.Ite
         view.removeWindow();
     }
 
+    private void clearGeneralInterestDimension(String dimType) {
+        List<InterestPropertyType> interestList = null;
+        switch (dimType){
+            case "TemporalDim":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getPeriodOfInterest() == null)
+                        .collect(Collectors.toList());
+                break;
+            case "SpatialDim":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getShapeArea() == null)
+                        .collect(Collectors.toList());
+                break;
+            case "AircraftDim":
+                interestList = model.getIntersectionInterest().getHasMember().stream()
+                        .filter(ipt -> ipt.getAircraftOfInterest() == null)
+                        .collect(Collectors.toList());
+                break;
+            default: interestList = model.getIntersectionInterest().getHasMember();
+        }
+        model.getIntersectionInterest().getHasMember().clear();
+        model.getIntersectionInterest().getHasMember().addAll(interestList);
+    }
+
     //get only Dim-Value from whole Path
     private String getDim(String value) {
         int i = value.lastIndexOf('/');
         return value.substring(i+1, value.length());
     }
 
-    public void setGeneralInterestData(String ontologyUri, String conceptUri) {
+    private void setGeneralInterestData(String ontologyUri, String conceptUri) {
         String generalInterestPropertyXML = GeneralInterestWS.getInterestFromConcept(ontologyUri, conceptUri);
         model.getIntersectionInterest().getHasMember().add(XMLUnmarshaller.unmarshalGeneralInterestData(generalInterestPropertyXML));
     }
 
     public GeneralInterestModel getModel() {
         return model;
+    }
+
+    public void setIntersectionInterest(IntersectionInterestType intersectionInterest) {
+        model.setIntersectionInterest(intersectionInterest);
     }
 }

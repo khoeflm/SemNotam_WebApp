@@ -3,13 +3,14 @@ package at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestFo
 import at.notamWebapp.interestSpec.specificInterest.controller.ElevatedDataController;
 import at.notamWebapp.interestSpec.specificInterest.controller.SemNotamController;
 import at.notamWebapp.interestSpec.specificInterest.view.forms.FormValidatorInterface;
+import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import at.notamWebapp.util.customConverter.CustomDateConverter;
 import at.notamWebapp.util.customConverter.CustomDayTimeConverter;
 import at.notamWebapp.util.customConverter.CustomDurationConverter;
-import at.notamWebapp.interestSpec.specificInterest.view.forms.simpleInterestForm.areaForm.customFields.ElevatedCurveField;
 import com.frequentis.semnotam.schema._1.AreaOfInterestPropertyType;
-import com.frequentis.semnotam.schema._1.ElevatedPointReferencePropertyType;
 import com.frequentis.semnotam.schema._1.TransitionAreaType;
+import com.frequentis.semnotam.schema._1.TransitionSegmentType;
+import com.frequentis.semnotam.ws.specificInterest.SpecificInterestWS;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -17,7 +18,6 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
-import net.opengis.gml.GeodesicStringType;
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
     private ComboBox aerodromeDesignator = new ComboBox("Aerodrome Designator");
     private DateField beginPosition = new DateField("Begin Position");
     private DateField endPosition = new DateField("End Position");
+    ElevatedCurveField elevatedCurveField = new ElevatedCurveField();
     private SemNotamController controller;
 
     public TransitionAreaFields(AreaOfInterestPropertyType area, String areaId, List<String> transitionSegmentIds, List<String> aerodromeIds, SemNotamController controller) {
@@ -84,7 +85,7 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
         aerodromeDesignator.setWidth("90%");
         //startPoint.setWidth("90%");
         //endPoint.setWidth("90%");
-        ElevatedCurveField elevatedCurveField = new ElevatedCurveField();
+
         elevatedCurveField.setWidth("90%");
         TextField bufferBefore = new TextField("Buffer Before [min]");
         bufferBefore.setWidth("90%");
@@ -120,82 +121,34 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
         meteoConditions.addItems("IMC", "VMC");
         flightRules.addItems("IFR", "VFR");
         flightAltitude.setCaption("Height");
-        sequence.setNullRepresentation("");
         Label areaId1 = new Label();
         areaId1.setValue(areaId);
 
         //Bind Aerodrome Type to Bean Item
         BeanFieldGroup<TransitionAreaType> binder = new BeanFieldGroup<>(TransitionAreaType.class);
         BeanItem<TransitionAreaType> item = null;
+        TransitionAreaType specArea = null;
         if(area.getDepartureArea() != null) {
             item = new BeanItem<>(area.getDepartureArea());
-            identifier.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDepartureArea();
-                setElevatedProperties(specArea, valueChangeEvent);
-            });
-            elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDepartureArea();
-                setElevatedPoint(specArea);
-            });
+            specArea = area.getDepartureArea();
         }
         else if(area.getDestinationApproachArea() != null){
             item = new BeanItem<>(area.getDestinationApproachArea());
-            identifier.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDestinationApproachArea();
-                setElevatedProperties(specArea, valueChangeEvent);
-            });
-            elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDestinationApproachArea();
-                setElevatedPoint(specArea);
-            });
+            specArea = area.getDestinationApproachArea();
+
         }
         else if(area.getDepartureAlternateApproachArea() != null){
             item = new BeanItem<>(area.getDepartureAlternateApproachArea());
-            identifier.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDepartureAlternateApproachArea();
-                setElevatedProperties(specArea, valueChangeEvent);
-            });
-            elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDepartureAlternateApproachArea();
-                setElevatedPoint(specArea);
-            });
+            specArea = area.getDepartureAlternateApproachArea();
         }
         else if(area.getEnRouteAlternateApproachArea() != null){
             item = new BeanItem<>(area.getEnRouteAlternateApproachArea());
-            identifier.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getEnRouteAlternateApproachArea();
-                setElevatedProperties(specArea, valueChangeEvent);
-            });
-            elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getEnRouteAlternateApproachArea();
-                setElevatedPoint(specArea);
-            });
+            specArea = area.getEnRouteAlternateApproachArea();
         }
         else if(area.getDestinationAlternateApproachArea() != null){
             item = new BeanItem<>(area.getDestinationAlternateApproachArea());
-            identifier.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDestinationAlternateApproachArea();
-                setElevatedProperties(specArea, valueChangeEvent);
-            });
-            elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
-                TransitionAreaType specArea = area.getDestinationAlternateApproachArea();
-                setElevatedPoint(specArea);
-            });
+            specArea = area.getDestinationAlternateApproachArea();
         }
-
-        aerodromeDesignator.addValueChangeListener(valueChangeEvent ->
-        {try {
-            if (!aerodromeDesignator.isValid()) {
-                aerodromeDesignator.setValidationVisible(true);
-            } else {
-                aerodromeDesignator.setValidationVisible(false);
-                aerodromeDesignator.setComponentError(null);
-                aerodromeDesignator.commit();
-            }
-        } catch (Validator.EmptyValueException e) {
-            // A required value was missing
-        }});
-
 
         //bind fields to aerodrome properties
         binder.setItemDataSource(item);
@@ -219,6 +172,35 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
         binder.bind(verticalBuffer, "areaBuffer.spatialBuffer.vertical");
         int index = areaId.indexOf("AREA");
         sequence.setValue(areaId.substring(index+4));
+        sequence.commit();
+
+        TransitionAreaType finalSpecArea = specArea;
+        identifier.addValueChangeListener(valueChangeEvent -> {
+            String transitionSegmentId = valueChangeEvent.getProperty().getValue().toString();
+            TransitionSegmentType transitionSegment = SpecificInterestWS.getTransitionSegmentById(transitionSegmentId);
+            if(transitionSegmentId.equals(transitionSegment.getIdentifier())) {
+                elevatedCurveField.setInternalValue(transitionSegment.getShape().getElevatedCurve().getSegments());
+                controller.getElevatedDataController().setElevatedProperties(finalSpecArea, valueChangeEvent,
+                        identifier.getValue().toString(), this.getId());
+            }
+        });
+        elevatedCurveField.addValueChangeListener(valueChangeEvent -> {
+            controller.getElevatedDataController().setElevatedPoint(finalSpecArea, identifier.getValue().toString(), this.getId());
+        });
+
+        aerodromeDesignator.addValueChangeListener(valueChangeEvent ->
+        {try {
+            if (!aerodromeDesignator.isValid()) {
+                aerodromeDesignator.setValidationVisible(true);
+            } else {
+                aerodromeDesignator.setValidationVisible(false);
+                aerodromeDesignator.setComponentError(null);
+                aerodromeDesignator.commit();
+            }
+        } catch (Validator.EmptyValueException e) {
+            // A required value was missing
+        }});
+
 
 
         //add fields to layout
@@ -261,7 +243,9 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else endPosition.commit();
+                    }else if(endPosition.getValue() != null) {
+                        endPosition.commit();
+                    }
                 }
         );
 
@@ -274,35 +258,32 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
                                 "Attention",
                                 "End date must be after start date",
                                 Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-                    }else beginPosition.commit();
+                    }else if(endPosition.getValue() != null) {
+                        beginPosition.commit();
+                    }
                 }
         );
     }
 
-    private void setElevatedProperties(TransitionAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
-        try {
-            if (!identifier.isValid()) {
-                identifier.setValidationVisible(true);
-            } else {
-                identifier.setValidationVisible(false);
-                identifier.setComponentError(null);
-                identifier.commit();
-                setElevatedCurveId(specArea, valueChangeEvent);
-                setElevatedPoint(specArea);
-            }
-        } catch (Validator.EmptyValueException e) {
-            // A required value was missing
+   /* private void setElevatedProperties(TransitionAreaType specArea, Property.ValueChangeEvent valueChangeEvent) {
+        String transitionSegmentId = valueChangeEvent.getProperty().getValue().toString();
+        TransitionSegmentType transitionSegment = SpecificInterestWS.getTransitionSegmentById(transitionSegmentId);
+        if(transitionSegmentId.equals(transitionSegment.getIdentifier())) {
+            elevatedCurveField.setInternalValue(transitionSegment.getShape().getElevatedCurve().getSegments());
+            controller.getElevatedDataController().setElevatedProperties(specArea, valueChangeEvent,
+                    identifier.getValue().toString(), this.getId());
         }
     }
 
 
-
     private void setElevatedPoint(TransitionAreaType transArea) {
+        controller.getElevatedDataController().setElevatedPoint(transArea, identifier.getValue().toString(), this.getId());
+
         if(!identifier.getValue().toString().isEmpty()) {
             GeodesicStringType geodesicStringType = (GeodesicStringType) transArea.getSegmentShape().getSegmentShapeArea().getShapeCurve().
                     getElevatedCurve().getSegments().getAbstractCurveSegment().get(0).getValue();
             List<Double> pointList = geodesicStringType.getPosList().getValue();
-            controller.getElevatedDataController().setElevatedPoint(identifier.getValue().toString(), pointList);
+            controller.getElevatedDataController().setElevatedPoint(identifier.getValue().toString(), this.getId(), pointList);
             ElevatedPointReferencePropertyType startPoint = new ElevatedPointReferencePropertyType();
             ElevatedPointReferencePropertyType endPoint = new ElevatedPointReferencePropertyType();
             startPoint.setHref("#ElevatedPoint" + ElevatedDataController.getFirstPointId(identifier.getValue().toString()));
@@ -310,7 +291,8 @@ public class TransitionAreaFields extends GridLayout implements FormValidatorInt
             transArea.getSegmentShape().getSegmentShapeArea().setStartPoint(startPoint);
             transArea.getSegmentShape().getSegmentShapeArea().setEndPoint(endPoint);
         }
-    }
+
+    }*/
 
     private void setElevatedCurveId(TransitionAreaType transArea, Property.ValueChangeEvent valueChangeEvent) {
         String identifier = (String) valueChangeEvent.getProperty().getValue();
