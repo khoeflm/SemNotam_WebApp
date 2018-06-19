@@ -30,29 +30,7 @@
 			<id>vaadin-addons</id>
 			<url>http://maven.vaadin.com/vaadin-addons</url>
 		</repository>
-		<repository>
-			<id>maven.oracle.com</id>
-			<name>oracle-maven-repo</name>
-			<url>https://maven.oracle.com</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>maven.oracle.com</id>
-			<name>oracle-maven-repo</name>
-			<url>https://maven.oracle.com</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -93,16 +71,6 @@
 			<groupId>com.vaadin.tapio</groupId>
 			<artifactId>googlemaps</artifactId>
 			<version>1.3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.jdbc</groupId>
-			<artifactId>ojdbc7</artifactId>
-			<version>12.1.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.jdbc</groupId>
-			<artifactId>ucp</artifactId>
-			<version>12.1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>

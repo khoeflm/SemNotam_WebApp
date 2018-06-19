@@ -405,16 +405,18 @@ public class InterestSpecificationService{
 
     //Remove old Point from Point List and Interest Spec
     public void removeInterestSpecificData(String pointId){
-        InterestSpecificDataType interestSpecificDataType = interestSpec.getInterestSpecificData().get(0).getPointData();
-     //   if(elevatedPointMap.containsKey(pointId)) {
+        if(interestSpec.getInterestSpecificData().size() != 0) {
+            InterestSpecificDataType interestSpecificDataType = interestSpec.getInterestSpecificData().get(0).getPointData();
+            //   if(elevatedPointMap.containsKey(pointId)) {
             ElevatedPointPropertyType removePointProp = new ElevatedPointPropertyType();
             ElevatedPointType oldPoint = elevatedPointMap.remove(pointId);
-            for(ElevatedPointPropertyType pointProp : interestSpecificDataType.getHasMember()){
-                if(pointProp.getElevatedPoint().equals(oldPoint)){
+            for (ElevatedPointPropertyType pointProp : interestSpecificDataType.getHasMember()) {
+                if (pointProp.getElevatedPoint().equals(oldPoint)) {
                     removePointProp = pointProp;
                 }
-     //       }
-            interestSpecificDataType.getHasMember().remove(removePointProp);
+                //       }
+                interestSpecificDataType.getHasMember().remove(removePointProp);
+            }
         }
     }
 

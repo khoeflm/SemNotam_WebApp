@@ -101,6 +101,15 @@ public class GeneralInterestForm extends Panel {
         delDataFormat.setId("del7");
         delDataType.setId("del8");
 
+        delTempFilterDim.setEnabled(false);
+        delTempDim.setEnabled(false);
+        delSpatialFilterDim.setEnabled(false);
+        delSpatialDim.setEnabled(false);
+        delSpatial4Dim.setEnabled(false);
+        delAircraftDim.setEnabled(false);
+        delDataFormat.setEnabled(false);
+        delDataType.setEnabled(false);
+
         giFormLayout.addComponents(tfTempFilterDim, bTempFilterDim, delTempFilterDim, tfTempDim, bTempDim, delTempDim,
                 tfSpatialFilterDim, bSpatialFilterDim, delSpatialFilterDim, tfSpatialDim, bSpatialDim, delSpatialDim,
                 tfSpatial4dDim, bSpatial4dDim, delSpatial4Dim, tfAircraftDim, bAircraftDim, delAircraftDim,
@@ -179,13 +188,40 @@ public class GeneralInterestForm extends Panel {
         return delSpatialDim;
     }
 
+    public Button getDelAircraftDim() {
+        return delAircraftDim;
+    }
+
+    public Button getDelDataFormat() {
+        return delDataFormat;
+    }
+
+    public Button getDelDataType() {
+        return delDataType;
+    }
+
+    public Button getDelSpatial4Dim() {
+        return delSpatial4Dim;
+    }
+
+    public Button getDelSpatialFilterDim() {
+        return delSpatialFilterDim;
+    }
+
+    public Button getDelTempFilterDim() {
+        return delTempFilterDim;
+    }
+
     public void removeWindow() {
         getUI().removeWindow(getElw());
     }
 
 
     public boolean isValid() {
-        if(tfAircraftDim.isEmpty()&&tfSpatial4dDim.isEmpty()&&tfSpatialDim.isEmpty()&&tfTempDim.isEmpty()){
+        if(tfTempFilterDim.getValue().equals("NONE") && tfSpatialFilterDim.getValue().equals("NONE")){
+            return true;
+        }
+        else if(tfAircraftDim.isEmpty()&&tfSpatial4dDim.isEmpty()&&tfSpatialDim.isEmpty()&&tfTempDim.isEmpty()){
             return false;
         } else return true;
     }
@@ -206,12 +242,42 @@ public class GeneralInterestForm extends Panel {
     public void setDimStrings(String generalInteresDims) {
         List<String> dims = Arrays.asList(generalInteresDims.split(";"));
         tfTempFilterDim.setValue(dims.get(0));
+        if(!dims.get(0).equals(" ")){
+            delTempFilterDim.setEnabled(true);
+            bTempDim.setEnabled(true);
+        }
         tfTempDim.setValue(dims.get(1));
+        if(!dims.get(1).equals(" ")){
+            delTempDim.setEnabled(true);
+            bSpatial4dDim.setEnabled(false);
+        }
         tfSpatialFilterDim.setValue(dims.get(2));
+        if(!dims.get(2).equals(" ")){
+            delSpatialFilterDim.setEnabled(true);
+            bSpatialDim.setEnabled(true);
+        }
         tfSpatialDim.setValue(dims.get(3));
+        if(!dims.get(3).equals(" ")){
+            delSpatialDim.setEnabled(true);
+            bSpatial4dDim.setEnabled(false);
+        }
         tfSpatial4dDim.setValue(dims.get(4));
+        if(!dims.get(4).equals(" ")){
+            delSpatial4Dim.setEnabled(true);
+            bSpatialDim.setEnabled(false);
+            bTempDim.setEnabled(false);
+        }
         tfAircraftDim.setValue(dims.get(5));
+        if(!dims.get(5).equals(" ")){
+            delAircraftDim.setEnabled(true);
+        }
         tfDataFormat.setValue(dims.get(6));
+        if(!dims.get(6).equals(" ")){
+            delDataFormat.setEnabled(true);
+        }
         tfDataType.setValue(dims.get(7));
+        if(!dims.get(0).equals(" ")){
+            delDataType.setEnabled(true);
+        }
     }
 }

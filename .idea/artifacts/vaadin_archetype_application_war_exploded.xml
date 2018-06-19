@@ -23,15 +23,6 @@
           <element id="library" level="project" name="Maven: com.google.gwt.google-apis:gwt-ajaxloader:1.1.0" />
           <element id="library" level="project" name="Maven: junit:junit:3.8.1" />
           <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.4" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:ojdbc7:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:xdb6:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:orai18n:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:xmlparserv2:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:oraclepki:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:osdt_cert:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:osdt_core:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:ucp:12.1.0.2" />
-          <element id="library" level="project" name="Maven: com.oracle.jdbc:ons:12.1.0.2" />
           <element id="library" level="project" name="Maven: org.vaadin.addons:exporter:0.0.6" />
           <element id="library" level="project" name="Maven: com.itextpdf:itextpdf:5.3.4" />
           <element id="library" level="project" name="Maven: org.apache.poi:poi:3.9" />
